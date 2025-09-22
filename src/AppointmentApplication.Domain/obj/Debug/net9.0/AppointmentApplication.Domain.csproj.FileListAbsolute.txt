@@ -1,0 +1,12 @@
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/bin/Debug/net9.0/AppointmentApplication.Domain.deps.json
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/bin/Debug/net9.0/AppointmentApplication.Domain.dll
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/bin/Debug/net9.0/AppointmentApplication.Domain.pdb
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/obj/Debug/net9.0/AppointmentApplication.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/obj/Debug/net9.0/AppointmentApplication.Domain.AssemblyInfoInputs.cache
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/obj/Debug/net9.0/AppointmentApplication.Domain.AssemblyInfo.cs
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/obj/Debug/net9.0/AppointmentApplication.Domain.csproj.CoreCompileInputs.cache
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/obj/Debug/net9.0/AppointmentApplication.Domain.dll
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/obj/Debug/net9.0/refint/AppointmentApplication.Domain.dll
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/obj/Debug/net9.0/AppointmentApplication.Domain.pdb
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/obj/Debug/net9.0/ref/AppointmentApplication.Domain.dll
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/obj/Debug/net9.0/AppointmentApplication.Domain.csproj.AssemblyReference.cache
