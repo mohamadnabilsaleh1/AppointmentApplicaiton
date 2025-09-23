@@ -24,6 +24,7 @@ using AppointmentApplication.Domain.MedicalRecordAttachments;
 using AppointmentApplication.Domain.MedicalRecords;
 using AppointmentApplication.Domain.Patients;
 using AppointmentApplication.Domain.Patients.Allergies;
+using AppointmentApplication.Domain.Patients.ChronicDiseases;
 using AppointmentApplication.Domain.Patients.PatientAllergies;
 using AppointmentApplication.Domain.Patients.PatientChronicDiseases;
 using AppointmentApplication.Domain.Prescriptions;
@@ -247,12 +248,12 @@ public class AppDbContext : DbContext, IAppDbContext
         });
 
         // ChronicDisease configuration
-        // modelBuilder.Entity<ChronicDisease>(entity =>
-        // {
-        //     entity.HasKey(e => e.Id);
-        //     entity.Property(e => e.Id).ValueGeneratedNever();
-        //     entity.Property(e => e.Name).IsRequired().HasMaxLength(255);
-        // });
+        modelBuilder.Entity<ChronicDisease>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(255);
+        });
 
         // Doctor configuration
         modelBuilder.Entity<Doctor>(entity =>
@@ -413,10 +414,10 @@ public class AppDbContext : DbContext, IAppDbContext
                 .HasForeignKey(pa => pa.PatientId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // entity.HasOne(pa => pa.Allergy)
-            //     .WithMany(a => a.PatientAllergies)
-            //     .HasForeignKey(pa => pa.AllergyId)
-            //     .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(pa => pa.Allergy)
+                .WithMany(a => a.PatientAllergies)
+                .HasForeignKey(pa => pa.AllergyId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasIndex(e => new { e.PatientId, e.AllergyId }).IsUnique();
         });
@@ -434,10 +435,10 @@ public class AppDbContext : DbContext, IAppDbContext
                 .HasForeignKey(pcd => pcd.PatientId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // entity.HasOne(pcd => pcd.ChronicDisease)
-            //     .WithMany(cd => cd.PatientChronicDiseases)
-            //     .HasForeignKey(pcd => pcd.ChronicDiseaseId)
-            //     .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(pcd => pcd.ChronicDisease)
+                .WithMany(cd => cd.PatientChronicDiseases)
+                .HasForeignKey(pcd => pcd.ChronicDiseaseId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasIndex(e => new { e.PatientId, e.ChronicDiseaseId }).IsUnique();
         });
@@ -517,10 +518,10 @@ public class AppDbContext : DbContext, IAppDbContext
                 .HasForeignKey(a => a.PatientID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // entity.HasOne(a => a.Doctor)
-            //     .WithMany(d => d.Appointments)
-            //     .HasForeignKey(a => a.DoctorID)
-            //     .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(a => a.Doctor)
+                .WithMany(d => d.Appointments)
+                .HasForeignKey(a => a.DoctorID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(a => a.Facility)
                 .WithMany()

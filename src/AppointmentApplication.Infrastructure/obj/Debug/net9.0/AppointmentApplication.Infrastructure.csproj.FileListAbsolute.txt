@@ -17,3 +17,4 @@
 /home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Infrastructure/obj/Debug/net9.0/ref/AppointmentApplication.Infrastructure.dll
 /home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Infrastructure/bin/Debug/net9.0/AppointmentApplication.Infrastructure.runtimeconfig.json
 /home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Infrastructure/obj/Debug/net9.0/AppointmentApplication.Infrastructure.genruntimeconfig.cache
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Infrastructure/obj/Debug/net9.0/AppointmentApplication.Infrastructure.sourcelink.json
