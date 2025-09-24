@@ -1,0 +1,25 @@
+{"@t":"2025-09-23T19:37:06.9854186Z","@mt":"Seq {SeqVersion} running on OS {OSCaption}","SeqVersion":"2025.2.14476","OSCaption":"Ubuntu 22.04.5 LTS","SourceContext":"Seq.Diagnostics.Logging.EnvironmentInformationWriter"}
+{"@t":"2025-09-23T19:37:07.3812171Z","@mt":"Seq listening on {ListenUris}","ListenUris":["http://localhost/","https://localhost/","http://localhost:5341/","https://localhost:45341/"]}
+{"@t":"2025-09-23T19:37:07.3880471Z","@mt":"Opening event store at {StreamPath}","StreamPath":"/data/Stream/stream.flare","SourceContext":"Seq.Engine.Cluster.NativeStorage"}
+{"@t":"2025-09-23T19:37:07.4283578Z","@mt":"Opening metastore {MetastorePath}","MetastorePath":"/data/Documents/metastore.flare","SourceContext":"Seq.Metastore.Native.NativeDocumentStore"}
+{"@t":"2025-09-23T19:37:07.4422738Z","@mt":"Initializing a new metastore","SourceContext":"Seq.Metastore.Native.NativeDocumentStore"}
+{"@t":"2025-09-23T19:37:07.4733607Z","@mt":"Skipping authentication setup; `firstRun.noAuthentication` is specified","@l":"Warning"}
+{"@t":"2025-09-23T19:37:07.5257189Z","@mt":"Creating default workspace for {UserId}","UserId":"user-admin"}
+{"@t":"2025-09-23T19:37:07.5912906Z","@mt":"Storage subsystem available"}
+{"@t":"2025-09-23T19:37:07.5938822Z","@mt":"Storing new key {FriendlyName}","FriendlyName":"key-e27afdcb-7bdb-4028-acf9-02e7a6528641"}
+{"@t":"2025-09-23T19:37:07.6005827Z","@mt":"Loaded key {XmlKeyId} with friendly name {FriendlyName}","XmlKeyId":"xmlkey-18","FriendlyName":"key-e27afdcb-7bdb-4028-acf9-02e7a6528641"}
+{"@t":"2025-09-23T19:37:07.6065246Z","@mt":"Ingestion enabled","SourceContext":"Seq.Engine.Cluster.NativeStorage"}
+{"@t":"2025-09-23T19:37:17.6415584Z","@mt":"Authentication is disabled. To protect your system, enable authentication in Settings > Users.","@l":"Warning","SystemComponent":"Authentication","SourceContext":"Seq.Diagnostics.Status.SystemNotificationDispatcher"}
+{"@t":"2025-09-23T19:38:07.6834442Z","@sp":"63c7beeb9bfc0e89","@tr":"3bf821072c897bda4d57f7643d9acba2","@mt":"Creating {IndexCount} missing index definitions","IndexCount":4,"SourceContext":"Seq.Engine.Queries.DataStore"}
+{"@t":"2025-09-23T19:38:07.7006257Z","@sp":"63c7beeb9bfc0e89","@tr":"3bf821072c897bda4d57f7643d9acba2","@mt":"Wrote {IndexSetCount} index sets","IndexSetCount":0,"SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-23T19:38:07.7010002Z","@sp":"63c7beeb9bfc0e89","@tr":"3bf821072c897bda4d57f7643d9acba2","@mt":"Indexing with {Allocated:0.000} ms allowance","@r":["600000.000"],"Allocated":600000,"@st":"2025-09-23T19:38:07.6345568Z","SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-23T19:39:07.6382498Z","@sp":"e9a521f83b45aba4","@tr":"a622a5b7539b10e5b731f67f401991b8","@mt":"Wrote {IndexSetCount} index sets","IndexSetCount":0,"SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-23T19:39:07.6384352Z","@sp":"e9a521f83b45aba4","@tr":"a622a5b7539b10e5b731f67f401991b8","@mt":"Indexing with {Allocated:0.000} ms allowance","@r":["600000.000"],"Allocated":600000,"@st":"2025-09-23T19:39:07.6334427Z","SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-23T19:39:19.0920381Z","@mt":"Termination signal received"}
+{"@t":"2025-09-23T19:39:19.0940738Z","@mt":"Stopping {Tasks} scheduled leader tasks","Tasks":18,"SourceContext":"Seq.Server.Tasks.TaskRunner"}
+{"@t":"2025-09-23T19:39:19.0955573Z","@mt":"Stopping input channel","SourceContext":"Seq.Server.Features.Apps.Inputs.InputChannel"}
+{"@t":"2025-09-23T19:39:19.6513427Z","@mt":"Shutting down input channel; {AcceptedCount} queued events will be written","AcceptedCount":0,"SourceContext":"Seq.Server.Features.Apps.Inputs.InputChannel"}
+{"@t":"2025-09-23T19:39:19.6525557Z","@mt":"Stopping broadcast channel","SourceContext":"Seq.Engine.Broadcast.BroadcastChannel"}
+{"@t":"2025-09-23T19:39:20.6531004Z","@mt":"Shutting down broadcast channel with {AllowableFlush} flushable event batches (+{Tolerance} tolerance)","AllowableFlush":0,"Tolerance":15,"SourceContext":"Seq.Engine.Broadcast.BroadcastChannel"}
+{"@t":"2025-09-23T19:39:20.6540019Z","@mt":"Stopping alert processor","SourceContext":"Seq.Server.Features.Alerting.AlertProcessor"}
+{"@t":"2025-09-23T19:39:20.7088941Z","@mt":"Server stopped cleanly"}

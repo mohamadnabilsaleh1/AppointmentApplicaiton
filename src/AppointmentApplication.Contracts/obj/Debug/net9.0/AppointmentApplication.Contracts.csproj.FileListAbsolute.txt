@@ -1,0 +1,16 @@
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/bin/Debug/net9.0/AppointmentApplication.Contracts.deps.json
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/bin/Debug/net9.0/AppointmentApplication.Contracts.dll
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/bin/Debug/net9.0/AppointmentApplication.Contracts.pdb
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/bin/Debug/net9.0/AppointmentApplication.Domain.dll
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/bin/Debug/net9.0/AppointmentApplication.Domain.pdb
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/obj/Debug/net9.0/AppointmentApplication.Contracts.csproj.AssemblyReference.cache
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/obj/Debug/net9.0/AppointmentApplication.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/obj/Debug/net9.0/AppointmentApplication.Contracts.AssemblyInfoInputs.cache
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/obj/Debug/net9.0/AppointmentApplication.Contracts.AssemblyInfo.cs
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/obj/Debug/net9.0/AppointmentApplication.Contracts.csproj.CoreCompileInputs.cache
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/obj/Debug/net9.0/AppointmentApplication.Contracts.sourcelink.json
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/obj/Debug/net9.0/Appointm.F97AEF7F.Up2Date
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/obj/Debug/net9.0/AppointmentApplication.Contracts.dll
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/obj/Debug/net9.0/refint/AppointmentApplication.Contracts.dll
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/obj/Debug/net9.0/AppointmentApplication.Contracts.pdb
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Contracts/obj/Debug/net9.0/ref/AppointmentApplication.Contracts.dll

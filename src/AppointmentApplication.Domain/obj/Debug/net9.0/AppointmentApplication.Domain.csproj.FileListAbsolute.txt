@@ -10,3 +10,4 @@
 /home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/obj/Debug/net9.0/AppointmentApplication.Domain.pdb
 /home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/obj/Debug/net9.0/ref/AppointmentApplication.Domain.dll
 /home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/obj/Debug/net9.0/AppointmentApplication.Domain.csproj.AssemblyReference.cache
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/obj/Debug/net9.0/AppointmentApplication.Domain.sourcelink.json

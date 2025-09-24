@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AppointmentApplication.Domain.Abstractions;
+using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.DoctorDepartments;
 using AppointmentApplication.Domain.DoctorFacilities;
 using AppointmentApplication.Domain.Doctors.ScheduleExceptions;
@@ -34,8 +35,8 @@ public class Doctor : AuditableEntity
     private readonly List<ScheduleExceptionDoctor> _scheduleExceptions = new();
     public IReadOnlyCollection<ScheduleExceptionDoctor> ScheduleExceptions => _scheduleExceptions.AsReadOnly();
 
-    // private readonly List<Appointment> _appointments = new();
-    // public IReadOnlyCollection<Appointment> Appointments => _appointments.AsReadOnly();
+    private readonly List<Appointment> _appointments = new();
+    public IReadOnlyCollection<Appointment> Appointments => _appointments.AsReadOnly();
     private Doctor() { }
     public static Doctor Create(string userId, string firstName, string lastName, Gender gender,
     DateOnly dateOfBirth, Guid specializationId, string licenseNumber)

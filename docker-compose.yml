@@ -1,40 +1,86 @@
-version: '3.4'
-
 services:
-  web-api:
-    image: ${DOCKER_REGISTRY-}webapi
-    container_name: web-api
+  appointmentapp-api:
+    container_name: appointmentapp-api
     build:
       context: .
-      dockerfile: src/Web.Api/Dockerfile
+      dockerfile: Dockerfile
+      target: final
     ports:
-      - 5000:5000
-      - 5001:5001
-
-  postgres:
-    image: postgres:latest
-    container_name: postgres
+      - "5001:80"
     environment:
-      - POSTGRES_DB=clean-architecture
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    volumes:
-      - ./.containers/db:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
-
-  seq:
-    image: datalust/seq:latest
-    container_name: seq
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=AppointmentAppDb;User=sa;Password=YourStrong@Password1;TrustServerCertificate=True;MultipleActiveResultSets=True
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://seq:5341/ingest/otlp/v1/traces
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+    depends_on:
+      - sqlserver
+      - seq
+    networks:
+      - appointmentapp-net
+    restart: on-failure
+    
+  sqlserver:
+    container_name: appointmentapp-sql
+    image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong@Password1
     ports:
-      - 5341:5341
-      - 8081:80
-
-  redis:
-    image: redis:latest
-    container_name: redis
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - appointmentapp-net
     restart: always
+
+  seq:
+    container_name: seq
+    image: datalust/seq:latest
+    volumes:
+      - ./containers/seq:/data
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_NOAUTHENTICATION=true
+    networks:
+      - appointmentapp-net
     ports:
-      - '6379:6379'
+      - "5341:5341"
+      - "8081:80"
+    restart: unless-stopped
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./containers/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    depends_on:
+      - appointmentapp-api
+    networks:
+      - appointmentapp-net
+    restart: unless-stopped
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=YourStrongPwd
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - appointmentapp-net
+    restart: unless-stopped
+
+volumes:
+  sqlserver-data: {}
+  grafana-data: {}
+
+networks:
+  appointmentapp-net:
+    driver: bridge

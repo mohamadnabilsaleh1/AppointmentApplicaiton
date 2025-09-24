@@ -13,6 +13,7 @@
         "packagesPath": "/home/kali/.nuget/packages/",
         "outputPath": "/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Application/obj/",
         "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
         "configFilePaths": [
           "/home/kali/.nuget/NuGet/NuGet.Config"
         ],
@@ -33,7 +34,6 @@
           }
         },
         "warningProperties": {
-          "allWarningsAsErrors": true,
           "warnAsError": [
             "NU1605"
           ]
@@ -49,16 +49,74 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "FluentValidation.DependencyInjectionExtensions": {
+              "target": "Package",
+              "version": "[12.0.0, )",
+              "versionCentrallyManaged": true
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[9.0.9, )"
+              "version": "[9.0.6, )",
+              "versionCentrallyManaged": true
             },
-            "SonarAnalyzer.CSharp": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+            "QuestPDF": {
+              "target": "Package",
+              "version": "[2025.5.1, )",
+              "versionCentrallyManaged": true
+            },
+            "StyleCop.Analyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.20.0.85982, )"
+              "version": "[1.2.0-beta.556, )",
+              "versionCentrallyManaged": true
             }
+          },
+          "centralPackageVersions": {
+            "Asp.Versioning.Mvc": "8.1.0",
+            "Asp.Versioning.Mvc.ApiExplorer": "8.1.0",
+            "Blazored.LocalStorage": "4.5.0",
+            "coverlet.collector": "6.0.4",
+            "FluentValidation.AspNetCore": "11.3.1",
+            "FluentValidation.DependencyInjectionExtensions": "12.0.0",
+            "Humanizer": "2.14.1",
+            "MediatR": "12.5.0",
+            "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.6",
+            "Microsoft.AspNetCore.Authorization": "9.0.6",
+            "Microsoft.AspNetCore.Components.DataAnnotations.Validation": "3.2.0-rc1.20223.4",
+            "Microsoft.AspNetCore.Components.Web": "9.0.6",
+            "Microsoft.AspNetCore.Components.WebAssembly": "9.0.6",
+            "Microsoft.AspNetCore.Components.WebAssembly.Authentication": "9.0.6",
+            "Microsoft.AspNetCore.Components.WebAssembly.Server": "9.0.6",
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "9.0.6",
+            "Microsoft.AspNetCore.Mvc.Testing": "9.0.6",
+            "Microsoft.AspNetCore.OpenApi": "9.0.6",
+            "Microsoft.AspNetCore.SignalR.Client": "9.0.6",
+            "Microsoft.EntityFrameworkCore": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Design": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Sqlite": "9.0.6",
+            "Microsoft.EntityFrameworkCore.SqlServer": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Tools": "9.0.6",
+            "Microsoft.Extensions.Caching.Hybrid": "9.6.0",
+            "Microsoft.Extensions.Configuration.Abstractions": "9.0.6",
+            "Microsoft.Extensions.Http": "9.0.6",
+            "Microsoft.NET.Test.Sdk": "17.14.1",
+            "NSubstitute": "5.3.0",
+            "OpenTelemetry.Exporter.OpenTelemetryProtocol": "1.12.0",
+            "OpenTelemetry.Exporter.Prometheus.AspNetCore": "1.12.0-beta.1",
+            "OpenTelemetry.Extensions.Hosting": "1.12.0",
+            "OpenTelemetry.Instrumentation.AspNetCore": "1.12.0",
+            "OpenTelemetry.Instrumentation.Http": "1.12.0",
+            "QuestPDF": "2025.5.1",
+            "Scalar.AspNetCore": "2.5.3",
+            "Serilog.AspNetCore": "9.0.0",
+            "Serilog.Sinks.Seq": "9.0.0",
+            "StyleCop.Analyzers": "1.2.0-beta.556",
+            "Swashbuckle.AspNetCore": "9.0.1",
+            "System.IdentityModel.Tokens.Jwt": "8.12.1",
+            "Testcontainers.MsSql": "4.6.0",
+            "xunit": "2.9.3",
+            "xunit.runner.visualstudio": "3.1.1"
           },
           "imports": [
             "net461",
@@ -89,6 +147,7 @@
         "packagesPath": "/home/kali/.nuget/packages/",
         "outputPath": "/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/obj/",
         "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
         "configFilePaths": [
           "/home/kali/.nuget/NuGet/NuGet.Config"
         ],
@@ -105,7 +164,6 @@
           }
         },
         "warningProperties": {
-          "allWarningsAsErrors": true,
           "warnAsError": [
             "NU1605"
           ]
@@ -123,14 +181,62 @@
           "dependencies": {
             "MediatR": {
               "target": "Package",
-              "version": "[13.0.0, )"
+              "version": "[12.5.0, )",
+              "versionCentrallyManaged": true
             },
-            "SonarAnalyzer.CSharp": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+            "StyleCop.Analyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.20.0.85982, )"
+              "version": "[1.2.0-beta.556, )",
+              "versionCentrallyManaged": true
             }
+          },
+          "centralPackageVersions": {
+            "Asp.Versioning.Mvc": "8.1.0",
+            "Asp.Versioning.Mvc.ApiExplorer": "8.1.0",
+            "Blazored.LocalStorage": "4.5.0",
+            "coverlet.collector": "6.0.4",
+            "FluentValidation.AspNetCore": "11.3.1",
+            "FluentValidation.DependencyInjectionExtensions": "12.0.0",
+            "Humanizer": "2.14.1",
+            "MediatR": "12.5.0",
+            "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.6",
+            "Microsoft.AspNetCore.Authorization": "9.0.6",
+            "Microsoft.AspNetCore.Components.DataAnnotations.Validation": "3.2.0-rc1.20223.4",
+            "Microsoft.AspNetCore.Components.Web": "9.0.6",
+            "Microsoft.AspNetCore.Components.WebAssembly": "9.0.6",
+            "Microsoft.AspNetCore.Components.WebAssembly.Authentication": "9.0.6",
+            "Microsoft.AspNetCore.Components.WebAssembly.Server": "9.0.6",
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "9.0.6",
+            "Microsoft.AspNetCore.Mvc.Testing": "9.0.6",
+            "Microsoft.AspNetCore.OpenApi": "9.0.6",
+            "Microsoft.AspNetCore.SignalR.Client": "9.0.6",
+            "Microsoft.EntityFrameworkCore": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Design": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Sqlite": "9.0.6",
+            "Microsoft.EntityFrameworkCore.SqlServer": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Tools": "9.0.6",
+            "Microsoft.Extensions.Caching.Hybrid": "9.6.0",
+            "Microsoft.Extensions.Configuration.Abstractions": "9.0.6",
+            "Microsoft.Extensions.Http": "9.0.6",
+            "Microsoft.NET.Test.Sdk": "17.14.1",
+            "NSubstitute": "5.3.0",
+            "OpenTelemetry.Exporter.OpenTelemetryProtocol": "1.12.0",
+            "OpenTelemetry.Exporter.Prometheus.AspNetCore": "1.12.0-beta.1",
+            "OpenTelemetry.Extensions.Hosting": "1.12.0",
+            "OpenTelemetry.Instrumentation.AspNetCore": "1.12.0",
+            "OpenTelemetry.Instrumentation.Http": "1.12.0",
+            "QuestPDF": "2025.5.1",
+            "Scalar.AspNetCore": "2.5.3",
+            "Serilog.AspNetCore": "9.0.0",
+            "Serilog.Sinks.Seq": "9.0.0",
+            "StyleCop.Analyzers": "1.2.0-beta.556",
+            "Swashbuckle.AspNetCore": "9.0.1",
+            "System.IdentityModel.Tokens.Jwt": "8.12.1",
+            "Testcontainers.MsSql": "4.6.0",
+            "xunit": "2.9.3",
+            "xunit.runner.visualstudio": "3.1.1"
           },
           "imports": [
             "net461",
