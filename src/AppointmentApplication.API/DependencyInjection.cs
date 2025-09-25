@@ -5,8 +5,8 @@ using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using System.Threading.Tasks;
 
-using AppointmentApplication.Api.OpenApi.Transformers;
 using AppointmentApplication.API.Infrastructure;
+using AppointmentApplication.Api.OpenApi.Transformers;
 using AppointmentApplication.Infrastructure.Settings;
 using Asp.Versioning;
 using Microsoft.AspNetCore.RateLimiting;
@@ -14,6 +14,8 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Serilog;
+using AppointmentApplication.API.Services;
+
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjection
@@ -36,9 +38,8 @@ public static class DependencyInjection
                 .AddAppOutputCaching()
                 .AddAppOpenTelememrty()
                 .AddSignalR();
-
-            //                .AddIdentityInfrastructure()
-
+        services.AddScoped<LinkService>();
+        // .AddIdentityInfrastructure()
         return services;
     }
 
@@ -154,9 +155,15 @@ public static class DependencyInjection
 
     public static IServiceCollection AddControllerWithJsonConfiguration(this IServiceCollection services)
     {
-        services.AddControllers().AddJsonOptions(options => options
-            .JsonSerializerOptions
-            .DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
+        services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                // تحويل enum إلى نصوص
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+
+                // تجاهل القيم null عند الكتابة في JSON
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            });
 
         return services;
     }

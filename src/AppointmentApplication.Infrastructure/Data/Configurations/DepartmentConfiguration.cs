@@ -16,7 +16,7 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
         builder.Property(e => e.CreatedAtUtc).IsRequired();
         builder.Property(e => e.UpdatedAtdUtc);
 
-        builder.HasOne(d => d.Facility)
+        builder.HasOne(d => d.HealthcareFacility)
               .WithMany(f => f.Departments)
               .HasForeignKey(d => d.FacilityId)
               .OnDelete(DeleteBehavior.Restrict);

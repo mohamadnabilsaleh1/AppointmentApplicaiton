@@ -24,7 +24,7 @@ public class MedicalRecordAttachment:AuditableEntity
     public MedicalRecord MedicalRecord { get; private set; }
 
     public static MedicalRecordAttachment Create(Guid medicalRecordId, Guid uploadedById,
-        string fileType, string fileUrli, string title , string description ,
+        string fileType, string fileUrli, string title, string description,
         string visibility = "Private")
     {
         return new MedicalRecordAttachment

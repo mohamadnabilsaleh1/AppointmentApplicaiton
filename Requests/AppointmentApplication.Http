@@ -1,0 +1,24 @@
+@baseUrl = http://localhost:5001
+
+### Create a Health Care Facility
+POST {{baseUrl}}/api/healthCareFacilities
+Content-Type: application/json
+
+{
+  "name": "Shaza Hospital",
+  "type": 0,
+  "street": "123 Main St",
+  "city": "Damascus",
+  "state": "Rif Dimashq",
+  "country": "Syria",
+  "zipCode": "11001",
+  "gpsLatitude": 33.5138,
+  "gpsLongitude": 36.2765
+}
+
+###
+GEt {{baseUrl}}/api/healthCareFacilities?zipCode=9711MN
+
+###
+
+GEt {{baseUrl}}/api/healthCareFacilities/2e7dd12a-d6eb-4032-a354-0efcd269940b

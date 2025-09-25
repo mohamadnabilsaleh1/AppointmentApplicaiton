@@ -1,6 +1,4 @@
 ﻿using AppointmentApplication.Domain.Abstractions;
-
-
 namespace AppointmentApplication.Domain.Users;
 
 public sealed class User : AuditableEntity
@@ -15,7 +13,9 @@ public sealed class User : AuditableEntity
         Email = email;
     }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private User()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     {
     }
 
@@ -29,9 +29,9 @@ public sealed class User : AuditableEntity
 
     public IReadOnlyCollection<Role> Roles => _roles.ToList();
 
-    public static User Create(FirstName firstName, LastName lastName, Email email)
+    public static User Create(Guid id, FirstName firstName, LastName lastName, Email email)
     {
-        var user = new User(Guid.NewGuid(), firstName, lastName, email);
+        var user = new User(id, firstName, lastName, email);
 
         user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
 
@@ -43,5 +43,10 @@ public sealed class User : AuditableEntity
     public void SetIdentityId(string identityId)
     {
         IdentityId = identityId;
+    }
+
+    public static object Create(Guid guid, string firstName, string lastName, string email)
+    {
+        throw new NotImplementedException();
     }
 }

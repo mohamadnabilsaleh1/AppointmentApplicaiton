@@ -54,6 +54,16 @@
               "version": "[12.0.0, )",
               "versionCentrallyManaged": true
             },
+            "Microsoft.AspNetCore.Http": {
+              "target": "Package",
+              "version": "[2.3.0, )",
+              "versionCentrallyManaged": true
+            },
+            "Microsoft.AspNetCore.Routing": {
+              "target": "Package",
+              "version": "[2.3.0, )",
+              "versionCentrallyManaged": true
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.6, )",
@@ -64,11 +74,21 @@
               "version": "[2025.5.1, )",
               "versionCentrallyManaged": true
             },
+            "Scrutor": {
+              "target": "Package",
+              "version": "[6.1.0, )",
+              "versionCentrallyManaged": true
+            },
             "StyleCop.Analyzers": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers",
               "suppressParent": "All",
               "target": "Package",
               "version": "[1.2.0-beta.556, )",
+              "versionCentrallyManaged": true
+            },
+            "System.Linq.Dynamic.Core": {
+              "target": "Package",
+              "version": "[1.6.7, )",
               "versionCentrallyManaged": true
             }
           },
@@ -88,9 +108,11 @@
             "Microsoft.AspNetCore.Components.WebAssembly": "9.0.6",
             "Microsoft.AspNetCore.Components.WebAssembly.Authentication": "9.0.6",
             "Microsoft.AspNetCore.Components.WebAssembly.Server": "9.0.6",
+            "Microsoft.AspNetCore.Http": "2.3.0",
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "9.0.6",
             "Microsoft.AspNetCore.Mvc.Testing": "9.0.6",
             "Microsoft.AspNetCore.OpenApi": "9.0.6",
+            "Microsoft.AspNetCore.Routing": "2.3.0",
             "Microsoft.AspNetCore.SignalR.Client": "9.0.6",
             "Microsoft.EntityFrameworkCore": "9.0.6",
             "Microsoft.EntityFrameworkCore.Design": "9.0.6",
@@ -109,11 +131,13 @@
             "OpenTelemetry.Instrumentation.Http": "1.12.0",
             "QuestPDF": "2025.5.1",
             "Scalar.AspNetCore": "2.5.3",
+            "Scrutor": "6.1.0",
             "Serilog.AspNetCore": "9.0.0",
             "Serilog.Sinks.Seq": "9.0.0",
             "StyleCop.Analyzers": "1.2.0-beta.556",
             "Swashbuckle.AspNetCore": "9.0.1",
             "System.IdentityModel.Tokens.Jwt": "8.12.1",
+            "System.Linq.Dynamic.Core": "1.6.7",
             "Testcontainers.MsSql": "4.6.0",
             "xunit": "2.9.3",
             "xunit.runner.visualstudio": "3.1.1"
@@ -208,9 +232,11 @@
             "Microsoft.AspNetCore.Components.WebAssembly": "9.0.6",
             "Microsoft.AspNetCore.Components.WebAssembly.Authentication": "9.0.6",
             "Microsoft.AspNetCore.Components.WebAssembly.Server": "9.0.6",
+            "Microsoft.AspNetCore.Http": "2.3.0",
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "9.0.6",
             "Microsoft.AspNetCore.Mvc.Testing": "9.0.6",
             "Microsoft.AspNetCore.OpenApi": "9.0.6",
+            "Microsoft.AspNetCore.Routing": "2.3.0",
             "Microsoft.AspNetCore.SignalR.Client": "9.0.6",
             "Microsoft.EntityFrameworkCore": "9.0.6",
             "Microsoft.EntityFrameworkCore.Design": "9.0.6",
@@ -229,11 +255,13 @@
             "OpenTelemetry.Instrumentation.Http": "1.12.0",
             "QuestPDF": "2025.5.1",
             "Scalar.AspNetCore": "2.5.3",
+            "Scrutor": "6.1.0",
             "Serilog.AspNetCore": "9.0.0",
             "Serilog.Sinks.Seq": "9.0.0",
             "StyleCop.Analyzers": "1.2.0-beta.556",
             "Swashbuckle.AspNetCore": "9.0.1",
             "System.IdentityModel.Tokens.Jwt": "8.12.1",
+            "System.Linq.Dynamic.Core": "1.6.7",
             "Testcontainers.MsSql": "4.6.0",
             "xunit": "2.9.3",
             "xunit.runner.visualstudio": "3.1.1"

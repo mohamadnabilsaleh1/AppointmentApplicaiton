@@ -13,7 +13,7 @@ public sealed class Department : AuditableEntity
     public string Description { get; private set; } = string.Empty;
     public bool IsActive { get; private set; } = true;
 
-    public HealthCareFacility Facility { get; private set; } = null!;
+    public HealthCareFacility HealthcareFacility { get; private set; } = null!;
 
     private readonly List<DoctorDepartment> _doctorDepartments = new();
     public IReadOnlyCollection<DoctorDepartment> DoctorDepartments => _doctorDepartments.AsReadOnly();
@@ -22,40 +22,34 @@ public sealed class Department : AuditableEntity
     private Department() { }
 #pragma warning restore CS8618
 
-    private Department(Guid facilityId, string name, string description)
+    private Department(Guid healthcareFacilityId, string name, string description)
     {
         Id = Guid.NewGuid();
-        FacilityId = facilityId;
+        FacilityId = healthcareFacilityId;
         Name = name;
         Description = description;
         IsActive = true;
     }
 
     // ✅ Create
-    public static Result<Department> Create(Guid facilityId, string name, string description)
+    public static Result<Department> Create(Guid healthcareFacilityId, string name, string description)
     {
-        if (facilityId == Guid.Empty)
+        if (healthcareFacilityId == Guid.Empty)
         {
-
             return DepartmentErrors.FacilityIdRequired;
         }
 
-
         if (string.IsNullOrWhiteSpace(name))
         {
-
             return DepartmentErrors.NameRequired;
         }
 
-
         if (!string.IsNullOrWhiteSpace(description) && description.Length > 1000)
         {
-
             return DepartmentErrors.DescriptionTooLong;
         }
 
-
-        return new Department(facilityId, name.Trim(), description?.Trim() ?? string.Empty);
+        return new Department(healthcareFacilityId, name.Trim(), description?.Trim() ?? string.Empty);
     }
 
     // ✅ Update
@@ -63,17 +57,13 @@ public sealed class Department : AuditableEntity
     {
         if (string.IsNullOrWhiteSpace(name))
         {
-
             return DepartmentErrors.NameRequired;
         }
 
-
         if (!string.IsNullOrWhiteSpace(description) && description.Length > 1000)
         {
-
             return DepartmentErrors.DescriptionTooLong;
         }
-
 
         Name = name.Trim();
         Description = description?.Trim() ?? string.Empty;
@@ -86,10 +76,8 @@ public sealed class Department : AuditableEntity
     {
         if (doctorDepartment is null)
         {
-
             return DepartmentErrors.DoctorDepartmentRequired;
         }
-
 
         _doctorDepartments.Add(doctorDepartment);
         return Result.Success;
@@ -99,10 +87,8 @@ public sealed class Department : AuditableEntity
     {
         if (doctorDepartment is null)
         {
-
             return DepartmentErrors.DoctorDepartmentRequired;
         }
-
 
         _doctorDepartments.Remove(doctorDepartment);
         return Result.Success;
@@ -113,10 +99,8 @@ public sealed class Department : AuditableEntity
     {
         if (!IsActive)
         {
-
             return DepartmentErrors.AlreadyInactive;
         }
-
 
         IsActive = false;
         return Result.Deleted;
@@ -126,10 +110,8 @@ public sealed class Department : AuditableEntity
     {
         if (IsActive)
         {
-
             return DepartmentErrors.AlreadyActive;
         }
-
 
         IsActive = true;
         return Result.Updated;

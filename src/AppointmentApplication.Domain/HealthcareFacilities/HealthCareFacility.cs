@@ -33,8 +33,8 @@ public sealed class HealthCareFacility : AuditableEntity
     private HealthCareFacility() { }
 #pragma warning restore CS8618
 
-    private HealthCareFacility(string userId, string name, HealthCareType type, Address address,
-        double latitude, double longitude)
+    private HealthCareFacility(Guid id, string userId, string name, HealthCareType type, Address address,
+        double latitude, double longitude):base(id)
     {
         UserId = userId;
         Name = name;
@@ -47,6 +47,7 @@ public sealed class HealthCareFacility : AuditableEntity
 
     // ✅ Create with inline validation
     public static Result<HealthCareFacility> Create(
+        Guid id,
         string userId,
         string name,
         HealthCareType type,
@@ -75,7 +76,7 @@ public sealed class HealthCareFacility : AuditableEntity
         }
 
 
-        return new HealthCareFacility(userId, name.Trim(), type, address, latitude, longitude);
+        return new HealthCareFacility(id, userId, name.Trim(), type, address, latitude, longitude);
     }
 
     public Result<Updated> Update(string name, HealthCareType type, Address address,

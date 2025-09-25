@@ -1,7 +1,8 @@
+using System.Text.RegularExpressions;
+
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.HealthcareFacilities.Enums;
 using FluentValidation;
-using System.Text.RegularExpressions;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
 
@@ -9,10 +10,37 @@ public sealed class CreateHealthcareFacilityCommandValidator : AbstractValidator
 {
     public CreateHealthcareFacilityCommandValidator()
     {
-        RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("User ID is required")
-            .MaximumLength(50).WithMessage("User ID cannot exceed 50 characters")
-            .Matches("^[a-zA-Z0-9_-]+$").WithMessage("User ID contains invalid characters");
+        RuleFor(x => x.FirstName)
+            .NotEmpty().WithMessage("First name is required")
+            .MaximumLength(50).WithMessage("First name cannot exceed 50 characters")
+            .MinimumLength(2).WithMessage("First name must be at least 2 characters long")
+            .Matches(@"^[a-zA-Z\s\-'\.]+$").WithMessage("First name contains invalid characters");
+
+        RuleFor(x => x.LastName)
+            .NotEmpty().WithMessage("Last name is required")
+            .MaximumLength(50).WithMessage("Last name cannot exceed 50 characters")
+            .MinimumLength(2).WithMessage("Last name must be at least 2 characters long")
+            .Matches(@"^[a-zA-Z\s\-'\.]+$").WithMessage("Last name contains invalid characters");
+
+        // Email validation
+        RuleFor(x => x.Email)
+            .NotEmpty().WithMessage("Email address is required")
+            .MaximumLength(100).WithMessage("Email address cannot exceed 100 characters")
+            .EmailAddress().WithMessage("Invalid email address format")
+            .Matches(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+            .WithMessage("Invalid email address format");
+
+        // Password validation
+        RuleFor(x => x.Password)
+            .NotEmpty().WithMessage("Password is required")
+            .MinimumLength(8).WithMessage("Password must be at least 8 characters long")
+            .MaximumLength(100).WithMessage("Password cannot exceed 100 characters")
+            .Matches(@"[A-Z]").WithMessage("Password must contain at least one uppercase letter")
+            .Matches(@"[a-z]").WithMessage("Password must contain at least one lowercase letter")
+            .Matches(@"[0-9]").WithMessage("Password must contain at least one number")
+            .Matches(@"[!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]")
+            .WithMessage("Password must contain at least one special character")
+            .Must(NotContainWhitespace).WithMessage("Password cannot contain whitespace");
 
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Facility name is required")
@@ -71,7 +99,12 @@ public sealed class CreateHealthcareFacilityCommandValidator : AbstractValidator
 
         int latitudePrecision = latitudeString.Contains('.') ? latitudeString.Split('.')[1].Length : 0;
         int longitudePrecision = longitudeString.Contains('.') ? longitudeString.Split('.')[1].Length : 0;
-        
+
         return latitudePrecision <= 6 && longitudePrecision <= 6;
+    }
+
+    private bool NotContainWhitespace(string password)
+    {
+        return !string.IsNullOrWhiteSpace(password) && !password.Any(char.IsWhiteSpace);
     }
 }
