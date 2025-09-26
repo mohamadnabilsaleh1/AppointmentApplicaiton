@@ -51,13 +51,11 @@ public sealed class ScheduleHealthcareFacility : AuditableEntity
             return ScheduleHealthcareFacilityErrors.FacilityIdRequired;
         }
 
-
         if (!Enum.IsDefined(dayOfWeek))
         {
 
             return ScheduleHealthcareFacilityErrors.InvalidDayOfWeek;
         }
-
 
         if (endTime <= startTime)
         {
@@ -65,20 +63,17 @@ public sealed class ScheduleHealthcareFacility : AuditableEntity
             return ScheduleHealthcareFacilityErrors.InvalidTimeRange;
         }
 
-
         if (!Enum.IsDefined(status))
         {
 
             return ScheduleHealthcareFacilityErrors.StatusRequired;
         }
 
-
         if (!string.IsNullOrWhiteSpace(note) && note.Length > 500)
         {
 
             return ScheduleHealthcareFacilityErrors.NoteTooLong;
         }
-
 
         return new ScheduleHealthcareFacility(
             Guid.NewGuid(),
@@ -101,13 +96,11 @@ public sealed class ScheduleHealthcareFacility : AuditableEntity
             return ScheduleHealthcareFacilityErrors.InvalidDayOfWeek;
         }
 
-
         if (endTime <= startTime)
         {
 
             return ScheduleHealthcareFacilityErrors.InvalidTimeRange;
         }
-
 
         if (!Enum.IsDefined(status))
         {
@@ -115,13 +108,11 @@ public sealed class ScheduleHealthcareFacility : AuditableEntity
             return ScheduleHealthcareFacilityErrors.StatusRequired;
         }
 
-
         if (!string.IsNullOrWhiteSpace(note) && note.Length > 500)
         {
 
             return ScheduleHealthcareFacilityErrors.NoteTooLong;
         }
-
 
         DayOfWeek = dayOfWeek;
         StartTime = startTime;

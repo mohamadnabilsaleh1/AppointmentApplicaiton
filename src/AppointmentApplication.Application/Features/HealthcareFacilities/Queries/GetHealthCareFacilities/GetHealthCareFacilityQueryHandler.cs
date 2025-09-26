@@ -59,8 +59,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
                 pageSize: request.PageSize,
                 fields: request.Fields,
                 toDtoFunc: list => list.ToDtos(),
-                filters: filters
-            );
+                filters: filters);
 
             return result;
         }

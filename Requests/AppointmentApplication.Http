@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ###
-GEt {{baseUrl}}/api/healthCareFacilities?zipCode=9711MN
+GEt {{baseUrl}}/api/healthCareFacilities
 
 ###
 

@@ -1,0 +1,28 @@
+{"@t":"2025-09-25T16:41:33.3777862Z","@mt":"Seq {SeqVersion} running on OS {OSCaption}","SeqVersion":"2025.2.14476","OSCaption":"Ubuntu 22.04.5 LTS","SourceContext":"Seq.Diagnostics.Logging.EnvironmentInformationWriter"}
+{"@t":"2025-09-25T16:41:33.9818944Z","@mt":"Seq listening on {ListenUris}","ListenUris":["http://localhost/","https://localhost/","http://localhost:5341/","https://localhost:45341/"]}
+{"@t":"2025-09-25T16:41:33.9926277Z","@mt":"Opening event store at {StreamPath}","StreamPath":"/data/Stream/stream.flare","SourceContext":"Seq.Engine.Cluster.NativeStorage"}
+{"@t":"2025-09-25T16:41:34.0482715Z","@mt":"Opening metastore {MetastorePath}","MetastorePath":"/data/Documents/metastore.flare","SourceContext":"Seq.Metastore.Native.NativeDocumentStore"}
+{"@t":"2025-09-25T16:41:34.0931977Z","@mt":"Storage subsystem available"}
+{"@t":"2025-09-25T16:41:34.1010395Z","@mt":"Loaded key {XmlKeyId} with friendly name {FriendlyName}","XmlKeyId":"xmlkey-18","FriendlyName":"key-e27afdcb-7bdb-4028-acf9-02e7a6528641"}
+{"@t":"2025-09-25T16:41:34.1131493Z","@mt":"Ingestion enabled","SourceContext":"Seq.Engine.Cluster.NativeStorage"}
+{"@t":"2025-09-25T16:41:44.1680068Z","@mt":"Authentication is disabled. To protect your system, enable authentication in Settings > Users.","@l":"Warning","SystemComponent":"Authentication","SourceContext":"Seq.Diagnostics.Status.SystemNotificationDispatcher"}
+{"@t":"2025-09-25T16:42:34.2147810Z","@sp":"723b923cf934262b","@tr":"273e266def25eca3a0902c038f0082e3","@mt":"Wrote {IndexSetCount} index sets","IndexSetCount":0,"SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-25T16:42:34.2160999Z","@sp":"723b923cf934262b","@tr":"273e266def25eca3a0902c038f0082e3","@mt":"Indexing with {Allocated:0.000} ms allowance","@r":["600000.000"],"Allocated":600000,"@st":"2025-09-25T16:42:34.1579507Z","SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-25T16:43:34.1625217Z","@sp":"8fcb61510b575733","@tr":"1e9216282b8aa18eb64eba8c5ef524be","@mt":"Wrote {IndexSetCount} index sets","IndexSetCount":0,"SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-25T16:43:34.1626659Z","@sp":"8fcb61510b575733","@tr":"1e9216282b8aa18eb64eba8c5ef524be","@mt":"Indexing with {Allocated:0.000} ms allowance","@r":["600000.000"],"Allocated":600000,"@st":"2025-09-25T16:43:34.1579300Z","SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-25T16:44:34.1646607Z","@sp":"b0fb7ef031bc7c05","@tr":"012c035bd62b9c208fb9be3c79055785","@mt":"Wrote {IndexSetCount} index sets","IndexSetCount":0,"SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-25T16:44:34.1655749Z","@sp":"b0fb7ef031bc7c05","@tr":"012c035bd62b9c208fb9be3c79055785","@mt":"Indexing with {Allocated:0.000} ms allowance","@r":["600000.000"],"Allocated":600000,"@st":"2025-09-25T16:44:34.1588514Z","SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-25T16:45:34.1619746Z","@sp":"51e894e2ad6e9b91","@tr":"32a8b5821ba1ff3e9ee7c33e72c4f51b","@mt":"Wrote {IndexSetCount} index sets","IndexSetCount":0,"SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-25T16:45:34.1639791Z","@sp":"51e894e2ad6e9b91","@tr":"32a8b5821ba1ff3e9ee7c33e72c4f51b","@mt":"Indexing with {Allocated:0.000} ms allowance","@r":["600000.000"],"Allocated":600000,"@st":"2025-09-25T16:45:34.1590685Z","SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-25T16:46:34.1603174Z","@sp":"67aa1ccae86e12f7","@tr":"830bad0327e908e6a618e5060674d3a5","@mt":"Wrote {IndexSetCount} index sets","IndexSetCount":0,"SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-25T16:46:34.1604210Z","@sp":"67aa1ccae86e12f7","@tr":"830bad0327e908e6a618e5060674d3a5","@mt":"Indexing with {Allocated:0.000} ms allowance","@r":["600000.000"],"Allocated":600000,"@st":"2025-09-25T16:46:34.1583640Z","SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-25T16:47:34.1602200Z","@sp":"d5942717fa4844a8","@tr":"5a38c359cfd9a5c30a2134ec941f032f","@mt":"Wrote {IndexSetCount} index sets","IndexSetCount":0,"SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-25T16:47:34.1603580Z","@sp":"d5942717fa4844a8","@tr":"5a38c359cfd9a5c30a2134ec941f032f","@mt":"Indexing with {Allocated:0.000} ms allowance","@r":["600000.000"],"Allocated":600000,"@st":"2025-09-25T16:47:34.1574907Z","SourceContext":"Seq.Server.Features.Indexing.EventStoreIndexer"}
+{"@t":"2025-09-25T16:47:43.8372373Z","@mt":"Termination signal received"}
+{"@t":"2025-09-25T16:47:43.8383885Z","@mt":"Stopping {Tasks} scheduled leader tasks","Tasks":18,"SourceContext":"Seq.Server.Tasks.TaskRunner"}
+{"@t":"2025-09-25T16:47:43.8394963Z","@mt":"Stopping input channel","SourceContext":"Seq.Server.Features.Apps.Inputs.InputChannel"}
+{"@t":"2025-09-25T16:47:44.2049360Z","@mt":"Shutting down input channel; {AcceptedCount} queued events will be written","AcceptedCount":0,"SourceContext":"Seq.Server.Features.Apps.Inputs.InputChannel"}
+{"@t":"2025-09-25T16:47:44.2058744Z","@mt":"Stopping broadcast channel","SourceContext":"Seq.Engine.Broadcast.BroadcastChannel"}
+{"@t":"2025-09-25T16:47:44.2094465Z","@mt":"Shutting down broadcast channel with {AllowableFlush} flushable event batches (+{Tolerance} tolerance)","AllowableFlush":0,"Tolerance":15,"SourceContext":"Seq.Engine.Broadcast.BroadcastChannel"}
+{"@t":"2025-09-25T16:47:44.2100275Z","@mt":"Stopping alert processor","SourceContext":"Seq.Server.Features.Alerting.AlertProcessor"}
+{"@t":"2025-09-25T16:47:44.2691133Z","@mt":"Server stopped cleanly"}

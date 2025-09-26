@@ -61,20 +61,17 @@ public sealed class HealthCareFacility : AuditableEntity
             return HealthCareFacilityErrors.UserIdRequired;
         }
 
-
         if (string.IsNullOrWhiteSpace(name))
         {
 
             return HealthCareFacilityErrors.NameRequired;
         }
 
-
         if (address is null)
         {
 
             return HealthCareFacilityErrors.AddressRequired;
         }
-
 
         return new HealthCareFacility(id, userId, name.Trim(), type, address, latitude, longitude);
     }
@@ -88,13 +85,11 @@ public sealed class HealthCareFacility : AuditableEntity
             return HealthCareFacilityErrors.NameRequired;
         }
 
-
         if (address is null)
         {
 
             return HealthCareFacilityErrors.AddressRequired;
         }
-
 
         Name = name.Trim();
         Type = type;
@@ -116,7 +111,6 @@ public sealed class HealthCareFacility : AuditableEntity
 
             return departmentResult.Errors;
         }
-
 
         Department department = departmentResult.Value;
         _departments.Add(department);

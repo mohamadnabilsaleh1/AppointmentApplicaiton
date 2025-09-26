@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +10,8 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace AppointmentApplication.API.Controllers;
 
 [ApiController]
-#pragma warning disable CA1515 // Consider making public types internal
 
 public class ApiController : ControllerBase
-#pragma warning restore CA1515 // Consider making public types internal
 
 {
     protected ActionResult Problem(List<Error> errors)

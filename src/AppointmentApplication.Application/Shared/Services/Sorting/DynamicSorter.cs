@@ -24,7 +24,6 @@ namespace AppointmentApplication.Application.Shared.Services
                 return query.OrderBy(defaultOrderBy);
             }
 
-
             try
             {
                 // جمع كل الحقول الصالحة
@@ -54,7 +53,6 @@ namespace AppointmentApplication.Application.Shared.Services
 
                     return query.OrderBy(defaultOrderBy);
                 }
-
 
                 string orderBy = string.Join(",", sortFields);
                 return query.OrderBy(orderBy);

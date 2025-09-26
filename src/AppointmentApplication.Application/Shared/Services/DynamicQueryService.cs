@@ -31,8 +31,7 @@ namespace AppointmentApplication.Application.Shared.Query
             int pageSize,
             string? fields,
             Func<List<TEntity>, List<TDto>> toDtoFunc,
-            Dictionary<string, object?>? filters = null
-        )
+            Dictionary<string, object?>? filters = null)
             where TEntity : class
         {
             // ---------------------

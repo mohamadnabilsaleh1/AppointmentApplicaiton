@@ -45,13 +45,11 @@ public sealed class ScheduleExceptionHealthcareFacility : AuditableEntity
             return ScheduleExceptionHealthcareFacilityErrors.FacilityIdRequired;
         }
 
-
         if (date == default)
         {
 
             return ScheduleExceptionHealthcareFacilityErrors.InvalidDate;
         }
-
 
         if (!Enum.IsDefined(dayOfWeek))
         {
@@ -59,13 +57,11 @@ public sealed class ScheduleExceptionHealthcareFacility : AuditableEntity
             return ScheduleExceptionHealthcareFacilityErrors.InvalidDayOfWeek;
         }
 
-
         if (endTime <= startTime)
         {
 
             return ScheduleExceptionHealthcareFacilityErrors.InvalidTimeRange;
         }
-
 
         if (!Enum.IsDefined(status))
         {
@@ -73,13 +69,11 @@ public sealed class ScheduleExceptionHealthcareFacility : AuditableEntity
             return ScheduleExceptionHealthcareFacilityErrors.StatusRequired;
         }
 
-
         if (!string.IsNullOrWhiteSpace(reason) && reason.Length > 500)
         {
 
             return ScheduleExceptionHealthcareFacilityErrors.ReasonTooLong;
         }
-
 
         return new ScheduleExceptionHealthcareFacility(
             facilityId, date, dayOfWeek, startTime, endTime, status, reason?.Trim() ?? string.Empty);
@@ -94,13 +88,11 @@ public sealed class ScheduleExceptionHealthcareFacility : AuditableEntity
             return ScheduleExceptionHealthcareFacilityErrors.InvalidDate;
         }
 
-
         if (!Enum.IsDefined(dayOfWeek))
         {
 
             return ScheduleExceptionHealthcareFacilityErrors.InvalidDayOfWeek;
         }
-
 
         if (endTime <= startTime)
         {
@@ -108,20 +100,17 @@ public sealed class ScheduleExceptionHealthcareFacility : AuditableEntity
             return ScheduleExceptionHealthcareFacilityErrors.InvalidTimeRange;
         }
 
-
         if (!Enum.IsDefined(status))
         {
 
             return ScheduleExceptionHealthcareFacilityErrors.StatusRequired;
         }
 
-
         if (!string.IsNullOrWhiteSpace(reason) && reason.Length > 500)
         {
 
             return ScheduleExceptionHealthcareFacilityErrors.ReasonTooLong;
         }
-
 
         Date = date;
         DayOfWeek = dayOfWeek;

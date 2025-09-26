@@ -3,7 +3,6 @@ using System.Linq.Dynamic.Core; // Add this using
 
 namespace AppointmentApplication.Application.Shared.Services;
 
-
 internal static class QueryableExtensions
 {
     public static IQueryable<T> ApplySort<T>(
