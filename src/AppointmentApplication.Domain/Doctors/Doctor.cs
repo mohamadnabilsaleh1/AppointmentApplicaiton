@@ -10,12 +10,14 @@ using AppointmentApplication.Domain.Doctors.ScheduleExceptions;
 using AppointmentApplication.Domain.Doctors.Schedules;
 using AppointmentApplication.Domain.Doctors.Specializations;
 using AppointmentApplication.Domain.Shared.Enums;
+using AppointmentApplication.Domain.Users;
 
 namespace AppointmentApplication.Domain.Doctors;
 
 public class Doctor : AuditableEntity
 {
-    public string UserId { get; private set; }
+    public Guid UserId { get; private set; }
+    public User User { get; private set; }
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
     public Gender Gender { get; private set; }
@@ -38,7 +40,7 @@ public class Doctor : AuditableEntity
     private readonly List<Appointment> _appointments = new();
     public IReadOnlyCollection<Appointment> Appointments => _appointments.AsReadOnly();
     private Doctor() { }
-    public static Doctor Create(string userId, string firstName, string lastName, Gender gender,
+    public static Doctor Create(Guid userId, string firstName, string lastName, Gender gender,
     DateOnly dateOfBirth, Guid specializationId, string licenseNumber)
     {
         return new Doctor

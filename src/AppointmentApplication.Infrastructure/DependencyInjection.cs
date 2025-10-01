@@ -5,8 +5,12 @@ using System.Threading.Tasks;
 
 using AppointmentApplication.Application.Abstractions.Authentication;
 using AppointmentApplication.Application.Shared.Interfaces;
+using AppointmentApplication.Domain.Users;
 using AppointmentApplication.Infrastructure.Authentication;
+using AppointmentApplication.Infrastructure.Authorization;
 using AppointmentApplication.Infrastructure.Data;
+
+using Microsoft.AspNetCore.Authentication;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -31,12 +35,15 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
         services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer();
-        services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));
+        services.AddTransient<AdminAuthorizationDelegatingHandler>();
+
+        services.Configure<Authentication.AuthenticationOptions>(configuration.GetSection("Authentication"));
         services.ConfigureOptions<JwtBearerOptionsSetup>();
         services.Configure<KeycloakOptions>(configuration.GetSection("Keycloak"));
-        services.AddHttpClient<IAuthenticationService, AuthenticationService>((serviceProvider, httpClient) =>
+        services.AddHttpClient<Application.Abstractions.Authentication.IAuthenticationService, Authentication.AuthenticationService>((serviceProvider, httpClient) =>
         {
             var keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
             httpClient.BaseAddress = new Uri(keycloakOptions.AdminUrl);
@@ -47,6 +54,15 @@ public static class DependencyInjection
             var keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
             httpClient.BaseAddress = new Uri(keycloakOptions.TokenUrl);
         });
+        AddAuthorization(services);
+        services.AddTransient<IUserContext, UserContext>();
+
         return services;
+    }
+
+    private static void AddAuthorization(IServiceCollection services)
+    {
+        services.AddScoped<AuthorizationService>();
+        services.AddTransient<IClaimsTransformation, CustomClaimsTransformation>();
     }
 }

@@ -7,12 +7,14 @@ using AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions;
 using AppointmentApplication.Domain.Shared.Enums;
 using AppointmentApplication.Domain.Shared.Results;
 using AppointmentApplication.Domain.HealthcareFacilities.Enums;
+using AppointmentApplication.Domain.Users;
 
 namespace AppointmentApplication.Domain.HealthcareFacilities;
 
 public sealed class HealthCareFacility : AuditableEntity
 {
-    public string UserId { get; private set; }
+    public Guid UserId { get; private set; }
+    public User User { get; private set; }
     public string Name { get; private set; }
     public HealthCareType Type { get; private set; }
     public Address Address { get; private set; }
@@ -33,7 +35,7 @@ public sealed class HealthCareFacility : AuditableEntity
     private HealthCareFacility() { }
 #pragma warning restore CS8618
 
-    private HealthCareFacility(Guid id, string userId, string name, HealthCareType type, Address address,
+    private HealthCareFacility(Guid id, Guid userId, string name, HealthCareType type, Address address,
         double latitude, double longitude):base(id)
     {
         UserId = userId;
@@ -48,14 +50,14 @@ public sealed class HealthCareFacility : AuditableEntity
     // ✅ Create with inline validation
     public static Result<HealthCareFacility> Create(
         Guid id,
-        string userId,
+        Guid userId,
         string name,
         HealthCareType type,
         Address address,
         double latitude,
         double longitude)
     {
-        if (string.IsNullOrWhiteSpace(userId))
+        if (userId == Guid.Empty)
         {
 
             return HealthCareFacilityErrors.UserIdRequired;

@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppointmentApplication.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250923100012_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250927092525_FixUserRelationships2")]
+    partial class FixUserRelationships2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("ProductVersion", "9.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -330,13 +330,14 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<DateTime>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SpecializationID");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Doctors");
                 });
@@ -595,11 +596,12 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<DateTime>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("HealthcareFacilities");
                 });
@@ -1064,13 +1066,15 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<DateTime>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserID")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NationalID")
                         .IsUnique();
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Patients");
                 });
@@ -1317,6 +1321,120 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.ToTable("Phones");
                 });
 
+            modelBuilder.Entity("AppointmentApplication.Domain.Users.Permission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("permissions", (string)null);
+                });
+
+            modelBuilder.Entity("AppointmentApplication.Domain.Users.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("roles", (string)null);
+                });
+
+            modelBuilder.Entity("AppointmentApplication.Domain.Users.RolePermission", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoleId", "PermissionId");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("role_permissions", (string)null);
+                });
+
+            modelBuilder.Entity("AppointmentApplication.Domain.Users.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("IdentityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("UpdatedAtdUtc")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("IdentityId")
+                        .IsUnique();
+
+                    b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("user_roles", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("user_roles");
+                });
+
             modelBuilder.Entity("AppointmentApplication.Domain.Appointments.Appointment", b =>
                 {
                     b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.Departments.Department", "Department")
@@ -1452,7 +1570,14 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("AppointmentApplication.Domain.Users.User", "User")
+                        .WithMany("Doctors")
+                        .HasForeignKey("UserId")
+                        .IsRequired();
+
                     b.Navigation("Specialization");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.Doctors.DoctorsTreatmentCapabilities.DoctorTreatmentCapacity", b =>
@@ -1502,17 +1627,22 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.Departments.Department", b =>
                 {
-                    b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "Facility")
+                    b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "HealthcareFacility")
                         .WithMany("Departments")
                         .HasForeignKey("FacilityId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Facility");
+                    b.Navigation("HealthcareFacility");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", b =>
                 {
+                    b.HasOne("AppointmentApplication.Domain.Users.User", "User")
+                        .WithMany("HealthCareFacilities")
+                        .HasForeignKey("UserId")
+                        .IsRequired();
+
                     b.OwnsOne("AppointmentApplication.Domain.HealthcareFacilities.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("HealthCareFacilityId")
@@ -1553,6 +1683,8 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
                     b.Navigation("Address")
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions.ScheduleExceptionHealthcareFacility", b =>
@@ -1656,6 +1788,16 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("AppointmentApplication.Domain.Patients.Patient", b =>
+                {
+                    b.HasOne("AppointmentApplication.Domain.Users.User", "User")
+                        .WithMany("Patients")
+                        .HasForeignKey("UserId")
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AppointmentApplication.Domain.Patients.PatientAllergies.PatientAllergy", b =>
                 {
                     b.HasOne("AppointmentApplication.Domain.Patients.Allergies.Allergy", "Allergy")
@@ -1738,6 +1880,36 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("AppointmentApplication.Domain.Users.RolePermission", b =>
+                {
+                    b.HasOne("AppointmentApplication.Domain.Users.Permission", null)
+                        .WithMany()
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppointmentApplication.Domain.Users.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("user_roles", b =>
+                {
+                    b.HasOne("AppointmentApplication.Domain.Users.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppointmentApplication.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AppointmentApplication.Domain.Appointments.Appointment", b =>
                 {
                     b.Navigation("Billings");
@@ -1806,6 +1978,15 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Navigation("ChronicDiseases");
 
                     b.Navigation("MedicalRecords");
+                });
+
+            modelBuilder.Entity("AppointmentApplication.Domain.Users.User", b =>
+                {
+                    b.Navigation("Doctors");
+
+                    b.Navigation("HealthCareFacilities");
+
+                    b.Navigation("Patients");
                 });
 #pragma warning restore 612, 618
         }

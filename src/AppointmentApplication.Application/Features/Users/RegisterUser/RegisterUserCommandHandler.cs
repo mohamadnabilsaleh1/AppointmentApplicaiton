@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using AppointmentApplication.Application.Abstractions.Authentication;
+using AppointmentApplication.Application.Shared.Interfaces;
 
 using AppointmentApplication.Domain.Abstractions;
 
@@ -13,47 +14,35 @@ using AppointmentApplication.Domain.Users;
 
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace AppointmentApplication.Application.Features.Users.RegisterUser;
 
 internal sealed class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Result<Guid>>
 {
     private readonly IAuthenticationService _authenticationService;
-    private readonly IUserRepository _userRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IAppDbContext _context;
 
-    public RegisterUserCommandHandler(
-        IAuthenticationService authenticationService,
-        IUserRepository userRepository,
-        IUnitOfWork unitOfWork)
+    // ✅ Constructor Injection
+    public RegisterUserCommandHandler(IAuthenticationService authenticationService, IAppDbContext context)
     {
-        _authenticationService = authenticationService;
-        _userRepository = userRepository;
-        _unitOfWork = unitOfWork;
+        _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task<Result<Guid>> Handle(
-        RegisterUserCommand request,
-        CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var user = User.Create(
-            Guid.NewGuid(),
-            new FirstName(request.FirstName),
-            new LastName(request.LastName),
-            new Email(request.Email));
+        Role role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Patient", cancellationToken);
+        // استخدم Role.Patient مباشرة
+        var user = User.Create(Guid.NewGuid(), request.FirstName, request.LastName, request.Email, role);
 
-        string identityId = await _authenticationService.RegisterAsync(
-            user,
-            request.Password,
-            cancellationToken);
+        string identityId = await _authenticationService.RegisterAsync(user, request.Password, cancellationToken);
 
         user.SetIdentityId(identityId);
 
-        _userRepository.Add(user);
-
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return user.Id;
     }
-
-
 }

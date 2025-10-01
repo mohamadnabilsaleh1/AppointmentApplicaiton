@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using AppointmentApplication.Application.Shared.Interfaces;
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Appointments;
@@ -31,6 +32,8 @@ using AppointmentApplication.Domain.Prescriptions;
 using AppointmentApplication.Domain.Reviews;
 using AppointmentApplication.Domain.Shared;
 using AppointmentApplication.Domain.Shared.Phone;
+using AppointmentApplication.Domain.Users;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -39,6 +42,12 @@ namespace AppointmentApplication.Infrastructure.Data;
 public class AppDbContext : DbContext, IAppDbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
+    // User & Auth Entities
+    public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<Permission> Permissions { get; set; }
+    public DbSet<RolePermission> RolePermissions { get; set; }
 
     // Healthcare Facility Entities
     public DbSet<HealthCareFacility> HealthcareFacilities { get; set; }

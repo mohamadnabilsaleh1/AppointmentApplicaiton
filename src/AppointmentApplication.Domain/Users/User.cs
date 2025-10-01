@@ -1,11 +1,14 @@
 ﻿using AppointmentApplication.Domain.Abstractions;
+using AppointmentApplication.Domain.Doctors;
+using AppointmentApplication.Domain.HealthcareFacilities;
+using AppointmentApplication.Domain.Patients;
+using System.Collections.Generic;
+
 namespace AppointmentApplication.Domain.Users;
 
 public sealed class User : AuditableEntity
 {
-    private readonly List<Role> _roles = new();
-
-    private User(Guid id, FirstName firstName, LastName lastName, Email email)
+    private User(Guid id, string firstName, string lastName, string email)
         : base(id)
     {
         FirstName = firstName;
@@ -13,29 +16,37 @@ public sealed class User : AuditableEntity
         Email = email;
     }
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-    private User()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-    {
-    }
+#pragma warning disable CS8618
+    private User() { } // For EF Core
+#pragma warning restore CS8618
 
-    public FirstName FirstName { get; private set; }
-
-    public LastName LastName { get; private set; }
-
-    public Email Email { get; private set; }
-
+    public string FirstName { get; private set; }
+    public string LastName { get; private set; }
+    public string Email { get; private set; }
     public string IdentityId { get; private set; } = string.Empty;
 
-    public IReadOnlyCollection<Role> Roles => _roles.ToList();
+    // 👇 One-to-Many: User -> HealthCareFacilities
+    private readonly List<HealthCareFacility> _healthCareFacilities = new();
+    public IReadOnlyCollection<HealthCareFacility> HealthCareFacilities => _healthCareFacilities.AsReadOnly();
 
-    public static User Create(Guid id, FirstName firstName, LastName lastName, Email email)
+    // 👇 One-to-Many: User -> Patients
+    private readonly List<Patient> _patients = new();
+    public IReadOnlyCollection<Patient> Patients => _patients.AsReadOnly();
+
+    // 👇 One-to-Many: User -> Doctors
+    private readonly List<Doctor> _doctors = new();
+    public IReadOnlyCollection<Doctor> Doctors => _doctors.AsReadOnly();
+
+    // 👇 Many-to-Many: User -> Roles
+    private readonly List<Role> _roles = new();
+    public IReadOnlyCollection<Role> Roles => _roles.AsReadOnly();
+
+    public static User Create(Guid id, string firstName, string lastName, string email,Role role)
     {
         var user = new User(id, firstName, lastName, email);
 
         user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
-
-        user._roles.Add(Role.Registered);
+        user._roles.Add(role);
 
         return user;
     }
@@ -45,8 +56,22 @@ public sealed class User : AuditableEntity
         IdentityId = identityId;
     }
 
-    public static object Create(Guid guid, string firstName, string lastName, string email)
+    // Optional helper methods to add related entities
+    public void AddHealthCareFacility(HealthCareFacility facility)
     {
-        throw new NotImplementedException();
+        if (!_healthCareFacilities.Contains(facility))
+            _healthCareFacilities.Add(facility);
+    }
+
+    public void AddPatient(Patient patient)
+    {
+        if (!_patients.Contains(patient))
+            _patients.Add(patient);
+    }
+
+    public void AddDoctor(Doctor doctor)
+    {
+        if (!_doctors.Contains(doctor))
+            _doctors.Add(doctor);
     }
 }

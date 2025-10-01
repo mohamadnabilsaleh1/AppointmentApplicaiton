@@ -10,6 +10,7 @@ using AppointmentApplication.Application.Shared.Services;
 using AppointmentApplication.Contracts.Requests;
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.Shared.Results;
+using AppointmentApplication.Domain.Users;
 
 using Asp.Versioning;
 using MediatR;
@@ -20,11 +21,12 @@ using Microsoft.AspNetCore.OutputCaching;
 
 namespace AppointmentApplication.API.Controllers;
 
-[Authorize]
 [Route("api/healthCareFacilities")]
 public sealed class HealthCareFacilityController(ISender sender, LinkService linkService) : ApiController
 {
     [HttpPost]
+    [Authorize]
+
     [ProducesResponseType(typeof(HealthcareFacilityDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -71,6 +73,7 @@ public sealed class HealthCareFacilityController(ISender sender, LinkService lin
             Problem);
     }
 
+    [Authorize(Roles = Roles.Patient)]
     [HttpGet("{id:guid}", Name = "GetHealthCareFacilityById")]
     [ProducesResponseType(typeof(HealthcareFacilityDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -97,6 +100,7 @@ public sealed class HealthCareFacilityController(ISender sender, LinkService lin
             Problem);
     }
 
+    [Authorize(Roles = Roles.Patient)]
     [HttpGet]
     [MapToApiVersion("0.1")]
     [EndpointSummary("Get Health Care Facilities.")]

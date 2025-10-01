@@ -19,7 +19,6 @@ services:
     networks:
       - appointmentapp-net
     restart: on-failure
-    
   sqlserver:
     container_name: appointmentapp-sql
     image: mcr.microsoft.com/mssql/server:2022-latest

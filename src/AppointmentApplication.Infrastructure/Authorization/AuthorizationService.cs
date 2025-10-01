@@ -1,0 +1,52 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using AppointmentApplication.Domain.Users;
+using AppointmentApplication.Infrastructure.Data;
+
+using Microsoft.EntityFrameworkCore;
+
+namespace AppointmentApplication.Infrastructure.Authorization;
+
+internal sealed class AuthorizationService
+{
+    private readonly AppDbContext _dbContext;
+
+    public AuthorizationService(AppDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    public async Task<UserRolesResponse> GetRolesForUserAsync(string identityId)
+    {
+
+
+        UserRolesResponse roles = await _dbContext.Set<User>()
+            .Where(u => u.IdentityId == identityId)
+            .Select(u => new UserRolesResponse
+            {
+                UserId = u.Id,
+                Roles = u.Roles.ToList()
+            })
+            .FirstAsync();
+
+
+        return roles;
+    }
+
+    public async Task<HashSet<string>> GetPermissionsForUserAsync(string identityId)
+    {
+
+        ICollection<Permission> permissions = await _dbContext.Set<User>()
+            .Where(u => u.IdentityId == identityId)
+            .SelectMany(u => u.Roles.Select(r => r.Permissions))
+            .FirstAsync();
+
+        var permissionsSet = permissions.Select(p => p.Name).ToHashSet();
+
+
+        return permissionsSet;
+    }
+}

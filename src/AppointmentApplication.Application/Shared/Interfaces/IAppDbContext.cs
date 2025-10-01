@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.Billings;
 using AppointmentApplication.Domain.Billings.BillingPayments;
@@ -27,55 +28,61 @@ using AppointmentApplication.Domain.Prescriptions;
 using AppointmentApplication.Domain.Reviews;
 using AppointmentApplication.Domain.Shared;
 using AppointmentApplication.Domain.Shared.Phone;
+using AppointmentApplication.Domain.Users;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentApplication.Application.Shared.Interfaces;
 
-    public interface IAppDbContext
-    {
-        // Healthcare Facility Entities
-        DbSet<HealthCareFacility> HealthcareFacilities { get; set; }
-        DbSet<ScheduleHealthcareFacility> ScheduleHealthcareFacilities { get; set; }
-        DbSet<ScheduleExceptionHealthcareFacility> ScheduleExceptionHealthcareFacilities { get; set; }
-        DbSet<Department> Departments { get; set; }
-        
-        // Contact Information
-        DbSet<Email> Emails { get; set; }
-        DbSet<Phone> Phones { get; set; }
-        
-        // Medical Entities
-        DbSet<Specialization> Specializations { get; set; }
-        DbSet<Allergy> Allergies { get; set; }
-        DbSet<PatientChronicDisease> ChronicDiseases { get; set; }
-        
-        // Doctor Entities
-        DbSet<Doctor> Doctors { get; set; }
-        DbSet<DoctorFacility> DoctorFacilities { get; set; }
-        DbSet<DoctorDepartment> DoctorDepartments { get; set; }
-        DbSet<ScheduleDoctor> ScheduleDoctors { get; set; }
-        DbSet<ScheduleExceptionDoctor> ScheduleExceptionDoctors { get; set; }
-        DbSet<DoctorTreatmentCapacity> DoctorTreatmentCapacities { get; set; }
-        
-        // Patient Entities
-        DbSet<Patient> Patients { get; set; }
-        DbSet<PatientAllergy> PatientAllergies { get; set; }
-        DbSet<PatientChronicDisease> PatientChronicDiseases { get; set; }
-        
-        // Medical Records
-        DbSet<MedicalRecord> MedicalRecords { get; set; }
-        DbSet<MedicalRecordAttachment> MedicalRecordAttachments { get; set; }
-        
-        // Appointments & Billing
-        DbSet<Appointment> Appointments { get; set; }
-        DbSet<Prescription> Prescriptions { get; set; }
-        DbSet<Billing> Billings { get; set; }
-        DbSet<BillingPayment> BillingPayments { get; set; }
-        
-        // Reviews & Uploads
-        DbSet<Review> Reviews { get; set; }
-        DbSet<PatientUpload> PatientUploads { get; set; }
-        DbSet<FacilityUpload> FacilityUploads { get; set; }
+public interface IAppDbContext
+{
+    // Healthcare Facility Entities
+    DbSet<User> Users { get; set; }
+    DbSet<Role> Roles { get; set; }
+    DbSet<Permission> Permissions { get; set; }
+    DbSet<RolePermission> RolePermissions { get; set; }
+    DbSet<HealthCareFacility> HealthcareFacilities { get; set; }
+    DbSet<ScheduleHealthcareFacility> ScheduleHealthcareFacilities { get; set; }
+    DbSet<ScheduleExceptionHealthcareFacility> ScheduleExceptionHealthcareFacilities { get; set; }
+    DbSet<Department> Departments { get; set; }
 
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-        int SaveChanges();
-    }
+    // Contact Information
+    DbSet<Email> Emails { get; set; }
+    DbSet<Phone> Phones { get; set; }
+
+    // Medical Entities
+    DbSet<Specialization> Specializations { get; set; }
+    DbSet<Allergy> Allergies { get; set; }
+    DbSet<PatientChronicDisease> ChronicDiseases { get; set; }
+
+    // Doctor Entities
+    DbSet<Doctor> Doctors { get; set; }
+    DbSet<DoctorFacility> DoctorFacilities { get; set; }
+    DbSet<DoctorDepartment> DoctorDepartments { get; set; }
+    DbSet<ScheduleDoctor> ScheduleDoctors { get; set; }
+    DbSet<ScheduleExceptionDoctor> ScheduleExceptionDoctors { get; set; }
+    DbSet<DoctorTreatmentCapacity> DoctorTreatmentCapacities { get; set; }
+
+    // Patient Entities
+    DbSet<Patient> Patients { get; set; }
+    DbSet<PatientAllergy> PatientAllergies { get; set; }
+    DbSet<PatientChronicDisease> PatientChronicDiseases { get; set; }
+
+    // Medical Records
+    DbSet<MedicalRecord> MedicalRecords { get; set; }
+    DbSet<MedicalRecordAttachment> MedicalRecordAttachments { get; set; }
+
+    // Appointments & Billing
+    DbSet<Appointment> Appointments { get; set; }
+    DbSet<Prescription> Prescriptions { get; set; }
+    DbSet<Billing> Billings { get; set; }
+    DbSet<BillingPayment> BillingPayments { get; set; }
+
+    // Reviews & Uploads
+    DbSet<Review> Reviews { get; set; }
+    DbSet<PatientUpload> PatientUploads { get; set; }
+    DbSet<FacilityUpload> FacilityUploads { get; set; }
+
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    int SaveChanges();
+}

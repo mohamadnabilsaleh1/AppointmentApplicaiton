@@ -6,7 +6,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Comma
 {
     public static class ApplicationHealthCareFacilityErrors
     {
-        public static Error FacilityAlreadyExists(string userId) =>
+        public static Error FacilityAlreadyExists(Guid userId) =>
             Error.Conflict(
                 "HealthCareFacility.AlreadyExists",
                 $"Healthcare facility already exists for user ID: {userId}");

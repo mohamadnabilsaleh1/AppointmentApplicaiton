@@ -8,6 +8,7 @@ using AppointmentApplication.Domain.MedicalRecords;
 using AppointmentApplication.Domain.Patients.PatientAllergies;
 using AppointmentApplication.Domain.Patients.PatientChronicDiseases;
 using AppointmentApplication.Domain.Shared.Enums;
+using AppointmentApplication.Domain.Users;
 
 namespace AppointmentApplication.Domain.Patients;
 
@@ -15,7 +16,8 @@ public class Patient : AuditableEntity
 {
     private Patient() { }
 
-    public Guid UserID { get; private set; }
+    public Guid UserId { get; private set; }
+    public User User { get; private set; }
     public string NationalID { get; private set; }
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
@@ -42,7 +44,7 @@ public class Patient : AuditableEntity
         return new Patient
         {
             Id = Guid.NewGuid(),
-            UserID = userId,
+            UserId = userId,
             NationalID = nationalId,
             FirstName = firstName,
             LastName = lastName,

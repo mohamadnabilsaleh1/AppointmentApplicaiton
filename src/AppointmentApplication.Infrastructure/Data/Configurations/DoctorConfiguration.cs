@@ -1,30 +1,39 @@
 using AppointmentApplication.Domain.Doctors;
+using AppointmentApplication.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AppointmentApplication.Infrastructure.Data.Configurations;
-
-// Doctor Entities Configurations
-public class DoctorConfiguration : IEntityTypeConfiguration<Doctor>
+namespace AppointmentApplication.Infrastructure.Data.Configurations
 {
-    public void Configure(EntityTypeBuilder<Doctor> builder)
+    public class DoctorConfiguration : IEntityTypeConfiguration<Doctor>
     {
-        builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).ValueGeneratedNever();
-        builder.Property(e => e.FirstName).IsRequired().HasMaxLength(100);
-        builder.Property(e => e.LastName).IsRequired().HasMaxLength(100);
-        builder.Property(e => e.Gender).IsRequired().HasMaxLength(10);
-        builder.Property(e => e.DateOfBirth).IsRequired();
-        builder.Property(e => e.LicenseNumber).IsRequired().HasMaxLength(50);
-        builder.Property(e => e.IsActive).IsRequired();
-        builder.Property(e => e.CreatedAtUtc).IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc);
+        public void Configure(EntityTypeBuilder<Doctor> builder)
+        {
+            builder.HasKey(e => e.Id);
+            builder.Property(e => e.Id).ValueGeneratedNever();
+            builder.Property(e => e.UserId).IsRequired();
+            builder.Property(e => e.FirstName).IsRequired().HasMaxLength(100);
+            builder.Property(e => e.LastName).IsRequired().HasMaxLength(100);
+            builder.Property(e => e.Gender).IsRequired().HasMaxLength(10);
+            builder.Property(e => e.DateOfBirth).IsRequired();
+            builder.Property(e => e.LicenseNumber).IsRequired().HasMaxLength(50);
+            builder.Property(e => e.IsActive).IsRequired();
+            builder.Property(e => e.CreatedAtUtc).IsRequired();
+            builder.Property(e => e.UpdatedAtdUtc);
 
-        builder.HasOne(d => d.Specialization)
-            .WithMany(s => s.Doctors)
-            .HasForeignKey(d => d.SpecializationID)
-            .OnDelete(DeleteBehavior.Restrict);
+            // Specialization relationship
+            builder.HasOne(d => d.Specialization)
+                   .WithMany(s => s.Doctors)
+                   .HasForeignKey(d => d.SpecializationID)
+                   .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasQueryFilter(e => e.IsActive);
+            builder.HasQueryFilter(e => e.IsActive);
+
+            // ✅ Explicitly map User navigation to User.Doctors collection
+            builder.HasOne(d => d.User)
+                   .WithMany(u => u.Doctors)
+                   .HasForeignKey(d => d.UserId)
+                   .OnDelete(DeleteBehavior.ClientSetNull);
+        }
     }
 }

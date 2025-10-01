@@ -6,7 +6,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Dtos;
 
 public record HealthcareFacilityDto(
     Guid Id,
-    string UserId,
+    Guid UserId,
     string Name,
     HealthCareType Type,
     AddressDto Address,

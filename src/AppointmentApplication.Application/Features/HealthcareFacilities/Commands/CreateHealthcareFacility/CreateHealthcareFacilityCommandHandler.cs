@@ -22,9 +22,9 @@ public class CreateHealthcareFacilityCommandHandler(
         CreateHealthcareFacilityCommand request,
         CancellationToken cancellationToken)
     {
-
-        var createUser = User.Create(Guid.NewGuid(), request.FirstName, request.LastName, request.Email);
-        var userId = "wslfsflfkajsdf";
+        var role = Role.HealthCareFacility;
+        var createUser = User.Create(Guid.NewGuid(), request.FirstName, request.LastName, request.Email,role);
+        var userId = createUser.Id;
 
         // 1. Validate user doesn't already have a facility
         var userFacilityExists = await _context.HealthcareFacilities
