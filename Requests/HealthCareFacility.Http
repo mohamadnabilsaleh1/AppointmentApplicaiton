@@ -1,0 +1,65 @@
+@baseUrl = http://localhost:5001
+@Token = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NTk0MjQxODcsImlhdCI6MTc1OTM4ODE4NywianRpIjoib25ydHJvOjFmMTA1OGJiLWZiYTktZGEzNS0xYWMxLTkwY2RhNWJmZjljYyIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJkYTllYjFlOC1iYTIyLTQ1YzMtODI5MC05ZDQ1MWI0OWVkOGMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6IjNiZTYxMjQ3LWZjNGYtNGEyYS05YWRmLTUwZTM0ZjU0NDcyNyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IlNoYXphIEhvc3BpdGFsIiwicHJlZmVycmVkX3VzZXJuYW1lIjoic2hhemEuaG9zcGl0YWxAZXhhbXBsZS5jb20iLCJnaXZlbl9uYW1lIjoiU2hhemEiLCJmYW1pbHlfbmFtZSI6Ikhvc3BpdGFsIiwiZW1haWwiOiJzaGF6YS5ob3NwaXRhbEBleGFtcGxlLmNvbSJ9.YkupNzCCrWK1rSbwR9iqxoHDHI5rEuLfM7ObNwoike5F2SEpmq5ym_dA_91n-R6HhzLsADiKomaLDK7-LLZqpcVdSK3onMhPJf05EkJY9UI7F1CVzG2yyBh6f8R2wnJ8Zr89VefWlkuS2OmInum_wwGxzI_2JRqVVryOyagIFzbmGjoSIDwISkQ0JU74Ks9r3L3KOHqzyqdUWaS4S5pASZf-WGcA-K9mThDA2mk4J75RkjL7nIFtp7SggrA43WtGo7pVNWluEvj_v8zrFohWYghSdR19HKnFxP75ZQCR511dY5YPGZ69As5k1n8wko61rBoiyNDONrgaPl5qS_I3BA
+
+### Create a Health Care Facility
+POST {{baseUrl}}/api/healthCareFacilities
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NTkzNzEyMTksImlhdCI6MTc1OTMzNTIxOSwianRpIjoib25ydHJvOjdjYWUxMjk4LTUwZDEtMjk3Yi1iNThlLTE4Yjg0ZTc2YzU4NiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJiNGE3M2VkNy05Mzg1LTQ1YTYtOTA0Ni05NzJmMTkzMWQ2YmEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6IjFlZTY4ZWI3LWNkZTktNDFiMS1iYzIwLTBhYmUxZTY1YTQxNSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6Im1vaGFtYWQgYWRtaW4iLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhZG1pbkBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoibW9oYW1hZCIsImZhbWlseV9uYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSJ9.y44Z92KKTpmdx1Tg-BXGrreyny7-XOB6vL2QvI91n6XgM-ur8YOrthYz1g1DyRiY3k8Ai9Zza0tdnrWs3u-zsXIp5-fRCa5v0KFkaER2EMa0csc6RTZdYvba0gT25a5haUYtTgCcGbrEQT5_GzA7qAe2-TOfsHt2qxIGuqqc_XN0spUoPqRxAxwSOaBJXzYCiGyG6z_dcMntjgQwfso9CpCitpgQtQOgdZw75MzXtuTK9NAW_ZzEhEe7ZERxN_VxzA-tLodM0s0YSRcECt7RUPYwiFNPpV1TAKEOF0RAxQjYeAfY3DMBuXNBLl52HgAd-bOCp8_GRTeyRsFYupufZQ
+Content-Type: application/json
+
+{
+  "firstName": "Shaza",
+  "lastName": "Hospital",
+  "email": "shaza.hospital@example.com",
+  "password": "SecurePassword123!",
+  "name": "Shaza Hospital",
+  "type": 0,
+  "street": "123 Main St",
+  "city": "Damascus",
+  "state": "Rif Dimashq",
+  "country": "Syria",
+  "zipCode": "11001",
+  "gpsLatitude": 33.5138,
+  "gpsLongitude": 36.2765
+}
+
+
+### get all
+GEt {{baseUrl}}/api/healthCareFacilities
+Authorization: {{Token}}
+
+### get by id
+GEt {{baseUrl}}/api/healthCareFacilities/b3f3a709-3762-4f5a-99a8-0d1ab4c27d5e
+Authorization: {{Token}}
+
+### get by User Id
+GEt {{baseUrl}}/api/healthCareFacilities/me
+Authorization: {{Token}}
+
+### by Latitude and Longitude 
+GET {{baseUrl}}/api/healthCareFacilities?GPSLatitude=33.5138&GPSLongitude=36.2765&radiusKm=2
+Authorization: Bearer {{Token}}
+
+
+### Update a Health Care Facility
+PUT {{baseUrl}}/api/healthCareFacilities/b3f3a709-3762-4f5a-99a8-0d1ab4c27d5e
+Authorization: {{Token}}
+Content-Type: application/json
+
+{
+  "name": "Shaza Hospital Updated",
+  "street": "456 Updated Street",
+  "city": "Damascus",
+  "state": "Rif Dimashq",
+  "country": "Syria",
+  "zipCode": "11002",
+  "gpsLatitude": 33.5139,
+  "gpsLongitude": 36.2766
+}
+###
+POST http://localhost:5001/api/users/login
+Content-Type: application/json
+
+{
+  "email": "shaza.hospital@example.com",
+  "password": "SecurePassword123!"
+}

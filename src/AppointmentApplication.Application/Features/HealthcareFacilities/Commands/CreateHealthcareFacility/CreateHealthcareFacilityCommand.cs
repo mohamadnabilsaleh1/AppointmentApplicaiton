@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using AppointmentApplication.Application.Features.HealthcareFacilities.Dtos;
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.HealthcareFacilities.Enums;
 using AppointmentApplication.Domain.Shared.Results;

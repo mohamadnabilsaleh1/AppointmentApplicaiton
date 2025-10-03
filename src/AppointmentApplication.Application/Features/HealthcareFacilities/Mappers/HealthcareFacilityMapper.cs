@@ -4,6 +4,8 @@ using AppointmentApplication.Domain.HealthcareFacilities.Departments;
 using AppointmentApplication.Domain.HealthcareFacilities.Enums;
 using AppointmentApplication.Domain.HealthcareFacilities.Schedules;
 using AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions;
+using AppointmentApplication.Application.Features.Users.Mappers;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Dtos;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Mappers;
 
@@ -16,17 +18,27 @@ public static class HealthcareFacilityMapper
 
         return new HealthcareFacilityDto(
             entity.Id,
-            entity.UserId,
             entity.Name,
             entity.Type,
             entity.Address.ToDto(),
             entity.GPSLatitude,
             entity.GPSLongitude,
-            entity.IsActive,
-            entity.CreatedAtUtc,
-            entity.CreatedBy,
-            entity.UpdatedAtdUtc,
-            entity.LastModifiedBy,
+            entity.Departments.ToDtos(),
+            entity.Schedules.ToDtos(),
+            entity.ScheduleExceptions.ToDtos());
+    }
+    public static HealthcareFacilityWithUserDto ToDtoWithUser(this HealthCareFacility entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        return new HealthcareFacilityWithUserDto(
+            entity.Id,
+            entity.Name,
+            entity.Type,
+            entity.Address.ToDto(),
+            entity.GPSLatitude,
+            entity.GPSLongitude,
+            entity.User.ToDto(),
             entity.Departments.ToDtos(),
             entity.Schedules.ToDtos(),
             entity.ScheduleExceptions.ToDtos());
@@ -76,13 +88,11 @@ public static class HealthcareFacilityMapper
 
         return new ScheduleDto(
             entity.Id,
-            entity.FacilityId,   // now consistent
             entity.DayOfWeek,
             entity.StartTime,
             entity.EndTime,
-            entity.Status.ToString(),
-            entity.IsAvailable,
-            entity.Note);
+            entity.Note
+            );
     }
     public static List<ScheduleDto> ToDtos(this IEnumerable<ScheduleHealthcareFacility> entities)
     {

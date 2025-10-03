@@ -9,7 +9,6 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Comma
 public sealed record UpdateHealthcareFacilityCommand(
     Guid FacilityId,
     string Name,
-    HealthCareType Type,
     string Street,
     string City,
     string State,

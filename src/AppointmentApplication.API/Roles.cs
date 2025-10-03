@@ -8,5 +8,8 @@ namespace AppointmentApplication.API
     public static class Roles
     {
         public const string Patient = "Patient";
+        public const string Admin = "Admin";
+        public const string HealthCareFacility = "HealthCareFacility";
+        public const string Doctor = "Doctor";
     }
 }

@@ -1,0 +1,69 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
+
+using AppointmentApplication.Application.Features.HealthcareFacilities.Mappers;
+
+using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Dtos;
+
+using AppointmentApplication.Application.HealthcareFacilities.Schedules.Commands;
+using AppointmentApplication.Application.Shared.Interfaces;
+using AppointmentApplication.Domain.HealthcareFacilities;
+using AppointmentApplication.Domain.Shared.Enums;
+using AppointmentApplication.Domain.Shared.Results;
+
+using MediatR;
+
+using Microsoft.EntityFrameworkCore;
+
+namespace AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Commands
+{
+    public class CreateScheduleCommandHandler : IRequestHandler<CreateScheduleCommand, Result<ScheduleDto>>
+    {
+        private readonly IAppDbContext _context;
+
+        public CreateScheduleCommandHandler(IAppDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<Result<ScheduleDto>> Handle(CreateScheduleCommand request, CancellationToken cancellationToken)
+        {
+            // الحصول على المنشأة مع جداولها
+            var facility = await _context.HealthcareFacilities
+                .Include(f => f.Schedules)
+                .FirstOrDefaultAsync(f => f.Id == request.FacilityId, cancellationToken);
+
+            if (facility is null)
+            {
+
+                return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.FacilityId);
+            }
+
+
+            // إنشاء الجدول
+
+            var scheduleResult = facility.AddSchedule(
+                request.DayOfWeek,
+                request.StartTime,
+                request.EndTime,
+                request.Status,
+                request.Note);
+
+            if (scheduleResult.IsError)
+            {
+
+                return scheduleResult.Errors;
+            }
+
+            // إضافة وحفظ
+
+            _context.ScheduleHealthcareFacilities.Add(scheduleResult.Value);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return scheduleResult.Value.ToDto();
+        }
+    }
+}

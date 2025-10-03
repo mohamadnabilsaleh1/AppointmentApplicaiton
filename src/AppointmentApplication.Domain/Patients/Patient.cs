@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.MedicalRecords;
@@ -19,11 +20,9 @@ public class Patient : AuditableEntity
     public Guid UserId { get; private set; }
     public User User { get; private set; }
     public string NationalID { get; private set; }
-    public string FirstName { get; private set; }
-    public string LastName { get; private set; }
+
     public string Gender { get; private set; }
     public DateTime DateOfBirth { get; private set; }
-    public string BloodType { get; private set; }
     public bool IsActive { get; private set; }
 
     private readonly List<PatientAllergy> _allergies = new();
@@ -39,28 +38,23 @@ public class Patient : AuditableEntity
     public IReadOnlyCollection<MedicalRecord> MedicalRecords => _medicalRecords.AsReadOnly();
 
     public static Patient Create(Guid userId, string nationalId, string firstName, string lastName,
-        string gender, DateTime dateOfBirth, string bloodType)
+        string gender, DateTime dateOfBirth)
     {
         return new Patient
         {
             Id = Guid.NewGuid(),
             UserId = userId,
             NationalID = nationalId,
-            FirstName = firstName,
-            LastName = lastName,
             Gender = gender,
             DateOfBirth = dateOfBirth,
-            BloodType = bloodType,
         };
     }
 
-    public void Update(string firstName, string lastName, string gender, DateTime dateOfBirth, string bloodType)
+    public void Update(string nationalId, string firstName, string lastName, string gender, DateTime dateOfBirth)
     {
-        FirstName = firstName;
-        LastName = lastName;
+        NationalID = nationalId;
         Gender = gender;
         DateOfBirth = dateOfBirth;
-        BloodType = bloodType;
     }
 
     public void Deactivate() => IsActive = false;

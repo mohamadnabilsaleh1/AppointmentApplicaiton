@@ -7,6 +7,7 @@ namespace AppointmentApplication.API.Dtos.HealthCareFacilities
     {
         public double? GPSLatitude { get; set; }
         public double? GPSLongitude { get; set; }
+        public double radiusKm { get; set; } = 10;
         public HealthCareType? Type { get; set; }
         public string? Street { get; set; }
         public string? City { get; set; }

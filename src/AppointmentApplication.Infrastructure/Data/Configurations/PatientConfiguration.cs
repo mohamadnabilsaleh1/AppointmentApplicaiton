@@ -13,11 +13,9 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
             builder.Property(e => e.Id).ValueGeneratedNever();
             builder.Property(e => e.UserId).IsRequired();
             builder.Property(e => e.NationalID).IsRequired().HasMaxLength(20);
-            builder.Property(e => e.FirstName).IsRequired().HasMaxLength(100);
-            builder.Property(e => e.LastName).IsRequired().HasMaxLength(100);
+
             builder.Property(e => e.Gender).IsRequired().HasMaxLength(10);
             builder.Property(e => e.DateOfBirth).IsRequired();
-            builder.Property(e => e.BloodType).HasMaxLength(5);
             builder.Property(e => e.IsActive).IsRequired();
             builder.Property(e => e.CreatedAtUtc).IsRequired();
             builder.Property(e => e.UpdatedAtdUtc);

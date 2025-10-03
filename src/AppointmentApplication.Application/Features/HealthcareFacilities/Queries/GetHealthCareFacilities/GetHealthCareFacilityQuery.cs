@@ -20,7 +20,10 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
         string? City = null,
         string? State = null,
         string? Country = null,
-        string? ZipCode = null
+        string? ZipCode = null,
+        double? GPSLatitude = null,
+        double? GPSLongitude = null,
+        double RadiusKm = 10 // الافتراضي 10 كم
     ) : ICachedQuery<Result<PaginationResult<ExpandoObject>>>,
         IRequest<Result<PaginationResult<ExpandoObject>>>
     {
@@ -28,4 +31,5 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
         public string[] Tags => new[] { "healthCareFacility" };
         public TimeSpan Expiration => TimeSpan.FromMinutes(10);
     }
+
 }

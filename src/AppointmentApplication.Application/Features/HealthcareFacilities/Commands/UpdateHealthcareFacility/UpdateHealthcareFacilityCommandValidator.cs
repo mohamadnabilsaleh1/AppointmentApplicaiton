@@ -7,17 +7,11 @@ public sealed class UpdateHealthcareFacilityCommandValidator : AbstractValidator
 {
     public UpdateHealthcareFacilityCommandValidator()
     {
-        RuleFor(x => x.FacilityId)
-            .NotEmpty().WithMessage("Facility ID is required");
-
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Facility name is required")
             .MaximumLength(200).WithMessage("Facility name cannot exceed 200 characters")
             .MinimumLength(2).WithMessage("Facility name must be at least 2 characters long")
             .Matches(@"^[a-zA-Z0-9\s\.\-&',()]+$").WithMessage("Facility name contains invalid characters");
-
-        RuleFor(x => x.Type)
-            .IsInEnum().WithMessage("Invalid healthcare facility type");
 
         RuleFor(x => x.Street)
             .NotEmpty().WithMessage("Street address is required")

@@ -1,22 +1,33 @@
 using System;
 using System.Collections.Generic;
+
+using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Dtos;
+
+using AppointmentApplication.Application.Features.Users.Dtos;
 using AppointmentApplication.Domain.HealthcareFacilities.Enums;
+using AppointmentApplication.Domain.Users;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Dtos;
 
 public record HealthcareFacilityDto(
     Guid Id,
-    Guid UserId,
     string Name,
     HealthCareType Type,
     AddressDto Address,
     double GPSLatitude,
     double GPSLongitude,
-    bool IsActive,
-    DateTime CreatedAt,
-    string CreatedBy,
-    DateTime? LastModifiedAt,
-    string? LastModifiedBy,
+    IReadOnlyCollection<DepartmentDto> Departments,
+    IReadOnlyCollection<ScheduleDto> Schedules,
+    IReadOnlyCollection<ScheduleExceptionDto> ScheduleExceptions
+);
+public record HealthcareFacilityWithUserDto(
+    Guid Id,
+    string Name,
+    HealthCareType Type,
+    AddressDto Address,
+    double GPSLatitude,
+    double GPSLongitude,
+    UserDto User,
     IReadOnlyCollection<DepartmentDto> Departments,
     IReadOnlyCollection<ScheduleDto> Schedules,
     IReadOnlyCollection<ScheduleExceptionDto> ScheduleExceptions
@@ -41,16 +52,7 @@ public record DepartmentDto(
     DateTime CreatedAt
 );
 
-public record ScheduleDto(
-    Guid Id,
-    Guid HealthcareFacilityId,
-    DayOfWeek DayOfWeek,
-    TimeSpan StartTime,
-    TimeSpan EndTime,
-    string Status,
-    bool IsAvailable,
-    string Note
-);
+
 
 public record ScheduleExceptionDto(
     Guid Id,

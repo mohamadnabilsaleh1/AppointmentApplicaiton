@@ -1398,6 +1398,19 @@
           "buildTransitive/Mono.TextTemplating.targets": {}
         }
       },
+      "NetTopologySuite/2.6.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/NetTopologySuite.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/NetTopologySuite.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "QuestPDF/2025.5.1": {
         "type": "package",
         "compile": {
@@ -2357,6 +2370,7 @@
           "Microsoft.AspNetCore.Http": "2.3.0",
           "Microsoft.AspNetCore.Routing": "2.3.0",
           "Microsoft.EntityFrameworkCore": "9.0.6",
+          "Microsoft.EntityFrameworkCore.SqlServer": "9.0.6",
           "QuestPDF": "2025.5.1",
           "Scrutor": "6.1.0",
           "System.Linq.Dynamic.Core": "1.6.7"
@@ -4678,6 +4692,22 @@
         "readme.md"
       ]
     },
+    "NetTopologySuite/2.6.0": {
+      "sha512": "1B1OTacTd4QtFyBeuIOcThwSSLUdRZU3bSFIwM8vk36XiZlBMi3K36u74e4OqwwHRHUuJC1PhbDx4hyI266X1Q==",
+      "type": "package",
+      "path": "nettopologysuite/2.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "icon.png",
+        "lib/netstandard2.0/NetTopologySuite.dll",
+        "lib/netstandard2.0/NetTopologySuite.xml",
+        "lib/netstandard2.1/NetTopologySuite.dll",
+        "lib/netstandard2.1/NetTopologySuite.xml",
+        "nettopologysuite.2.6.0.nupkg.sha512",
+        "nettopologysuite.nuspec"
+      ]
+    },
     "QuestPDF/2025.5.1": {
       "sha512": "oRjdICOO28qkO9zTw3mFzFG1w51YAG6dWgC2g7JjzlsQF4HbY0iTa0uluwyPNZckPTv8v9+krSUyjjtspKhi7g==",
       "type": "package",
@@ -6190,6 +6220,7 @@
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.6",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.6",
       "Microsoft.Extensions.Caching.Hybrid >= 9.6.0",
+      "NetTopologySuite >= 2.6.0",
       "Serilog.AspNetCore >= 9.0.0",
       "Serilog.Sinks.Seq >= 9.0.0",
       "StyleCop.Analyzers >= 1.2.0-beta.556"
@@ -6285,6 +6316,11 @@
             "version": "[9.6.0, )",
             "versionCentrallyManaged": true
           },
+          "NetTopologySuite": {
+            "target": "Package",
+            "version": "[2.6.0, )",
+            "versionCentrallyManaged": true
+          },
           "Serilog.AspNetCore": {
             "target": "Package",
             "version": "[9.0.0, )",
@@ -6329,11 +6365,13 @@
           "Microsoft.EntityFrameworkCore.Design": "9.0.6",
           "Microsoft.EntityFrameworkCore.Sqlite": "9.0.6",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.6",
+          "Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite": "9.0.9",
           "Microsoft.EntityFrameworkCore.Tools": "9.0.6",
           "Microsoft.Extensions.Caching.Hybrid": "9.6.0",
           "Microsoft.Extensions.Configuration.Abstractions": "9.0.6",
           "Microsoft.Extensions.Http": "9.0.6",
           "Microsoft.NET.Test.Sdk": "17.14.1",
+          "NetTopologySuite": "2.6.0",
           "NSubstitute": "5.3.0",
           "OpenTelemetry.Exporter.OpenTelemetryProtocol": "1.12.0",
           "OpenTelemetry.Exporter.Prometheus.AspNetCore": "1.12.0-beta.1",

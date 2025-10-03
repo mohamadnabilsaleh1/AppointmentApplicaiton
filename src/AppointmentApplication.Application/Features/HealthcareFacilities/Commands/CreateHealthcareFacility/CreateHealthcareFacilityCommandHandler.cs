@@ -1,113 +1,125 @@
+using AppointmentApplication.Application.Abstractions.Authentication;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Dtos;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Mappers;
 using AppointmentApplication.Application.Shared.Interfaces;
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.Shared.Results;
 using AppointmentApplication.Domain.Users;
-
 using MediatR;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
 
 public class CreateHealthcareFacilityCommandHandler(
-    ILogger<CreateHealthcareFacilityCommandHandler> logger, // Fixed logger type
-    IAppDbContext context)
+    ILogger<CreateHealthcareFacilityCommandHandler> logger,
+    IAppDbContext context,
+    IAuthenticationService authenticationService)
     : IRequestHandler<CreateHealthcareFacilityCommand, Result<HealthCareFacility>>
 {
     private readonly ILogger<CreateHealthcareFacilityCommandHandler> _logger = logger;
     private readonly IAppDbContext _context = context;
+    private readonly IAuthenticationService _authenticationService = authenticationService;
 
     public async Task<Result<HealthCareFacility>> Handle(
         CreateHealthcareFacilityCommand request,
         CancellationToken cancellationToken)
     {
-        var role = Role.HealthCareFacility;
-        var createUser = User.Create(Guid.NewGuid(), request.FirstName, request.LastName, request.Email,role);
-        var userId = createUser.Id;
 
-        // 1. Validate user doesn't already have a facility
-        var userFacilityExists = await _context.HealthcareFacilities
-            .AnyAsync(f => f.UserId == userId, cancellationToken);
 
-        if (userFacilityExists)
-        {
-            _logger.LogWarning("Healthcare facility creation aborted. User {UserId} already has a facility.", userId);
-            return ApplicationHealthCareFacilityErrors.FacilityAlreadyExists(userId);
-        }
+            // 1. Create User
+            var role = await _context.Roles
+                .FirstOrDefaultAsync(r => r.Name == "HealthCareFacility", cancellationToken) 
+                ?? Role.HealthCareFacility;
 
-        // 2. Validate facility name is unique
-        var nameExists = await _context.HealthcareFacilities
-            .AnyAsync(f => f.Name == request.Name, cancellationToken);
+            var user = User.Create(Guid.NewGuid(), request.FirstName, request.LastName, request.Email, role);
 
-        if (nameExists)
-        {
-            _logger.LogWarning("Healthcare facility creation aborted. Facility name '{FacilityName}' already exists.", request.Name);
-            return ApplicationHealthCareFacilityErrors.FacilityNameAlreadyExists(request.Name);
-        }
+            // Check if user with email already exists
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
 
-        // 3. Validate GPS coordinates
-        if (!IsValidCoordinates(request.GPSLatitude, request.GPSLongitude))
-        {
-            _logger.LogWarning(
-                "Invalid GPS coordinates provided: Lat {Latitude}, Long {Longitude}",
-                request.GPSLatitude, request.GPSLongitude);
-            return ApplicationHealthCareFacilityErrors.InvalidCoordinates;
-        }
+            if (existingUser != null)
+            {
+                return ApplicationHealthCareFacilityErrors.UserAlreadyExists(request.Email);
+            }
 
-        // 4. Create address
-        Result<Address> createAddressResult = Address.Create(
-            request.Street,
-            request.City,
-            request.State,
-            request.Country,
-            request.ZipCode);
+            // Register user in authentication system
+            string identityId = await _authenticationService.RegisterAsync(user, request.Password, cancellationToken);
+            user.SetIdentityId(identityId);
 
-        if (createAddressResult.IsError)
-        {
-            _logger.LogWarning(
-                "Address creation failed: {Errors}",
-                string.Join(", ", createAddressResult.Errors));
-            return createAddressResult.Errors;
-        }
+            // 2. Validate facility name is unique
+            var nameExists = await _context.HealthcareFacilities
+                .AnyAsync(f => f.Name == request.Name, cancellationToken);
 
-        // 5. Create healthcare facility
-        Result<HealthCareFacility> createHealthCareFacilityResult = HealthCareFacility.Create(
-            Guid.NewGuid(),
-            userId,
-            request.Name,
-            request.Type,
-            createAddressResult.Value,
-            request.GPSLatitude,
-            request.GPSLongitude);
+            if (nameExists)
+            {
+                _logger.LogWarning("Healthcare facility creation aborted. Facility name '{FacilityName}' already exists.", request.Name);
+                return ApplicationHealthCareFacilityErrors.FacilityNameAlreadyExists(request.Name);
+            }
 
-        if (createHealthCareFacilityResult.IsError)
-        {
-            _logger.LogWarning(
-                "Healthcare facility creation failed: {Errors}",
-                string.Join(", ", createHealthCareFacilityResult.Errors));
-            return createHealthCareFacilityResult.Errors;
-        }
+            // 3. Validate GPS coordinates
+            if (!IsValidCoordinates(request.GPSLatitude, request.GPSLongitude))
+            {
+                _logger.LogWarning(
+                    "Invalid GPS coordinates provided: Lat {Latitude}, Long {Longitude}",
+                    request.GPSLatitude, request.GPSLongitude);
+                return ApplicationHealthCareFacilityErrors.InvalidCoordinates;
+            }
 
-        // 6. Save to database
-        _context.HealthcareFacilities.Add(createHealthCareFacilityResult.Value);
+            // 4. Create address
+            Result<Address> createAddressResult = Address.Create(
+                request.Street,
+                request.City,
+                request.State,
+                request.Country,
+                request.ZipCode);
 
-        var saveResult = await _context.SaveChangesAsync(cancellationToken);
+            if (createAddressResult.IsError)
+            {
+                _logger.LogWarning(
+                    "Address creation failed: {Errors}",
+                    string.Join(", ", createAddressResult.Errors));
+                return createAddressResult.Errors;
+            }
 
-        if (saveResult <= 0)
-        {
-            _logger.LogError("Failed to save healthcare facility to database. Save result: {SaveResult}", saveResult);
-            return ApplicationHealthCareFacilityErrors.DatabaseSaveFailed("No changes were saved to the database");
-        }
+            // 5. Create healthcare facility
+            Result<HealthCareFacility> createHealthCareFacilityResult = HealthCareFacility.Create(
+                Guid.NewGuid(),
+                user.Id, // Use the newly created user's ID
+                request.Name,
+                request.Type,
+                createAddressResult.Value,
+                request.GPSLatitude,
+                request.GPSLongitude);
 
-        // 7. Log success and return result
-        var healthCareFacility = createHealthCareFacilityResult.Value;
-        _logger.LogInformation(
-            "Healthcare Facility Created Successfully. ID: {HealthCareFacilityId}, Name: {FacilityName}",
-            healthCareFacility.Id, healthCareFacility.Name);
+            if (createHealthCareFacilityResult.IsError)
+            {
+                _logger.LogWarning(
+                    "Healthcare facility creation failed: {Errors}",
+                    string.Join(", ", createHealthCareFacilityResult.Errors));
+                return createHealthCareFacilityResult.Errors;
+            }
 
-        return healthCareFacility;
+            // 6. Save both user and facility to database
+            _context.Users.Add(user);
+            _context.HealthcareFacilities.Add(createHealthCareFacilityResult.Value);
 
+            var saveResult = await _context.SaveChangesAsync(cancellationToken);
+
+            if (saveResult <= 0)
+            {
+                _logger.LogError("Failed to save healthcare facility and user to database.");
+                return ApplicationHealthCareFacilityErrors.DatabaseSaveFailed("No changes were saved to the database");
+            }
+
+
+            // 7. Log success and return result
+            var healthCareFacility = createHealthCareFacilityResult.Value;
+            _logger.LogInformation(
+                "Healthcare Facility and User Created Successfully. Facility ID: {HealthCareFacilityId}, User ID: {UserId}, Name: {FacilityName}",
+                healthCareFacility.Id, user.Id, healthCareFacility.Name);
+
+            return healthCareFacility;
     }
 
     private static bool IsValidCoordinates(double latitude, double longitude)

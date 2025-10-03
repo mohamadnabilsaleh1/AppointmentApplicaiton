@@ -8,6 +8,7 @@ using AppointmentApplication.Domain.Shared.Enums;
 using AppointmentApplication.Domain.Shared.Results;
 using AppointmentApplication.Domain.HealthcareFacilities.Enums;
 using AppointmentApplication.Domain.Users;
+using AppointmentApplication.Domain.HealthcareFacilities.ScheduleHealthcareFacilities;
 
 namespace AppointmentApplication.Domain.HealthcareFacilities;
 
@@ -21,6 +22,7 @@ public sealed class HealthCareFacility : AuditableEntity
     public double GPSLatitude { get; private set; }
     public double GPSLongitude { get; private set; }
     public bool IsActive { get; private set; } = true;
+
 
     private readonly List<Department> _departments = new();
     public IReadOnlyCollection<Department> Departments => _departments.AsReadOnly();
@@ -36,7 +38,7 @@ public sealed class HealthCareFacility : AuditableEntity
 #pragma warning restore CS8618
 
     private HealthCareFacility(Guid id, Guid userId, string name, HealthCareType type, Address address,
-        double latitude, double longitude):base(id)
+        double latitude, double longitude) : base(id)
     {
         UserId = userId;
         Name = name;
@@ -78,7 +80,7 @@ public sealed class HealthCareFacility : AuditableEntity
         return new HealthCareFacility(id, userId, name.Trim(), type, address, latitude, longitude);
     }
 
-    public Result<Updated> Update(string name, HealthCareType type, Address address,
+    public Result<Updated> Update(string name, Address address,
         double latitude, double longitude)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -94,7 +96,6 @@ public sealed class HealthCareFacility : AuditableEntity
         }
 
         Name = name.Trim();
-        Type = type;
         Address = address;
         GPSLatitude = latitude;
         GPSLongitude = longitude;
@@ -105,17 +106,61 @@ public sealed class HealthCareFacility : AuditableEntity
     public void Activate() => IsActive = true;
     public void Deactivate() => IsActive = false;
 
-    public Result<Department> AddDepartment(string name, string description)
+    public Result<ScheduleHealthcareFacility> AddSchedule(
+    DaysOfWeek dayOfWeek,
+    TimeSpan startTime,
+    TimeSpan endTime,
+    Status status,
+    string? note = null)
     {
-        Result<Department> departmentResult = Department.Create(Id, name, description);
-        if (departmentResult.IsError)
+        // 1. التحقق من وجود جدول مكرر لنفس اليوم
+        if (_schedules.Any(s => s.DayOfWeek == dayOfWeek))
         {
-
-            return departmentResult.Errors;
+            return ScheduleHealthcareFacilityErrors.ScheduleAlreadyExistsForDay;
         }
 
-        Department department = departmentResult.Value;
-        _departments.Add(department);
-        return department;
+        // 2. التحقق من أن الوقت النهائي بعد الوقت البدائي
+        if (endTime <= startTime)
+        {
+            return ScheduleHealthcareFacilityErrors.InvalidTimeRange;
+        }
+
+        // 3. التحقق من أن المدة معقولة (أقل من 24 ساعة)
+        var duration = endTime - startTime;
+        if (duration > TimeSpan.FromHours(24))
+        {
+            return ScheduleHealthcareFacilityErrors.InvalidDuration;
+        }
+
+        // 4. إنشاء الجدول الجديد - إضافة true للمعامل isAvailable
+        var scheduleResult = ScheduleHealthcareFacility.Create(
+            Id, dayOfWeek, startTime, endTime, status, true, note); // ✅ أضفت true هنا
+
+        if (scheduleResult.IsError)
+            return scheduleResult.Errors;
+
+        var schedule = scheduleResult.Value;
+
+        // 5. التحقق من عدم تعارض الجدول مع جداول أخرى
+        if (HasScheduleOverlap(schedule))
+        {
+            return ScheduleHealthcareFacilityErrors.ScheduleOverlap;
+        }
+
+        // 6. إضافة الجدول إلى القائمة
+        _schedules.Add(schedule);
+
+        return schedule;
     }
+    private bool HasScheduleOverlap(ScheduleHealthcareFacility newSchedule)
+    {
+        return _schedules.Any(existingSchedule =>
+            existingSchedule.Id != newSchedule.Id && // استبعاد الجدول نفسه إذا كان يتم تحديثه
+            existingSchedule.DayOfWeek == newSchedule.DayOfWeek &&
+            existingSchedule.IsAvailable &&
+            existingSchedule.StartTime < newSchedule.EndTime &&
+            newSchedule.StartTime < existingSchedule.EndTime);
+    }
+
+
 }

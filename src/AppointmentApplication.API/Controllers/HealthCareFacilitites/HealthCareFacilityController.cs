@@ -2,17 +2,21 @@ using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Dtos.HealthCareFacilities;
 using AppointmentApplication.API.Services;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.UpdateHealthcareFacility;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Dtos;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Mappers;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Queries.GetHealthCareFacilities;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Queries.GetHealthCareFacilityById;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Queries.GetHealthCareFacilityByUserId;
 using AppointmentApplication.Application.Shared.Services;
 using AppointmentApplication.Contracts.Requests;
+using AppointmentApplication.Contracts.Requests.HealthCareFacilities;
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.Shared.Results;
 using AppointmentApplication.Domain.Users;
 
 using Asp.Versioning;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
@@ -21,12 +25,11 @@ using Microsoft.AspNetCore.OutputCaching;
 
 namespace AppointmentApplication.API.Controllers;
 
-[Route("api/healthCareFacilities")]
+[Route("api/health-care-facilities")]
 public sealed class HealthCareFacilityController(ISender sender, LinkService linkService) : ApiController
 {
     [HttpPost]
-    [Authorize]
-
+    [Authorize(Roles = Roles.Admin)]
     [ProducesResponseType(typeof(HealthcareFacilityDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -73,7 +76,6 @@ public sealed class HealthCareFacilityController(ISender sender, LinkService lin
             Problem);
     }
 
-    [Authorize(Roles = Roles.Patient)]
     [HttpGet("{id:guid}", Name = "GetHealthCareFacilityById")]
     [ProducesResponseType(typeof(HealthcareFacilityDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -99,8 +101,32 @@ public sealed class HealthCareFacilityController(ISender sender, LinkService lin
             },
             Problem);
     }
+    [HttpGet("me", Name = "GetHealthCareFacilityByUserId")]
+    [ProducesResponseType(typeof(HealthcareFacilityDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [MapToApiVersion("0.1")]
+    [EndpointSummary("Get Health Care Facility by User Id.")]
+    [EndpointDescription("Retrieves a single Health Care Facility.")]
+    [EndpointName("GetHealthCareFacilityByUserId")]
+    public async Task<IActionResult> GetHealthCareFacilityByUserId(Guid id, string? fields, CancellationToken cancellationToken)
+    {
+        var result = await sender.Send(new GetHealthCareFacilityByUserIdQuery(), cancellationToken);
 
-    [Authorize(Roles = Roles.Patient)]
+        return result.Match(
+            facility =>
+            {
+                var links = CreateLinks(id.ToString(), fields); // HATEOAS links
+                var resource = new
+                {
+                    data = facility,
+                    links
+                };
+                return Ok(resource);
+            },
+            Problem);
+    }
+
     [HttpGet]
     [MapToApiVersion("0.1")]
     [EndpointSummary("Get Health Care Facilities.")]
@@ -126,7 +152,10 @@ public sealed class HealthCareFacilityController(ISender sender, LinkService lin
                 queryParameters.City,
                 queryParameters.State,
                 queryParameters.Country,
-                queryParameters.ZipCode),
+                queryParameters.ZipCode,
+                queryParameters.GPSLatitude,
+                queryParameters.GPSLongitude,
+                queryParameters.radiusKm),
             cancellationToken);
 
         return result.Match(
@@ -147,6 +176,50 @@ public sealed class HealthCareFacilityController(ISender sender, LinkService lin
                         response.TotalCount,
                         response.TotalPages
                     },
+                    links
+                };
+
+                return Ok(resource);
+            },
+            Problem);
+    }
+    [HttpPut("{id:guid}")]
+    [Authorize(Roles = $"{Roles.Admin}, {Roles.HealthCareFacility}")]
+    [ProducesResponseType(typeof(HealthcareFacilityDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+    [MapToApiVersion("0.1")]
+    [EndpointSummary("Updates an existing Health Care Facility.")]
+    [EndpointDescription("Updates the details of an existing Health Care Facility.")]
+    [EndpointName("UpdateHealthCareFacility")]
+    public async Task<IActionResult> UpdateHealthCareFacility(
+    Guid id,
+    [FromBody] UpdateHealthcareFacilityRequest request,
+    CancellationToken cancellationToken)
+    {
+        var result = await sender.Send(
+            new UpdateHealthcareFacilityCommand(
+                id,
+                request.Name,
+                request.Street,
+                request.City,
+                request.State,
+                request.Country,
+                request.ZipCode,
+                request.GPSLatitude,
+                request.GPSLongitude),
+            cancellationToken);
+
+        return result.Match(
+            response =>
+            {
+                var dto = response.ToDto();
+                var links = CreateLinks(response.Id.ToString(), null);
+
+                var resource = new
+                {
+                    data = dto,
                     links
                 };
 
@@ -201,7 +274,10 @@ public sealed class HealthCareFacilityController(ISender sender, LinkService lin
         return new List<LinkDto>
         {
             linkService.Create(nameof(GetHealthCareFacilityById), "self", HttpMethods.Get, new { id, fields }),
-            linkService.Create(nameof(CreateHealthCareFacility), "create", HttpMethods.Post)
+            linkService.Create(nameof(CreateHealthCareFacility), "create", HttpMethods.Post),
+            linkService.Create(nameof(UpdateHealthCareFacility), "update", HttpMethods.Put, new { id }),
+            linkService.Create(nameof(GetHealthCareFacilityByUserId), "Get", HttpMethods.Get)
+
         };
     }
 }

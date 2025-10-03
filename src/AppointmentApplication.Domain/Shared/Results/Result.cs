@@ -102,6 +102,7 @@ public sealed class Result<TValue> : IResult<TValue>
 
     public static implicit operator Result<TValue>(List<Error> errors)
         => new(errors);
+
 }
 
 public readonly record struct Success;

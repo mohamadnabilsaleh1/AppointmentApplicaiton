@@ -1,5 +1,4 @@
 using AppointmentApplication.Domain.Shared.Results;
-
 using MechanicShop.Domain.Common.Results;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility
@@ -15,6 +14,11 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Comma
             Error.Validation(
                 "HealthCareFacility.InvalidAddress",
                 $"Invalid address provided: {details}");
+
+        public static Error UserAlreadyExists(string email) =>
+            Error.Conflict(
+                "HealthCareFacility.UserAlreadyExists",
+                $"User with email '{email}' already exists");
 
         public static Error InvalidFacilityCreation(string details) =>
             Error.Validation(
@@ -37,9 +41,9 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Comma
                 $"Healthcare facility with name '{name}' already exists");
 
         public static Error FacilityNotFound(Guid facilityId) =>
-Error.NotFound(
-   "HealthCareFacility.NotFound",
-   $"Healthcare facility with ID '{facilityId}' was not found.");
+            Error.NotFound(
+                "HealthCareFacility.NotFound",
+                $"Healthcare facility with ID '{facilityId}' was not found.");
 
         public static Error FacilityInactive(Guid facilityId) =>
             Error.Conflict(

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "oOFGGN9qckQ=",
+  "dgSpecHash": "qmY+0NNRx1A=",
   "success": true,
   "projectFilePath": "/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.API/AppointmentApplication.API.csproj",
   "expectedPackageFiles": [
@@ -88,6 +88,7 @@
     "/home/kali/.nuget/packages/microsoft.sqlserver.server/1.0.0/microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "/home/kali/.nuget/packages/microsoft.win32.systemevents/6.0.0/microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "/home/kali/.nuget/packages/mono.texttemplating/3.0.0/mono.texttemplating.3.0.0.nupkg.sha512",
+    "/home/kali/.nuget/packages/nettopologysuite/2.6.0/nettopologysuite.2.6.0.nupkg.sha512",
     "/home/kali/.nuget/packages/opentelemetry/1.12.0/opentelemetry.1.12.0.nupkg.sha512",
     "/home/kali/.nuget/packages/opentelemetry.api/1.12.0/opentelemetry.api.1.12.0.nupkg.sha512",
     "/home/kali/.nuget/packages/opentelemetry.api.providerbuilderextensions/1.12.0/opentelemetry.api.providerbuilderextensions.1.12.0.nupkg.sha512",
