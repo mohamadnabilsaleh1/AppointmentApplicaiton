@@ -19,7 +19,6 @@ public class Appointment:AuditableEntity
     public Guid PatientID { get; private set; }
     public Guid DoctorID { get; private set; }
     public Guid FacilityID { get; private set; }
-    public Guid DepartmentID { get; private set; }
     public DateTime ScheduledDate { get; private set; }
     public TimeSpan ScheduledTime { get; private set; }
     public int DurationMinutes { get; private set; }
@@ -33,7 +32,6 @@ public class Appointment:AuditableEntity
     public Patient Patient { get; private set; }
     public Doctor Doctor { get; private set; }
     public HealthCareFacility Facility { get; private set; }
-    public Department Department { get; private set; }
 
     private readonly List<Prescription> _prescriptions = new();
     public IReadOnlyCollection<Prescription> Prescriptions => _prescriptions.AsReadOnly();
@@ -49,7 +47,6 @@ public class Appointment:AuditableEntity
             PatientID = patientId,
             DoctorID = doctorId,
             FacilityID = facilityId,
-            DepartmentID = departmentId,
             ScheduledDate = scheduledDate,
             ScheduledTime = scheduledTime,
             DurationMinutes = durationMinutes,

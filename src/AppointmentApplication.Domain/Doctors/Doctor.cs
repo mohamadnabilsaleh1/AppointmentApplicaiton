@@ -2,13 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.DoctorDepartments;
-using AppointmentApplication.Domain.DoctorFacilities;
+using AppointmentApplication.Domain.Doctors.DoctorsTreatmentCapabilities;
 using AppointmentApplication.Domain.Doctors.ScheduleExceptions;
 using AppointmentApplication.Domain.Doctors.Schedules;
 using AppointmentApplication.Domain.Doctors.Specializations;
+using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.Shared.Enums;
 using AppointmentApplication.Domain.Users;
 
@@ -18,6 +20,8 @@ public class Doctor : AuditableEntity
 {
     public Guid UserId { get; private set; }
     public User User { get; private set; }
+    public Guid FacilityId { get; private set; }
+
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
     public Gender Gender { get; private set; }
@@ -25,9 +29,9 @@ public class Doctor : AuditableEntity
     public string LicenseNumber { get; private set; }
     public bool IsActive { get; private set; } = true;
     public Specialization Specialization { get; private set; }
-    private readonly List<DoctorFacility> _facilities = new();
-    public IReadOnlyCollection<DoctorFacility> Facilities => _facilities.AsReadOnly();
+    public HealthCareFacility HealthcareFacility { get; private set; } = null!;
 
+    public DoctorTreatmentCapacity? TreatmentCapacity { get; set; }
     private readonly List<DoctorDepartment> _departments = new();
     public IReadOnlyCollection<DoctorDepartment> Departments => _departments.AsReadOnly();
 

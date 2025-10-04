@@ -53,5 +53,10 @@ public class HealthCareFacilityConfiguration : IEntityTypeConfiguration<HealthCa
 
 
         builder.HasQueryFilter(e => e.IsActive);
+        builder.HasMany(f => f.Doctors)
+       .WithOne(d => d.HealthcareFacility)
+       .HasForeignKey(d => d.FacilityId)
+       .OnDelete(DeleteBehavior.Cascade);
+
     }
 }

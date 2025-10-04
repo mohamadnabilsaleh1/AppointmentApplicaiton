@@ -22,23 +22,6 @@ namespace AppointmentApplication.API.Controllers;
 [Route("api/doctors")]
 public sealed class DoctorController(ISender sender, LinkService linkService) : ApiController
 {
-    [HttpPost]
-    [Authorize(Roles = Roles.HealthCareFacility)]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [MapToApiVersion("0.1")]
-    [EndpointSummary("Creates a new Doctor.")]
-    [EndpointDescription("Adds a new doctor to the system.")]
-    [EndpointName("CreateDoctor")]
-    public async Task<IActionResult> CreateDoctor(
-    [FromBody] CreateDoctorRequest request,
-    CancellationToken cancellationToken)
-    {
-        return Ok();
-    }
-
-
     [HttpGet("{id:guid}", Name = "GetDoctorById")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -52,23 +35,6 @@ public sealed class DoctorController(ISender sender, LinkService linkService) : 
         string? fields,
         CancellationToken cancellationToken)
     {
-        return Ok();
-    }
-    [HttpPut("{id:guid}", Name = "UpdateMyDoctorById")]
-    [Authorize(Roles = Roles.HealthCareFacility)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [MapToApiVersion("0.1")]
-    [EndpointSummary("Updates current doctor HealthCareFacility.")]
-    [EndpointDescription("Updates the profile of the  doctor.")]
-    [EndpointName("UpdateDoctorById")]
-    public async Task<IActionResult> UpdateDoctor(
-    [FromBody] UpdateDoctorRequest request,
-    CancellationToken cancellationToken)
-    {
-
         return Ok();
     }
 
@@ -129,20 +95,11 @@ public sealed class DoctorController(ISender sender, LinkService linkService) : 
     {
         var links = new List<LinkDto>
         {
-            linkService.Create(nameof(GetDoctorById), "self", HttpMethods.Get, new { id, fields }),
-            linkService.Create(nameof(CreateDoctor), "create", HttpMethods.Post),
-            linkService.Create(nameof(UpdateDoctor), "update", HttpMethods.Put, new { id }),
-            linkService.Create(nameof(GetDoctors), "all", HttpMethods.Get),
-            linkService.Create("GetHealthCareFacilityDoctors", "facility-doctors", HttpMethods.Get, new { healthCareFacilityId = "{facilityId}" })
+        linkService.Create(nameof(GetDoctorById), "self", HttpMethods.Get, new { id, fields }),
+        linkService.Create(nameof(GetDoctors), "all", HttpMethods.Get),
+        linkService.Create(nameof(GetMyDoctorProfile), "my-profile", HttpMethods.Get),
+        linkService.Create(nameof(UpdateMyDoctorProfile), "update-my-profile", HttpMethods.Put),
         };
-
-        // // Add my-profile links if the authenticated user is a doctor
-        // if (currentUserService.IsInRole(Roles.Doctor))
-        // {
-        //     links.Add(linkService.Create(nameof(GetMyDoctorProfile), "my-profile", HttpMethods.Get));
-        //     links.Add(linkService.Create(nameof(UpdateMyDoctorProfile), "update-my-profile", HttpMethods.Put));
-        // }
-
         return links;
     }
 
@@ -163,7 +120,6 @@ public sealed class DoctorController(ISender sender, LinkService linkService) : 
                 gender = parameters.Gender,
                 isActive = parameters.IsActive
             }),
-            linkService.Create(nameof(CreateDoctor), "create", HttpMethods.Post),
         };
 
         if (hasNextPage)

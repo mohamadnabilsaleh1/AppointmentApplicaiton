@@ -1,7 +1,5 @@
 using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Services;
-
-using AppointmentApplication.Contracts.Requests.HealthCareFacilitites.ScheduleExceptions;
 using AppointmentApplication.Domain.Users;
 
 using Asp.Versioning;
@@ -14,82 +12,55 @@ using Microsoft.AspNetCore.OutputCaching;
 
 namespace AppointmentApplication.API.Controllers;
 
-[Route("api/health-care-facility/me/schedule-exceptions")]
+[Route("api/healthcarefacility/{healthcareId:guid}/schedules")]
 [Authorize(Roles = Roles.HealthCareFacility)]
-public sealed class HealthCareFacilityScheduleExceptionController(ISender sender, LinkService linkService) : ApiController
+public sealed class HealthCareFacilityScheduleController : ApiController
 {
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [MapToApiVersion("0.1")]
-    public async Task<IActionResult> CreateHealthCareFacilityScheduleException(
-        [FromBody] CreateHealthCareFacilityScheduleExceptionRequest request,
-        CancellationToken cancellationToken)
+    private readonly ISender _sender;
+    private readonly LinkService _linkService;
+
+    public HealthCareFacilityScheduleController(ISender sender, LinkService linkService)
     {
-        return NoContent();
+        _sender = sender;
+        _linkService = linkService;
     }
 
-    [HttpGet("{id:guid}", Name = "get-health-care-facility-schedule-exception-by-id")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [MapToApiVersion("0.1")]
-    public async Task<IActionResult> GetHealthCareFacilityScheduleExceptionById(
-        Guid id,
-        string? fields,
-        CancellationToken cancellationToken)
-    {
-        return Ok();
-    }
-
-    [HttpGet(Name = "get-health-care-facility-schedule-exceptions")]
+    // GET all schedules for a specific healthcare facility
+    [HttpGet(Name = "GetHealthCareFacilitySchedules")]
     [MapToApiVersion("0.1")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [OutputCache(Duration = 60)]
-    public async Task<IActionResult> GetHealthCareFacilityScheduleExceptions(
+    public async Task<IActionResult> GetHealthCareFacilitySchedules(
+        Guid healthcareId,
         CancellationToken cancellationToken)
     {
-        return Ok();
+        // هنا يمكنك استدعاء _sender.Send() لجلب البيانات من DB
+        return Ok(); // placeholder
     }
 
-    [HttpPut("{id:guid}", Name = "update-health-care-facility-schedule-exception")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    // GET schedule by Id
+    [HttpGet("{id:guid}", Name = "GetHealthCareFacilityScheduleById")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    public async Task<IActionResult> UpdateHealthCareFacilityScheduleException(
-        Guid id,
-        [FromBody] UpdateHealthCareFacilityScheduleExceptionRequest request,
-        CancellationToken cancellationToken)
-    {
-        return NoContent();
-    }
-
-    [HttpDelete("{id:guid}", Name = "delete-health-care-facility-schedule-exception")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [MapToApiVersion("0.1")]
-    public async Task<IActionResult> DeleteHealthCareFacilityScheduleException(
+    public async Task<IActionResult> GetHealthCareFacilityScheduleById(
+        Guid healthcareId,
         Guid id,
         CancellationToken cancellationToken)
     {
-        return NoContent();
+        // هنا يمكنك استدعاء _sender.Send() لجلب البيانات من DB حسب Id
+        return Ok(); // placeholder
     }
 
-    private List<LinkDto> CreateLinks(string id, string? fields)
+    private List<LinkDto> CreateLinks(Guid healthcareId, Guid? id = null)
     {
-        return new List<LinkDto>
+        var links = new List<LinkDto>
         {
-            linkService.Create(nameof(GetHealthCareFacilityScheduleExceptionById), "self", HttpMethods.Get, new { id, fields }),
-            linkService.Create(nameof(CreateHealthCareFacilityScheduleException), "create", HttpMethods.Post),
-            linkService.Create(nameof(UpdateHealthCareFacilityScheduleException), "update", HttpMethods.Put, new { id }),
-            linkService.Create(nameof(DeleteHealthCareFacilityScheduleException), "delete", HttpMethods.Delete, new { id }),
-            linkService.Create(nameof(GetHealthCareFacilityScheduleExceptions), "all", HttpMethods.Get)
+            _linkService.Create(nameof(GetHealthCareFacilitySchedules), "self", HttpMethods.Get, new { healthcareId }),
+            _linkService.Create(nameof(GetHealthCareFacilityScheduleById), "self", HttpMethods.Get, new { healthcareId, id })
         };
+        return links;
     }
-
 }

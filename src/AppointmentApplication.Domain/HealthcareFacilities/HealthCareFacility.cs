@@ -9,6 +9,7 @@ using AppointmentApplication.Domain.Shared.Results;
 using AppointmentApplication.Domain.HealthcareFacilities.Enums;
 using AppointmentApplication.Domain.Users;
 using AppointmentApplication.Domain.HealthcareFacilities.ScheduleHealthcareFacilities;
+using AppointmentApplication.Domain.Doctors;
 
 namespace AppointmentApplication.Domain.HealthcareFacilities;
 
@@ -32,6 +33,9 @@ public sealed class HealthCareFacility : AuditableEntity
 
     private readonly List<ScheduleExceptionHealthcareFacility> _scheduleExceptionDays = new();
     public IReadOnlyCollection<ScheduleExceptionHealthcareFacility> ScheduleExceptions => _scheduleExceptionDays.AsReadOnly();
+    private readonly List<Doctor> _doctors = new();
+    public IReadOnlyCollection<Doctor> Doctors => _doctors.AsReadOnly();
+
 
 #pragma warning disable CS8618
     private HealthCareFacility() { }

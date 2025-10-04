@@ -7,7 +7,6 @@ using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.Billings;
 using AppointmentApplication.Domain.Billings.BillingPayments;
 using AppointmentApplication.Domain.DoctorDepartments;
-using AppointmentApplication.Domain.DoctorFacilities;
 using AppointmentApplication.Domain.Doctors;
 using AppointmentApplication.Domain.Doctors.DoctorsTreatmentCapabilities;
 using AppointmentApplication.Domain.Doctors.ScheduleExceptions;
@@ -57,7 +56,7 @@ public interface IAppDbContext
 
     // Doctor Entities
     DbSet<Doctor> Doctors { get; set; }
-    DbSet<DoctorFacility> DoctorFacilities { get; set; }
+
     DbSet<DoctorDepartment> DoctorDepartments { get; set; }
     DbSet<ScheduleDoctor> ScheduleDoctors { get; set; }
     DbSet<ScheduleExceptionDoctor> ScheduleExceptionDoctors { get; set; }

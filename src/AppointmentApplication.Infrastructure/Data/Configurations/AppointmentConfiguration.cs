@@ -36,9 +36,5 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
             .HasForeignKey(a => a.FacilityID)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(a => a.Department)
-            .WithMany()
-            .HasForeignKey(a => a.DepartmentID)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using AppointmentApplication.Domain.Abstractions;
 
 namespace AppointmentApplication.Domain.Doctors.DoctorsTreatmentCapabilities;
@@ -17,8 +18,8 @@ public class DoctorTreatmentCapacity : AuditableEntity
 
     public Doctor Doctor { get; private set; }
 
-    public static DoctorTreatmentCapacity Create(Guid doctorId, int maxPatientsPerDay = 10,
-        int sessionDurationMinutes = 30)
+    public static DoctorTreatmentCapacity Create(Guid doctorId, int maxPatientsPerDay,
+        int sessionDurationMinutes)
     {
         return new DoctorTreatmentCapacity
         {

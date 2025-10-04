@@ -43,9 +43,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("DepartmentID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("DoctorID")
                         .HasColumnType("uniqueidentifier");
 
@@ -85,8 +82,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DepartmentID");
 
                     b.HasIndex("DoctorID");
 
@@ -246,42 +241,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.ToTable("DoctorDepartments");
                 });
 
-            modelBuilder.Entity("AppointmentApplication.Domain.DoctorFacilities.DoctorFacility", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("DoctorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FacilityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedAtdUtc")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FacilityId");
-
-                    b.HasIndex("DoctorId", "FacilityId")
-                        .IsUnique();
-
-                    b.ToTable("DoctorFacilities");
-                });
-
             modelBuilder.Entity("AppointmentApplication.Domain.Doctors.Doctor", b =>
                 {
                     b.Property<Guid>("Id")
@@ -295,6 +254,9 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
                     b.Property<DateOnly>("DateOfBirth")
                         .HasColumnType("date");
+
+                    b.Property<Guid>("FacilityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -331,6 +293,8 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FacilityId");
 
                     b.HasIndex("SpecializationID");
 
@@ -1020,11 +984,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("BloodType")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
-
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
@@ -1033,11 +992,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Gender")
                         .IsRequired()
@@ -1049,11 +1003,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("NationalID")
                         .IsRequired()
@@ -1461,12 +1410,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("AppointmentApplication.Domain.Appointments.Appointment", b =>
                 {
-                    b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.Departments.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("AppointmentApplication.Domain.Doctors.Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorID")
@@ -1484,8 +1427,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasForeignKey("PatientID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Department");
 
                     b.Navigation("Doctor");
 
@@ -1567,27 +1508,14 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Navigation("Facility");
                 });
 
-            modelBuilder.Entity("AppointmentApplication.Domain.DoctorFacilities.DoctorFacility", b =>
-                {
-                    b.HasOne("AppointmentApplication.Domain.Doctors.Doctor", "Doctor")
-                        .WithMany("Facilities")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "Facility")
-                        .WithMany()
-                        .HasForeignKey("FacilityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Doctor");
-
-                    b.Navigation("Facility");
-                });
-
             modelBuilder.Entity("AppointmentApplication.Domain.Doctors.Doctor", b =>
                 {
+                    b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "HealthcareFacility")
+                        .WithMany("Doctors")
+                        .HasForeignKey("FacilityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("AppointmentApplication.Domain.Doctors.Specializations.Specialization", "Specialization")
                         .WithMany("Doctors")
                         .HasForeignKey("SpecializationID")
@@ -1599,6 +1527,8 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasForeignKey("UserId")
                         .IsRequired();
 
+                    b.Navigation("HealthcareFacility");
+
                     b.Navigation("Specialization");
 
                     b.Navigation("User");
@@ -1607,7 +1537,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
             modelBuilder.Entity("AppointmentApplication.Domain.Doctors.DoctorsTreatmentCapabilities.DoctorTreatmentCapacity", b =>
                 {
                     b.HasOne("AppointmentApplication.Domain.Doctors.Doctor", "Doctor")
-                        .WithOne()
+                        .WithOne("TreatmentCapacity")
                         .HasForeignKey("AppointmentApplication.Domain.Doctors.DoctorsTreatmentCapabilities.DoctorTreatmentCapacity", "DoctorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1959,11 +1889,11 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
                     b.Navigation("Departments");
 
-                    b.Navigation("Facilities");
-
                     b.Navigation("ScheduleExceptions");
 
                     b.Navigation("Schedules");
+
+                    b.Navigation("TreatmentCapacity");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.Doctors.Specializations.Specialization", b =>
@@ -1979,6 +1909,8 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
             modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", b =>
                 {
                     b.Navigation("Departments");
+
+                    b.Navigation("Doctors");
 
                     b.Navigation("ScheduleExceptions");
 
