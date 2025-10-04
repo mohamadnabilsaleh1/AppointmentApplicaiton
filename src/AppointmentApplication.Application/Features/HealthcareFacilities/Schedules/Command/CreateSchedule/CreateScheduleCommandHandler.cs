@@ -7,6 +7,7 @@ using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.
 using AppointmentApplication.Application.Features.HealthcareFacilities.Mappers;
 
 using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Dtos;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Mappers;
 
 using AppointmentApplication.Application.HealthcareFacilities.Schedules.Commands;
 using AppointmentApplication.Application.Shared.Interfaces;
@@ -34,11 +35,11 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Sched
             // الحصول على المنشأة مع جداولها
             var facility = await _context.HealthcareFacilities
                 .Include(f => f.Schedules)
-                .FirstOrDefaultAsync(f => f.Id == request.FacilityId, cancellationToken);
+                .FirstOrDefaultAsync(f => f.UserId == request.UserId, cancellationToken);
 
             if (facility is null)
             {
-                return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.FacilityId);
+                return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.UserId);
             }
 
             // إنشاء الجدول

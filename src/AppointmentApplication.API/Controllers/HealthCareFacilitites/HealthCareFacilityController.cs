@@ -89,7 +89,6 @@ public sealed class HealthCareFacilityController : ApiController
     }
 
     [HttpGet]
-
     [ProducesResponseType(typeof(PaginationResult<HealthcareFacilityDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
@@ -146,7 +145,7 @@ public sealed class HealthCareFacilityController : ApiController
             Problem);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:guid}", Name = "GetHealthCareFacilityById")]
     [ProducesResponseType(typeof(HealthcareFacilityDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -214,14 +213,14 @@ public sealed class HealthCareFacilityController : ApiController
     [EndpointSummary("Get Health Care Facility of logged-in user.")]
     [EndpointDescription("Retrieves the Health Care Facility associated with the authenticated user.")]
     [EndpointName("GetHealthCareFacilityMe")]
-    public async Task<IActionResult> GetHealthCareFacilityMe(Guid id, string? fields, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetHealthCareFacilityMe(string? fields, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetHealthCareFacilityByUserIdQuery(_userContext.UserId), cancellationToken);
 
         return result.Match(
             facility =>
             {
-                var links = CreateLinks(id.ToString(), fields); // HATEOAS links
+                var links = CreateLinks(facility.Id.ToString(), fields); // HATEOAS links
                 var resource = new
                 {
                     data = facility,
@@ -345,16 +344,18 @@ public sealed class HealthCareFacilityController : ApiController
 
     private List<LinkDto> CreateLinks(string id, string? fields)
     {
-        return new List<LinkDto>
-        {
-            _linkService.Create(nameof(GetHealthCareFacilityById), "self", HttpMethods.Get, new { id, fields }),
-            _linkService.Create(nameof(CreateHealthCareFacility), "create", HttpMethods.Post),
-            _linkService.Create(nameof(UpdateHealthCareFacility), "update", HttpMethods.Put, new { id }),
-            _linkService.Create(nameof(GetHealthCareFacilityMe), "get-me", HttpMethods.Get),
-            _linkService.Create(nameof(UpdateHealthCareFacilityMe), "update-me", HttpMethods.Put),
-            _linkService.Create(nameof(GetHealthCareFacilities), "all", HttpMethods.Get),
-            _linkService.Create(nameof(DeactivateHealthCareFacility), "deactivate", HttpMethods.Patch, new { id }),
-            _linkService.Create(nameof(ActivateHealthCareFacility), "activate", HttpMethods.Patch, new { id })
-        };
+        var links = new List<LinkDto>
+    {
+        _linkService.Create(nameof(GetHealthCareFacilityById), "self", HttpMethods.Get, new { id, fields }),
+        _linkService.Create(nameof(GetHealthCareFacilities), "all", HttpMethods.Get),
+        _linkService.Create(nameof(CreateHealthCareFacility), "create", HttpMethods.Post),
+        _linkService.Create(nameof(UpdateHealthCareFacility), "update", HttpMethods.Put, new { id }),
+        _linkService.Create(nameof(DeactivateHealthCareFacility), "deactivate", HttpMethods.Patch, new { id }),
+        _linkService.Create(nameof(ActivateHealthCareFacility), "activate", HttpMethods.Patch, new { id }),
+        _linkService.Create(nameof(GetHealthCareFacilityMe), "get-me", HttpMethods.Get),
+        _linkService.Create(nameof(UpdateHealthCareFacilityMe), "update-me", HttpMethods.Put)
+    };
+
+        return links;
     }
 }

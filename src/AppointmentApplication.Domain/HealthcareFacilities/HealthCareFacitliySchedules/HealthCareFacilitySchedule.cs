@@ -113,4 +113,5 @@ public sealed class HealthCareFacilitySchedule : AuditableEntity
 
         return Result.Updated;
     }
+    
 }

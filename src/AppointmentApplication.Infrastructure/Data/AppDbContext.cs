@@ -51,8 +51,8 @@ public class AppDbContext : DbContext, IAppDbContext
 
     // Healthcare Facility Entities
     public DbSet<HealthCareFacility> HealthcareFacilities { get; set; }
-    public DbSet<ScheduleHealthcareFacility> ScheduleHealthcareFacilities { get; set; }
-    public DbSet<ScheduleExceptionHealthcareFacility> ScheduleExceptionHealthcareFacilities { get; set; }
+    public DbSet<HealthCareFacilitySchedule> ScheduleHealthcareFacilities { get; set; }
+    public DbSet<HealthCareFacilityScheduleException> ScheduleExceptionHealthcareFacilities { get; set; }
     public DbSet<Department> Departments { get; set; }
 
     // Contact Information

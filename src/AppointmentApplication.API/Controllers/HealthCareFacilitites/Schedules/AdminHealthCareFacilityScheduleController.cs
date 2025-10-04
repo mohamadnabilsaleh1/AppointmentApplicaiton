@@ -157,11 +157,11 @@ public sealed class AdminHealthCareFacilityScheduleController : ApiController
     {
         return new List<LinkDto>
         {
-            _linkService.Create("AdminGetHealthCareFacilityScheduleById", "self", HttpMethods.Get, new { id, fields }),
-            _linkService.Create("AdminCreateHealthCareFacilitySchedule", "create", HttpMethods.Post),
-            _linkService.Create("AdminUpdateHealthCareFacilitySchedule", "update", HttpMethods.Put, new { id }),
-            _linkService.Create("AdminDeleteHealthCareFacilitySchedule", "delete", HttpMethods.Delete, new { id }),
-            _linkService.Create("AdminGetHealthCareFacilitySchedules", "all", HttpMethods.Get)
+            _linkService.Create(nameof(GetHealthCareFacilityScheduleById), "self", HttpMethods.Get, new { id, fields }),
+            _linkService.Create(nameof(CreateHealthCareFacilitySchedule), "create", HttpMethods.Post),
+            _linkService.Create(nameof(UpdateHealthCareFacilitySchedule), "update", HttpMethods.Put, new { id }),
+            _linkService.Create(nameof(DeleteHealthCareFacilitySchedule), "delete", HttpMethods.Delete, new { id }),
+            _linkService.Create(nameof(GetHealthCareFacilitySchedules), "all", HttpMethods.Get)
         };
     }
 

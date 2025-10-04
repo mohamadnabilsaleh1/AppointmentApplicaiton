@@ -1,5 +1,10 @@
+using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Dtos;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Mappers;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Dtos;
+using AppointmentApplication.Application.Features.HealthcareFacilities.ScheduleExceptions.Dtos;
+using AppointmentApplication.Application.Features.HealthcareFacilities.ScheduleExceptions.Mappers;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Dtos;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Mappers;
 using AppointmentApplication.Application.Features.Users.Mappers;
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.HealthcareFacilities.Departments;
@@ -64,61 +69,5 @@ public static class HealthcareFacilityMapper
     }
 
     // ✅ Department mapping
-    public static DepartmentDto ToDto(this Department entity)
-    {
-        ArgumentNullException.ThrowIfNull(entity);
 
-        return new DepartmentDto(
-            entity.Id,
-            entity.FacilityId,
-            entity.Name,
-            entity.Description,
-            entity.IsActive,
-            entity.CreatedAtUtc);
-    }
-
-    public static List<DepartmentDto> ToDtos(this IEnumerable<Department> entities)
-    {
-        return entities.Select(e => e.ToDto()).ToList();
-    }
-
-    // ✅ Schedule mapping
-    public static ScheduleDto ToDto(this ScheduleHealthcareFacility entity)
-    {
-        ArgumentNullException.ThrowIfNull(entity);
-
-        return new ScheduleDto(
-            entity.Id,
-            entity.DayOfWeek,
-            entity.StartTime,
-            entity.EndTime,
-            entity.Note
-            );
-    }
-
-    public static List<ScheduleDto> ToDtos(this IEnumerable<ScheduleHealthcareFacility> entities)
-    {
-        return entities.Select(e => e.ToDto()).ToList();
-    }
-
-    // ✅ Schedule exception mapping
-    public static ScheduleExceptionDto ToDto(this ScheduleExceptionHealthcareFacility entity)
-    {
-        ArgumentNullException.ThrowIfNull(entity);
-
-        return new ScheduleExceptionDto(
-            entity.Id,
-            entity.FacilityId,   // now consistent
-            entity.Date,
-            entity.DayOfWeek,
-            entity.StartTime,
-            entity.EndTime,
-            entity.Status.ToString(),
-            entity.Reason);
-    }
-
-    public static List<ScheduleExceptionDto> ToDtos(this IEnumerable<ScheduleExceptionHealthcareFacility> entities)
-    {
-        return entities.Select(e => e.ToDto()).ToList();
-    }
 }

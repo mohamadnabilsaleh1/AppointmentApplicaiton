@@ -58,8 +58,8 @@ namespace AppointmentApplication.API.Controllers
         {
             return new List<LinkDto>
             {
-                _linkService.Create("GetDepartments", "self", HttpMethods.Get),
-                _linkService.Create("GetDepartmentById", "self", HttpMethods.Get, new { id, fields })
+                _linkService.Create(nameof(GetDepartments), "self", HttpMethods.Get),
+                _linkService.Create(nameof(GetDepartmentById), "self", HttpMethods.Get, new { id, fields })
             };
         }
     }

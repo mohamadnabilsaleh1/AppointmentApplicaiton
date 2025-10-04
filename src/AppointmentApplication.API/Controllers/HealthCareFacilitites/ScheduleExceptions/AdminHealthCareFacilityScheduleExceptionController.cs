@@ -29,7 +29,7 @@ public sealed class AdminHealthCareFacilityScheduleExceptionController : ApiCont
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointName("CreateHealthCareFacilityScheduleException")]
+    [EndpointName("AdminCreateHealthCareFacilityScheduleException")]
     [EndpointSummary("Creates a new schedule exception")]
     [EndpointDescription("Adds a new schedule exception for the currently authenticated health care facility.")]
     public async Task<IActionResult> CreateHealthCareFacilityScheduleException(
@@ -44,7 +44,7 @@ public sealed class AdminHealthCareFacilityScheduleExceptionController : ApiCont
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointName("GetHealthCareFacilityScheduleExceptionById")]
+    [EndpointName("AdminGetHealthCareFacilityScheduleExceptionById")]
     [EndpointSummary("Retrieve a schedule exception by ID")]
     [EndpointDescription("Fetches a specific schedule exception for the currently authenticated health care facility.")]
     public async Task<IActionResult> GetHealthCareFacilityScheduleExceptionById(
@@ -60,7 +60,7 @@ public sealed class AdminHealthCareFacilityScheduleExceptionController : ApiCont
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [OutputCache(Duration = 60)]
-    [EndpointName("GetHealthCareFacilityScheduleExceptions")]
+    [EndpointName("AdminGetHealthCareFacilityScheduleExceptions")]
     [EndpointSummary("Retrieve all schedule exceptions")]
     [EndpointDescription("Fetches all schedule exceptions for the currently authenticated health care facility.")]
     public async Task<IActionResult> GetHealthCareFacilityScheduleExceptions(
@@ -75,7 +75,7 @@ public sealed class AdminHealthCareFacilityScheduleExceptionController : ApiCont
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointName("UpdateHealthCareFacilityScheduleException")]
+    [EndpointName("AdminUpdateHealthCareFacilityScheduleException")]
     [EndpointSummary("Updates a schedule exception")]
     [EndpointDescription("Modifies an existing schedule exception for the currently authenticated health care facility.")]
     public async Task<IActionResult> UpdateHealthCareFacilityScheduleException(
@@ -91,7 +91,7 @@ public sealed class AdminHealthCareFacilityScheduleExceptionController : ApiCont
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointName("DeleteHealthCareFacilityScheduleException")]
+    [EndpointName("AdminDeleteHealthCareFacilityScheduleException")]
     [EndpointSummary("Deletes a schedule exception")]
     [EndpointDescription("Removes a specific schedule exception for the currently authenticated health care facility.")]
     public async Task<IActionResult> DeleteHealthCareFacilityScheduleException(

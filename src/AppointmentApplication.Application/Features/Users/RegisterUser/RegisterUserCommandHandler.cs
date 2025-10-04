@@ -34,7 +34,8 @@ internal sealed class RegisterUserCommandHandler : IRequestHandler<RegisterUserC
     {
         Role role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Patient", cancellationToken);
         // استخدم Role.Patient مباشرة
-        var user = User.Create(Guid.NewGuid(), request.FirstName, request.LastName, request.Email, role);
+        var createUser = User.Create(Guid.NewGuid(), request.FirstName, request.LastName, request.Email, role);
+        var user = createUser.Value;
 
         string identityId = await _authenticationService.RegisterAsync(user, request.Password, cancellationToken);
 

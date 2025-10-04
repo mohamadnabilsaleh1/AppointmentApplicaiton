@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
-
+using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Dtos;
+using AppointmentApplication.Application.Features.HealthcareFacilities.ScheduleExceptions.Dtos;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Dtos;
-
 using AppointmentApplication.Application.Features.Users.Dtos;
 using AppointmentApplication.Domain.HealthcareFacilities.Enums;
 using AppointmentApplication.Domain.Users;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Dtos;
 
+// Record الرئيسي
 public record HealthcareFacilityDto(
     Guid Id,
     string Name,
@@ -19,7 +20,47 @@ public record HealthcareFacilityDto(
     IReadOnlyCollection<DepartmentDto> Departments,
     IReadOnlyCollection<ScheduleDto> Schedules,
     IReadOnlyCollection<ScheduleExceptionDto> ScheduleExceptions
-);
+)
+{
+    // حقول خاصة للتخزين الداخلي
+    private AddressDto _addressDto;
+    private List<DepartmentDto> _departmentDtos;
+    private List<ScheduleDto> _scheduleDtos;
+    private List<ScheduleExceptionDto> _scheduleExceptionDtos;
+
+    // منشئ ثانوي يستقبل List بدل IReadOnlyCollection
+    public HealthcareFacilityDto(
+        Guid id,
+        string name,
+        HealthCareType type,
+        AddressDto addressDto,
+        double gpsLatitude,
+        double gpsLongitude,
+        List<DepartmentDto> departmentDtos,
+        List<ScheduleDto> scheduleDtos,
+        List<ScheduleExceptionDto> scheduleExceptionDtos
+    )
+        : this(
+            id,
+            name,
+            type,
+            addressDto,
+            gpsLatitude,
+            gpsLongitude,
+            departmentDtos.AsReadOnly(),
+            scheduleDtos.AsReadOnly(),
+            scheduleExceptionDtos.AsReadOnly()
+        )
+    {
+        // حفظ القوائم الداخلية الخاصة
+        _addressDto = addressDto;
+        _departmentDtos = departmentDtos;
+        _scheduleDtos = scheduleDtos;
+        _scheduleExceptionDtos = scheduleExceptionDtos;
+    }
+}
+
+// Record يحتوي على مستخدم
 public record HealthcareFacilityWithUserDto(
     Guid Id,
     string Name,
@@ -33,6 +74,7 @@ public record HealthcareFacilityWithUserDto(
     IReadOnlyCollection<ScheduleExceptionDto> ScheduleExceptions
 );
 
+// Record للعنوان
 public record AddressDto(
     string Street,
     string City,
@@ -42,23 +84,3 @@ public record AddressDto(
 {
     public string FullAddress => $"{Street}, {City}, {Country} {ZipCode}";
 }
-
-public record DepartmentDto(
-    Guid Id,
-    Guid HealthcareFacilityId,
-    string Name,
-    string Description,
-    bool IsActive,
-    DateTime CreatedAt
-);
-
-public record ScheduleExceptionDto(
-    Guid Id,
-    Guid HealthcareFacilityId,
-    DateOnly Date,
-    DayOfWeek DayOfWeek,
-    TimeSpan StartTime,
-    TimeSpan EndTime,
-    string Status,
-    string Reason
-);

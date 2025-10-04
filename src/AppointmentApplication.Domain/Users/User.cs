@@ -2,7 +2,7 @@
 using AppointmentApplication.Domain.Doctors;
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.Patients;
-using System.Collections.Generic;
+using AppointmentApplication.Domain.Shared.Results;
 
 namespace AppointmentApplication.Domain.Users;
 
@@ -25,25 +25,48 @@ public sealed class User : AuditableEntity
     public string Email { get; private set; }
     public string IdentityId { get; private set; } = string.Empty;
 
-    // 👇 One-to-Many: User -> HealthCareFacilities
     private readonly List<HealthCareFacility> _healthCareFacilities = new();
     public IReadOnlyCollection<HealthCareFacility> HealthCareFacilities => _healthCareFacilities.AsReadOnly();
 
-    // 👇 One-to-Many: User -> Patients
     private readonly List<Patient> _patients = new();
     public IReadOnlyCollection<Patient> Patients => _patients.AsReadOnly();
 
-    // 👇 One-to-Many: User -> Doctors
     private readonly List<Doctor> _doctors = new();
     public IReadOnlyCollection<Doctor> Doctors => _doctors.AsReadOnly();
 
-    // 👇 Many-to-Many: User -> Roles
     private readonly List<Role> _roles = new();
     public IReadOnlyCollection<Role> Roles => _roles.AsReadOnly();
 
-    public static User Create(Guid id, string firstName, string lastName, string email,Role role)
+    public static Result<User> Create(Guid id, string firstName, string lastName, string email, Role role)
     {
-        var user = new User(id, firstName, lastName, email);
+        // 🔹 Validation
+        if (string.IsNullOrWhiteSpace(firstName))
+        {
+            return UserErrors.FirstNameRequired;
+        }
+
+        if (string.IsNullOrWhiteSpace(lastName))
+        {
+            return UserErrors.LastNameRequired;
+        }
+
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return UserErrors.EmailRequired;
+        }
+
+        if (!IsValidEmail(email))
+        {
+            return UserErrors.InvalidEmail;
+        }
+
+        if (role is null)
+        {
+            return UserErrors.RoleRequired;
+        }
+
+        // 🔹 Create new user
+        var user = new User(id, firstName.Trim(), lastName.Trim(), email.Trim().ToLowerInvariant());
 
         user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
         user._roles.Add(role);
@@ -56,28 +79,17 @@ public sealed class User : AuditableEntity
         IdentityId = identityId;
     }
 
-    // Optional helper methods to add related entities
-    public void AddHealthCareFacility(HealthCareFacility facility)
+    // 🔹 Email validation (basic regex)
+    private static bool IsValidEmail(string email)
     {
-        if (!_healthCareFacilities.Contains(facility))
+        try
         {
-            _healthCareFacilities.Add(facility);
+            var addr = new System.Net.Mail.MailAddress(email);
+            return addr.Address == email;
         }
-    }
-
-    public void AddPatient(Patient patient)
-    {
-        if (!_patients.Contains(patient))
+        catch
         {
-            _patients.Add(patient);
-        }
-    }
-
-    public void AddDoctor(Doctor doctor)
-    {
-        if (!_doctors.Contains(doctor))
-        {
-            _doctors.Add(doctor);
+            return false;
         }
     }
 }

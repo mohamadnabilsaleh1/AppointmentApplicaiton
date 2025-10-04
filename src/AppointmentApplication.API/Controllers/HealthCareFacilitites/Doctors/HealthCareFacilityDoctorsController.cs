@@ -34,7 +34,7 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilities.Doctors
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [OutputCache(Duration = 60)]
-        [EndpointName("GetDoctors")]
+        [EndpointName("GetDoctorsByHealthCareFacilityId")]
         [EndpointSummary("Retrieve all doctors for a healthcare facility")]
         [EndpointDescription("Fetches a list of all doctors associated with a specific healthcare facility by its ID.")]
         public async Task<IActionResult> GetDoctors(
@@ -51,7 +51,7 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilities.Doctors
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [EndpointName("GetDoctorById")]
+        [EndpointName("GetDoctorByIdAndByHealthCareFacilityId")]
         [EndpointSummary("Retrieve a doctor by ID for a healthcare facility")]
         [EndpointDescription("Fetches a specific doctor by their ID within the context of the given healthcare facility.")]
         public async Task<IActionResult> GetDoctorById(
@@ -68,8 +68,8 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilities.Doctors
         {
             return new List<LinkDto>
             {
-                _linkService.Create("GetDoctorById", "self", HttpMethods.Get, new { healthCareFacilityId, id = doctorId }),
-                _linkService.Create("GetDoctors", "all", HttpMethods.Get, new { healthCareFacilityId })
+                _linkService.Create(nameof(GetDoctors), "self", HttpMethods.Get, new { healthCareFacilityId, id = doctorId }),
+                _linkService.Create(nameof(GetDoctorById), "all", HttpMethods.Get, new { healthCareFacilityId })
             };
         }
     }

@@ -35,7 +35,7 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Doctors
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [OutputCache(Duration = 60)]
-        [EndpointName("GetDoctors")]
+        [EndpointName("AdminGetDoctors")]
         [EndpointSummary("Retrieve all doctors")]
         [EndpointDescription("Fetches all doctors for the currently authenticated health care facility.")]
         public async Task<IActionResult> GetDoctors(DoctorQueryParameters doctorQueryParameters, CancellationToken cancellationToken)
@@ -48,7 +48,7 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Doctors
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [EndpointName("GetDoctorById")]
+        [EndpointName("AdminGetDoctorById")]
         [EndpointSummary("Retrieve doctor by ID")]
         [EndpointDescription("Fetches a specific doctor for the currently authenticated health care facility by ID.")]
         public async Task<IActionResult> GetDoctorById(Guid id, CancellationToken cancellationToken)
@@ -61,7 +61,7 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Doctors
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [EndpointName("CreateDoctor")]
+        [EndpointName("AdminCreateDoctor")]
         [EndpointSummary("Create a new doctor")]
         [EndpointDescription("Adds a new doctor to the currently authenticated health care facility.")]
         public async Task<IActionResult> CreateDoctor([FromBody] CreateDoctorRequest request, CancellationToken cancellationToken)
@@ -76,7 +76,7 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Doctors
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [EndpointName("UpdateDoctor")]
+        [EndpointName("AdminUpdateDoctor")]
         [EndpointSummary("Update a doctor")]
         [EndpointDescription("Modifies an existing doctor in the currently authenticated health care facility.")]
         public async Task<IActionResult> UpdateDoctor(Guid id, [FromBody] UpdateDoctorRequest request, CancellationToken cancellationToken)
@@ -89,7 +89,7 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Doctors
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [EndpointName("DeleteDoctor")]
+        [EndpointName("AdminDeleteDoctor")]
         [EndpointSummary("Delete a doctor")]
         [EndpointDescription("Removes a specific doctor from the currently authenticated health care facility.")]
         public async Task<IActionResult> DeleteDoctor(Guid id, CancellationToken cancellationToken)

@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AppointmentApplication.Infrastructure.Data.Configurations;
 
-public class ScheduleExceptionHealthcareFacilityConfiguration : IEntityTypeConfiguration<ScheduleExceptionHealthcareFacility>
+public class ScheduleExceptionHealthcareFacilityConfiguration : IEntityTypeConfiguration<HealthCareFacilityScheduleException>
 {
-    public void Configure(EntityTypeBuilder<ScheduleExceptionHealthcareFacility> builder)
+    public void Configure(EntityTypeBuilder<HealthCareFacilityScheduleException> builder)
     {
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).ValueGeneratedNever();

@@ -5,7 +5,6 @@ using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using System.Threading.Tasks;
 
-
 using AppointmentApplication.API.Infrastructure;
 using AppointmentApplication.Api.OpenApi.Transformers;
 using AppointmentApplication.API.Services;

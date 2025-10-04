@@ -9,7 +9,7 @@ using MediatR;
 namespace AppointmentApplication.Application.HealthcareFacilities.Schedules.Commands;
 
 public sealed record CreateScheduleCommand(
-    Guid FacilityId,
+    Guid UserId,
     DaysOfWeek DayOfWeek,
     TimeSpan StartTime,
     TimeSpan EndTime,

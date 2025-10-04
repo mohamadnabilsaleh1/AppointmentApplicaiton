@@ -12,4 +12,8 @@ public static class HealthCareFacilityErrors
 
     public static readonly Error AddressRequired =
         Error.Validation("HealthCareFacility.Address.Required", "Address is required.");
+    public static readonly Error InvalidCoordinates =
+        Error.Validation(
+            "HealthcareFacility.InvalidCoordinates",
+            "The provided GPS coordinates are invalid. Latitude must be between -90 and 90, and Longitude must be between -180 and 180.");
 }

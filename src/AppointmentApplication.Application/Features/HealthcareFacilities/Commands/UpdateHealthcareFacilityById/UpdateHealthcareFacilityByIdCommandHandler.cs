@@ -61,14 +61,6 @@ public class UpdateHealthcareFacilityByIdCommandHandler
             }
         }
 
-        // 4. Validate GPS coordinates
-        if (!IsValidCoordinates(request.GPSLatitude, request.GPSLongitude))
-        {
-            _logger.LogWarning("Invalid GPS coordinates provided: Lat {Latitude}, Long {Longitude}",
-                request.GPSLatitude, request.GPSLongitude);
-            return ApplicationHealthCareFacilityErrors.InvalidCoordinates;
-        }
-
         // 5. Create new address
         Result<Address> createAddressResult = Address.Create(
             request.Street,
@@ -103,9 +95,4 @@ public class UpdateHealthcareFacilityByIdCommandHandler
         return Result.Updated;
     }
 
-    private static bool IsValidCoordinates(double latitude, double longitude)
-    {
-        return latitude >= -90 && latitude <= 90 &&
-               longitude >= -180 && longitude <= 180;
-    }
 }
