@@ -43,7 +43,6 @@ public static class DependencyInjection
         services.AddTransient<DynamicQueryService>();
         return services;
     }
-
 }
 
 

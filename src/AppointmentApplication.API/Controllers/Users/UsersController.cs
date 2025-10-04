@@ -70,6 +70,7 @@ public class UsersController(ISender sender) : ApiController
         // Just a placeholder endpoint for CreatedAtAction.
         return Ok(new { Id = id });
     }
+
     [AllowAnonymous]
     [HttpPost("login")]
     [ProducesResponseType(typeof(AccessTokenResponse), StatusCodes.Status200OK)]
@@ -112,5 +113,4 @@ public class UsersController(ISender sender) : ApiController
             Problem              // إذا لم يتم العثور أو حدث خطأ نرجع ProblemDetails
         );
     }
-
 }

@@ -11,7 +11,6 @@ using AppointmentApplication.Infrastructure.Authentication.Models;
 
 namespace AppointmentApplication.Infrastructure.Authentication;
 
-
 internal sealed class AuthenticationService : IAuthenticationService
 {
     private const string PasswordCredentialType = "password";

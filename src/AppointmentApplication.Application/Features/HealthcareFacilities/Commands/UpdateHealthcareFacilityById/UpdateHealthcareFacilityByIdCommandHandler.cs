@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Commands.UpdateHealthcareFacility;
 
-public class UpdateHealthcareFacilityByIdCommandHandler 
+public class UpdateHealthcareFacilityByIdCommandHandler
     : IRequestHandler<UpdateHealthcareFacilityByIdCommand, Result<Updated>>
 {
     private readonly ILogger<UpdateHealthcareFacilityByIdCommandHandler> _logger;

@@ -7,7 +7,6 @@ using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Services;
 using AppointmentApplication.Contracts.Requests.Doctors.Schedules;
 
-
 using Asp.Versioning;
 
 using MediatR;
@@ -23,7 +22,6 @@ namespace AppointmentApplication.API.Controllers;
 
 public sealed class AdminDoctorScheduleController(ISender sender, LinkService linkService) : ApiController
 {
-
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -37,7 +35,6 @@ public sealed class AdminDoctorScheduleController(ISender sender, LinkService li
         [FromBody] CreateDoctorScheduleRequest request,
         CancellationToken cancellationToken)
     {
-
         return Ok();
     }
 
@@ -106,7 +103,6 @@ public sealed class AdminDoctorScheduleController(ISender sender, LinkService li
         Guid id,
         CancellationToken cancellationToken)
     {
-
         return NoContent();
     }
 
@@ -121,9 +117,6 @@ public sealed class AdminDoctorScheduleController(ISender sender, LinkService li
             linkService.Create(nameof(GetDoctorSchedules), "all", HttpMethods.Get, new { doctorId })
         };
 
-
         return links;
     }
-
-
 }

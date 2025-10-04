@@ -17,7 +17,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queries.GetHealthCareFacilityByUserId
 {
-
     public sealed class GetHealthCareFacilityByUserIdQueryHandler : IRequestHandler<GetHealthCareFacilityByUserIdQuery, Result<HealthcareFacilityWithUserDto>>
     {
         private readonly IAppDbContext _context;
@@ -28,6 +27,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
             _context = context;
             _userContext = userContext;
         }
+
         public async Task<Result<HealthcareFacilityWithUserDto>> Handle(GetHealthCareFacilityByUserIdQuery request, CancellationToken cancellationToken)
         {
             var userId = _userContext.UserId;
@@ -40,6 +40,5 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
             var dto = healthCareFacility.ToDtoWithUser();
             return dto;
         }
-
     }
 }

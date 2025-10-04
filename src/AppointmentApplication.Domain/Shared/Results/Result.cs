@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.HealthcareFacilities;
 
-
 namespace AppointmentApplication.Domain.Shared.Results;
 
 public static class Result
@@ -91,9 +90,6 @@ public sealed class Result<TValue> : IResult<TValue>
     public TNextValue Match<TNextValue>(Func<TValue, TNextValue> onValue, Func<List<Error>, TNextValue> onError)
         => IsSuccess ? onValue(Value!) : onError(Errors);
 
-
-
-
     public static implicit operator Result<TValue>(TValue value)
         => new(value);
 
@@ -102,7 +98,6 @@ public sealed class Result<TValue> : IResult<TValue>
 
     public static implicit operator Result<TValue>(List<Error> errors)
         => new(errors);
-
 }
 
 public readonly record struct Success;

@@ -1,11 +1,11 @@
 using AppointmentApplication.Application.Features.HealthcareFacilities.Dtos;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Dtos;
+using AppointmentApplication.Application.Features.Users.Mappers;
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.HealthcareFacilities.Departments;
 using AppointmentApplication.Domain.HealthcareFacilities.Enums;
-using AppointmentApplication.Domain.HealthcareFacilities.Schedules;
 using AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions;
-using AppointmentApplication.Application.Features.Users.Mappers;
-using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Dtos;
+using AppointmentApplication.Domain.HealthcareFacilities.Schedules;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Mappers;
 
@@ -27,6 +27,7 @@ public static class HealthcareFacilityMapper
             entity.Schedules.ToDtos(),
             entity.ScheduleExceptions.ToDtos());
     }
+
     public static HealthcareFacilityWithUserDto ToDtoWithUser(this HealthCareFacility entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -94,6 +95,7 @@ public static class HealthcareFacilityMapper
             entity.Note
             );
     }
+
     public static List<ScheduleDto> ToDtos(this IEnumerable<ScheduleHealthcareFacility> entities)
     {
         return entities.Select(e => e.ToDto()).ToList();

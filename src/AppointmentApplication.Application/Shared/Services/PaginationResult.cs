@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+
+
 using AppointmentApplication.Application.Features.HealthcareFacilities.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentApplication.Application.Shared.Services;
 
@@ -45,7 +47,10 @@ public sealed record PaginationResult<T> : ICollectionResponse<T>
         int page,
         int pageSize)
     {
-        if (items == null) throw new ArgumentNullException(nameof(items));
+        if (items == null)
+        {
+            throw new ArgumentNullException(nameof(items));
+        }
 
         int totalCount = items.Count;
         List<T> pagedItems = items

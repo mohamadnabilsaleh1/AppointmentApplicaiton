@@ -47,8 +47,6 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
                    .HasForeignKey<DoctorTreatmentCapacity>(tc => tc.DoctorId)
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Cascade);
-
-
         }
     }
 }

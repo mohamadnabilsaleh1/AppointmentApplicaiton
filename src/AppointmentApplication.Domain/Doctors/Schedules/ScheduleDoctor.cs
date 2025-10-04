@@ -18,7 +18,7 @@ public class ScheduleDoctor : AuditableEntity
     public string Note { get; private set; } = string.Empty;
     public Doctor Doctor { get; private set; }
 
-    public static ScheduleDoctor Create(Guid doctorId, DayOfWeek dayOfWeek, TimeSpan startTime, 
+    public static ScheduleDoctor Create(Guid doctorId, DayOfWeek dayOfWeek, TimeSpan startTime,
         TimeSpan endTime, Status status, bool isAvailable, string note )
     {
         return new ScheduleDoctor
@@ -32,5 +32,4 @@ public class ScheduleDoctor : AuditableEntity
             Note = note,
         };
     }
-
 }

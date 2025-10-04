@@ -5,8 +5,10 @@ using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using System.Threading.Tasks;
 
+
 using AppointmentApplication.API.Infrastructure;
 using AppointmentApplication.Api.OpenApi.Transformers;
+using AppointmentApplication.API.Services;
 using AppointmentApplication.Infrastructure.Settings;
 using Asp.Versioning;
 using Microsoft.AspNetCore.RateLimiting;
@@ -14,7 +16,6 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Serilog;
-using AppointmentApplication.API.Services;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

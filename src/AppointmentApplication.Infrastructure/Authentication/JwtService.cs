@@ -16,7 +16,6 @@ namespace AppointmentApplication.Infrastructure.Authentication;
 
 internal sealed class JwtService : IJwtService
 {
-
     private readonly HttpClient _httpClient;
     private readonly KeycloakOptions _keycloakOptions;
 
@@ -60,6 +59,5 @@ internal sealed class JwtService : IJwtService
         }
 
         return authorizationToken.AccessToken;
-
     }
 }

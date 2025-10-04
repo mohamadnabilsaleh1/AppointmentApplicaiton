@@ -1,11 +1,12 @@
-using AppointmentApplication.Application.Features.HealthcareFacilities.Dtos;
-using AppointmentApplication.Domain.Shared.Results;
-using AppointmentApplication.Application.Shared.Interfaces;
-using MediatR;
-using AppointmentApplication.Application.Shared.Services;
 using System;
 using System.Dynamic;
+
+using AppointmentApplication.Application.Features.HealthcareFacilities.Dtos;
+using AppointmentApplication.Application.Shared.Interfaces;
+using AppointmentApplication.Application.Shared.Services;
 using AppointmentApplication.Domain.HealthcareFacilities.Enums;
+using AppointmentApplication.Domain.Shared.Results;
+using MediatR;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queries.GetHealthCareFacilities
 {
@@ -31,5 +32,4 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
         public string[] Tags => new[] { "healthCareFacility" };
         public TimeSpan Expiration => TimeSpan.FromMinutes(10);
     }
-
 }

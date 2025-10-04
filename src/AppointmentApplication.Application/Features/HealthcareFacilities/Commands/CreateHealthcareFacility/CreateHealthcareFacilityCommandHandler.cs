@@ -25,11 +25,9 @@ public class CreateHealthcareFacilityCommandHandler(
         CreateHealthcareFacilityCommand request,
         CancellationToken cancellationToken)
     {
-
-
             // 1. Create User
             var role = await _context.Roles
-                .FirstOrDefaultAsync(r => r.Name == "HealthCareFacility", cancellationToken) 
+                .FirstOrDefaultAsync(r => r.Name == "HealthCareFacility", cancellationToken)
                 ?? Role.HealthCareFacility;
 
             var user = User.Create(Guid.NewGuid(), request.FirstName, request.LastName, request.Email, role);
@@ -111,7 +109,6 @@ public class CreateHealthcareFacilityCommandHandler(
                 _logger.LogError("Failed to save healthcare facility and user to database.");
                 return ApplicationHealthCareFacilityErrors.DatabaseSaveFailed("No changes were saved to the database");
             }
-
 
             // 7. Log success and return result
             var healthCareFacility = createHealthCareFacilityResult.Value;

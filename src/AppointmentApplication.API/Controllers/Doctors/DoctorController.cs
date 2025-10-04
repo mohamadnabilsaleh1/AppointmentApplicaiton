@@ -8,7 +8,6 @@ using AppointmentApplication.API.Dtos.HealthCareFacilities;
 using AppointmentApplication.API.Services;
 using AppointmentApplication.Contracts.Requests.Doctors;
 
-
 using Asp.Versioning;
 
 using MediatR;
@@ -54,7 +53,6 @@ public sealed class DoctorController(ISender sender, LinkService linkService) : 
         return Ok();
     }
 
-
     [HttpGet("me", Name = "GetMyDoctorProfile")]
     [Authorize(Roles = Roles.Doctor)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -68,7 +66,6 @@ public sealed class DoctorController(ISender sender, LinkService linkService) : 
     string? fields,
     CancellationToken cancellationToken)
     {
-
         return Ok();
     }
 
@@ -86,10 +83,8 @@ public sealed class DoctorController(ISender sender, LinkService linkService) : 
     [FromBody] UpdateDoctorRequest request,
     CancellationToken cancellationToken)
     {
-
         return Ok();
     }
-
 
     private List<LinkDto> CreateLinks(string id, string? fields)
     {

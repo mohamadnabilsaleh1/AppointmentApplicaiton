@@ -21,8 +21,6 @@ internal sealed class AuthorizationService
 
     public async Task<UserRolesResponse> GetRolesForUserAsync(string identityId)
     {
-
-
         UserRolesResponse roles = await _dbContext.Set<User>()
             .Where(u => u.IdentityId == identityId)
             .Select(u => new UserRolesResponse
@@ -32,20 +30,17 @@ internal sealed class AuthorizationService
             })
             .FirstAsync();
 
-
         return roles;
     }
 
     public async Task<HashSet<string>> GetPermissionsForUserAsync(string identityId)
     {
-
         ICollection<Permission> permissions = await _dbContext.Set<User>()
             .Where(u => u.IdentityId == identityId)
             .SelectMany(u => u.Roles.Select(r => r.Permissions))
             .FirstAsync();
 
         var permissionsSet = permissions.Select(p => p.Name).ToHashSet();
-
 
         return permissionsSet;
     }

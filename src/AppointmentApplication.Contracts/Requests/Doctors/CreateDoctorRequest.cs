@@ -10,8 +10,6 @@ namespace AppointmentApplication.Contracts.Requests.Doctors
 {
     public class CreateDoctorRequest
     {
-
-
         [Required(ErrorMessage = "First name is required")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "First name must be between 2 and 100 characters")]
         public string FirstName { get; set; } = string.Empty;
@@ -30,7 +28,6 @@ namespace AppointmentApplication.Contracts.Requests.Doctors
         [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
 
-
         [Required(ErrorMessage = "Gender is required")]
         [EnumDataType(typeof(Gender), ErrorMessage = "Invalid gender")]
         public Gender Gender { get; set; }
@@ -44,6 +41,5 @@ namespace AppointmentApplication.Contracts.Requests.Doctors
         [Required(ErrorMessage = "License number is required")]
         [StringLength(50, ErrorMessage = "License number cannot exceed 50 characters")]
         public string LicenseNumber { get; set; } = string.Empty;
-
     }
 }

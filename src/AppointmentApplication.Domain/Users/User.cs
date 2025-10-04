@@ -60,18 +60,24 @@ public sealed class User : AuditableEntity
     public void AddHealthCareFacility(HealthCareFacility facility)
     {
         if (!_healthCareFacilities.Contains(facility))
+        {
             _healthCareFacilities.Add(facility);
+        }
     }
 
     public void AddPatient(Patient patient)
     {
         if (!_patients.Contains(patient))
+        {
             _patients.Add(patient);
+        }
     }
 
     public void AddDoctor(Doctor doctor)
     {
         if (!_doctors.Contains(doctor))
+        {
             _doctors.Add(doctor);
+        }
     }
 }

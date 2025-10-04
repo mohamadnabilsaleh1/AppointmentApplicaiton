@@ -7,7 +7,6 @@ using AppointmentApplication.Domain.Shared.Results;
 
 namespace AppointmentApplication.Application.Abstractions.Authentication;
 
-
 public interface IJwtService
 {
     Task<Result<string>> GetAccessTokenAsync(

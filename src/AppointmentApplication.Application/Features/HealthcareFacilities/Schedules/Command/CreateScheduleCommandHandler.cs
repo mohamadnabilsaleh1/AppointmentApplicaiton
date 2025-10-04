@@ -38,10 +38,8 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Sched
 
             if (facility is null)
             {
-
                 return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.FacilityId);
             }
-
 
             // إنشاء الجدول
 
@@ -54,7 +52,6 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Sched
 
             if (scheduleResult.IsError)
             {
-
                 return scheduleResult.Errors;
             }
 

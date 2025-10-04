@@ -52,8 +52,6 @@ public record DepartmentDto(
     DateTime CreatedAt
 );
 
-
-
 public record ScheduleExceptionDto(
     Guid Id,
     Guid HealthcareFacilityId,

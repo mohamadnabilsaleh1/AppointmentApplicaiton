@@ -51,9 +51,13 @@ namespace AppointmentApplication.Application.Shared.Query
             {
                 foreach (var filter in filters)
                 {
-                    if (filter.Value == null) continue;
+                    if (filter.Value == null)
+                    {
+                        continue;
+                    }
 
                     // exact match filter
+
                     query = query.Where($"{filter.Key} == @0", filter.Value);
                     Console.WriteLine(filter.Value+ "-------------"+ filter.Key);
                 }
@@ -99,7 +103,9 @@ namespace AppointmentApplication.Application.Shared.Query
         private IQueryable<T> ApplySortSafe<T>(IQueryable<T> query, string? sort, string defaultOrderBy)
         {
             if (string.IsNullOrWhiteSpace(sort))
+            {
                 return query.OrderBy(defaultOrderBy);
+            }
 
             try
             {
@@ -124,7 +130,9 @@ namespace AppointmentApplication.Application.Shared.Query
                     .ToArray();
 
                 if (sortFields.Length == 0)
+                {
                     return query.OrderBy(defaultOrderBy);
+                }
 
                 string orderBy = string.Join(",", sortFields);
                 return query.OrderBy(orderBy);

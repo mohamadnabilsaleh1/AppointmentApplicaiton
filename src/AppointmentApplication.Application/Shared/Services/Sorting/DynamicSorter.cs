@@ -20,7 +20,6 @@ namespace AppointmentApplication.Application.Shared.Services
         {
             if (string.IsNullOrWhiteSpace(sort))
             {
-
                 return query.OrderBy(defaultOrderBy);
             }
 
@@ -50,7 +49,6 @@ namespace AppointmentApplication.Application.Shared.Services
 
                 if (sortFields.Length == 0)
                 {
-
                     return query.OrderBy(defaultOrderBy);
                 }
 

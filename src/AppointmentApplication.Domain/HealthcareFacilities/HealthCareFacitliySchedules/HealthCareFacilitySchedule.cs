@@ -7,7 +7,7 @@ using AppointmentApplication.Domain.Shared.Results;
 
 namespace AppointmentApplication.Domain.HealthcareFacilities.Schedules;
 
-public sealed class ScheduleHealthcareFacility : AuditableEntity
+public sealed class HealthCareFacilitySchedule : AuditableEntity
 {
     public Guid FacilityId { get; private set; }
     public DaysOfWeek DayOfWeek { get; private set; }
@@ -17,13 +17,13 @@ public sealed class ScheduleHealthcareFacility : AuditableEntity
     public bool IsAvailable { get; private set; } = true;
     public string Note { get; private set; } = string.Empty;
 
-    public HealthCareFacility Facility { get; private set; }
+    public HealthCareFacility Facility { get; private set; } = null!;
 
 #pragma warning disable CS8618
-    private ScheduleHealthcareFacility() { }
+    private HealthCareFacilitySchedule() { }
 #pragma warning restore CS8618
 
-    private ScheduleHealthcareFacility(Guid id, Guid facilityId, DaysOfWeek dayOfWeek, TimeSpan startTime,
+    private HealthCareFacilitySchedule(Guid id, Guid facilityId, DaysOfWeek dayOfWeek, TimeSpan startTime,
         TimeSpan endTime, Status status, string note)
         : base(id)
     {
@@ -37,7 +37,7 @@ public sealed class ScheduleHealthcareFacility : AuditableEntity
     }
 
     // ✅ Create
-    public static Result<ScheduleHealthcareFacility> Create(
+    public static Result<HealthCareFacilitySchedule> Create(
         Guid facilityId,
         DaysOfWeek dayOfWeek,
         TimeSpan startTime,
@@ -48,35 +48,30 @@ public sealed class ScheduleHealthcareFacility : AuditableEntity
     {
         if (facilityId == Guid.Empty)
         {
-
-            return ScheduleHealthcareFacilityErrors.FacilityIdRequired;
+            return HealthCareFacilityScheduleErrors.FacilityIdRequired;
         }
 
         if (!Enum.IsDefined(dayOfWeek))
         {
-
-            return ScheduleHealthcareFacilityErrors.InvalidDayOfWeek;
+            return HealthCareFacilityScheduleErrors.InvalidDayOfWeek;
         }
 
         if (endTime <= startTime)
         {
-
-            return ScheduleHealthcareFacilityErrors.InvalidTimeRange;
+            return HealthCareFacilityScheduleErrors.InvalidTimeRange;
         }
 
         if (!Enum.IsDefined(status))
         {
-
-            return ScheduleHealthcareFacilityErrors.StatusRequired;
+            return HealthCareFacilityScheduleErrors.StatusRequired;
         }
 
         if (!string.IsNullOrWhiteSpace(note) && note.Length > 500)
         {
-
-            return ScheduleHealthcareFacilityErrors.NoteTooLong;
+            return HealthCareFacilityScheduleErrors.NoteTooLong;
         }
 
-        return new ScheduleHealthcareFacility(
+        return new HealthCareFacilitySchedule(
             Guid.NewGuid(),
             facilityId,
             dayOfWeek,
@@ -92,26 +87,22 @@ public sealed class ScheduleHealthcareFacility : AuditableEntity
     {
         if (!Enum.IsDefined(dayOfWeek))
         {
-
-            return ScheduleHealthcareFacilityErrors.InvalidDayOfWeek;
+            return HealthCareFacilityScheduleErrors.InvalidDayOfWeek;
         }
 
         if (endTime <= startTime)
         {
-
-            return ScheduleHealthcareFacilityErrors.InvalidTimeRange;
+            return HealthCareFacilityScheduleErrors.InvalidTimeRange;
         }
 
         if (!Enum.IsDefined(status))
         {
-
-            return ScheduleHealthcareFacilityErrors.StatusRequired;
+            return HealthCareFacilityScheduleErrors.StatusRequired;
         }
 
         if (!string.IsNullOrWhiteSpace(note) && note.Length > 500)
         {
-
-            return ScheduleHealthcareFacilityErrors.NoteTooLong;
+            return HealthCareFacilityScheduleErrors.NoteTooLong;
         }
 
         DayOfWeek = dayOfWeek;

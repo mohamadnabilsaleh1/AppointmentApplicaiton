@@ -7,7 +7,6 @@ namespace AppointmentApplication.Contracts.Requests.HealthCareFacilitites
 {
     public class CreateHealthcareFacilityScheduleRequest
     {
-
         [Required(ErrorMessage = "Day of week is required")]
         [EnumDataType(typeof(DaysOfWeek), ErrorMessage = "Invalid day of week")]
         public DaysOfWeek DayOfWeek { get; set; }

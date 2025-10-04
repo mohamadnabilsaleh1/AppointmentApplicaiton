@@ -14,5 +14,4 @@ namespace AppointmentApplication.Application.Features.Users.GetLoggedInUser
     // public sealed record GetHealthCareFacilityByIdQuery(Guid Id,string? Fields)
     // : IRequest<Result<ExpandoObject>>;
     public sealed record GetLoggedInUserQuery() : IRequest<Result<UserDto>>;
-
 }

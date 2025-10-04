@@ -4,7 +4,7 @@ using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Shared.Results;
 
 namespace AppointmentApplication.Domain.HealthcareFacilities;
-    public sealed class Address 
+    public sealed class Address
     {
         public string Street { get; }
         public string City { get; }
@@ -29,34 +29,33 @@ namespace AppointmentApplication.Domain.HealthcareFacilities;
             return AddressErrors.StreetRequired;
         }
 
-        if (string.IsNullOrWhiteSpace(city))
+            if (string.IsNullOrWhiteSpace(city))
         {
             return AddressErrors.CityRequired;
         }
 
-        if (string.IsNullOrWhiteSpace(state))
+            if (string.IsNullOrWhiteSpace(state))
         {
             return AddressErrors.StateRequired;
         }
 
-        if (string.IsNullOrWhiteSpace(country))
+            if (string.IsNullOrWhiteSpace(country))
         {
             return AddressErrors.CountryRequired;
         }
 
-        if (string.IsNullOrWhiteSpace(zipCode))
+            if (string.IsNullOrWhiteSpace(zipCode))
         {
             return AddressErrors.ZipCodeRequired;
         }
 
-        if (street.Length > 200 || city.Length > 100 || state.Length > 100 || country.Length > 100 || zipCode.Length > 20)
+            if (street.Length > 200 || city.Length > 100 || state.Length > 100 || country.Length > 100 || zipCode.Length > 20)
         {
             return AddressErrors.InvalidLength;
         }
 
-        return new Address(street.Trim(), city.Trim(), state.Trim(), country.Trim(), zipCode.Trim());
+            return new Address(street.Trim(), city.Trim(), state.Trim(), country.Trim(), zipCode.Trim());
         }
-
     }
 
     public static class AddressErrors

@@ -35,5 +35,4 @@ public class ScheduleExceptionDoctor:AuditableEntity
             Reason = reason,
         };
     }
-
 }

@@ -7,7 +7,7 @@ using AppointmentApplication.Domain.Shared.Results;
 
 namespace AppointmentApplication.Domain.HealthcareFacilities.ScheduleHealthcareFacilities;
 
-public static class ScheduleHealthcareFacilityErrors
+public static class HealthCareFacilityScheduleErrors
 {
     public static readonly Error FacilityIdRequired =
         Error.Validation("Schedule.FacilityId.Required", "Facility ID is required.");

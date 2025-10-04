@@ -10,7 +10,6 @@ namespace AppointmentApplication.Contracts.Requests.HealthCareFacilitites.Schedu
 {
     public class CreateHealthCareFacilityScheduleExceptionRequest
     {
-
         [Required(ErrorMessage = "Date is required")]
         public DateOnly Date { get; set; }
 

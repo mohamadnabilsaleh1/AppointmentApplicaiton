@@ -7,5 +7,4 @@ using MediatR;
 namespace AppointmentApplication.Domain.Abstractions;
     public interface IDomainEvent:INotification
     {
-        
     }

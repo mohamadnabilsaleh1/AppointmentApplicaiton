@@ -92,7 +92,7 @@ public sealed class AdminHealthCareFacilityScheduleController : ApiController
         // return result.Match(
         //     paginationResult => {
         //         var links = CreatePaginationLinks(paginationResult);
-        //         var resource = new { 
+        //         var resource = new {
         //             data = paginationResult.Items,
         //             pagination = new {
         //                 paginationResult.Page,

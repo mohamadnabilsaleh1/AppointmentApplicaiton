@@ -10,10 +10,10 @@ namespace AppointmentApplication.Domain.Patients.PatientChronicDiseases;
 public class PatientChronicDisease : AuditableEntity
 {
     private PatientChronicDisease() { }
-    
+
     public Guid PatientId { get; private set; }
     public Guid ChronicDiseaseId { get; private set; }
-    
+
     public Patient Patient { get; private set; }
     public ChronicDisease ChronicDisease { get; private set; }
 
@@ -26,5 +26,4 @@ public class PatientChronicDisease : AuditableEntity
             ChronicDiseaseId = chronicDiseaseId,
         };
     }
-
 }

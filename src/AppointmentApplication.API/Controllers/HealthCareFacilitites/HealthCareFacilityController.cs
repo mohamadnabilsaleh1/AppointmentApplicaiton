@@ -205,7 +205,6 @@ public sealed class HealthCareFacilityController : ApiController
             Problem);
     }
 
-
     [HttpGet("me")]
     [Authorize(Roles = Roles.HealthCareFacility)]
     [ProducesResponseType(typeof(HealthcareFacilityDto), StatusCodes.Status200OK)]
@@ -247,7 +246,6 @@ public sealed class HealthCareFacilityController : ApiController
         [FromBody] UpdateHealthcareFacilityRequest request,
         CancellationToken cancellationToken)
     {
-
         var result = await _sender.Send(
             new UpdateHealthcareFacilityByUserIdCommand(
                 _userContext.UserId,
@@ -265,6 +263,7 @@ public sealed class HealthCareFacilityController : ApiController
             response => NoContent(),
             Problem);
     }
+
     [HttpPatch("{id:guid}/activate")]
     [Authorize(Roles = Roles.Admin)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

@@ -37,7 +37,6 @@ namespace AppointmentApplication.API.Controllers.Doctors.DoctorsTreatmentCapabil
             return Ok();
         }
 
-
         [HttpGet]
         [MapToApiVersion("0.1")]
         [EndpointName("list-doctor-treatment-capacities")]

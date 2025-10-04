@@ -23,5 +23,4 @@ public class Email : AuditableEntity
             Label = label,
         };
     }
-
 }
