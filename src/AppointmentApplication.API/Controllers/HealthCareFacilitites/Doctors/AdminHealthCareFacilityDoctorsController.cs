@@ -10,9 +10,7 @@ using AppointmentApplication.Contracts.Requests.Doctors;
 using AppointmentApplication.Domain.Users;
 
 using Asp.Versioning;
-
 using MediatR;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
@@ -32,65 +30,70 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Doctors
             _linkService = linkService;
         }
 
-        // GET ALL
-        [HttpGet(Name = "admin-get-doctors")]
+        [HttpGet]
         [MapToApiVersion("0.1")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [OutputCache(Duration = 60)]
-        public async Task<IActionResult> GetDoctors(DoctorQueryParameters doctorQueryParameters,CancellationToken cancellationToken)
+        [EndpointName("GetDoctors")]
+        [EndpointSummary("Retrieve all doctors")]
+        [EndpointDescription("Fetches all doctors for the currently authenticated health care facility.")]
+        public async Task<IActionResult> GetDoctors(DoctorQueryParameters doctorQueryParameters, CancellationToken cancellationToken)
         {
-            // TODO: implement fetching all doctors logic
-            return Ok(new List<object>()); // return list of doctors
+            return Ok(new List<object>()); // placeholder
         }
 
-        // GET BY ID
-        [HttpGet("{id:guid}", Name = "admin-get-doctor-by-id")]
+        [HttpGet("{id:guid}")]
         [MapToApiVersion("0.1")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [EndpointName("GetDoctorById")]
+        [EndpointSummary("Retrieve doctor by ID")]
+        [EndpointDescription("Fetches a specific doctor for the currently authenticated health care facility by ID.")]
         public async Task<IActionResult> GetDoctorById(Guid id, CancellationToken cancellationToken)
         {
-            // TODO: implement fetching doctor by id
-            return Ok(new { Id = id, Name = "Doctor Name" });
+            return Ok(new { Id = id, Name = "Doctor Name" }); // placeholder
         }
 
-        // CREATE
-        [HttpPost(Name = "admin-create-doctor")]
+        [HttpPost]
         [MapToApiVersion("0.1")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [EndpointName("CreateDoctor")]
+        [EndpointSummary("Create a new doctor")]
+        [EndpointDescription("Adds a new doctor to the currently authenticated health care facility.")]
         public async Task<IActionResult> CreateDoctor([FromBody] CreateDoctorRequest request, CancellationToken cancellationToken)
         {
-            // TODO: implement doctor creation logic
             var createdDoctorId = Guid.NewGuid(); // placeholder
-            return CreatedAtRoute("get-doctor-by-id", new { id = createdDoctorId }, request);
+            return CreatedAtRoute("GetDoctorById", new { id = createdDoctorId }, request);
         }
 
-        // UPDATE
-        [HttpPut("{id:guid}", Name = "admin-update-doctor")]
+        [HttpPut("{id:guid}")]
         [MapToApiVersion("0.1")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [EndpointName("UpdateDoctor")]
+        [EndpointSummary("Update a doctor")]
+        [EndpointDescription("Modifies an existing doctor in the currently authenticated health care facility.")]
         public async Task<IActionResult> UpdateDoctor(Guid id, [FromBody] UpdateDoctorRequest request, CancellationToken cancellationToken)
         {
-            // TODO: implement doctor update logic
             return Ok(request);
         }
 
-        // DELETE
-        [HttpDelete("{id:guid}", Name = "admin-delete-doctor")]
+        [HttpDelete("{id:guid}")]
         [MapToApiVersion("0.1")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [EndpointName("DeleteDoctor")]
+        [EndpointSummary("Delete a doctor")]
+        [EndpointDescription("Removes a specific doctor from the currently authenticated health care facility.")]
         public async Task<IActionResult> DeleteDoctor(Guid id, CancellationToken cancellationToken)
         {
-            // TODO: implement doctor deletion logic
             return NoContent();
         }
 
@@ -105,6 +108,5 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Doctors
                 _linkService.Create(nameof(GetDoctors), "all", HttpMethods.Get)
             };
         }
-
     }
 }

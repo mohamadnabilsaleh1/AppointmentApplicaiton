@@ -1,48 +1,56 @@
 @baseUrl = http://localhost:5001
-@Token = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NTk0MjQxODcsImlhdCI6MTc1OTM4ODE4NywianRpIjoib25ydHJvOjFmMTA1OGJiLWZiYTktZGEzNS0xYWMxLTkwY2RhNWJmZjljYyIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJkYTllYjFlOC1iYTIyLTQ1YzMtODI5MC05ZDQ1MWI0OWVkOGMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6IjNiZTYxMjQ3LWZjNGYtNGEyYS05YWRmLTUwZTM0ZjU0NDcyNyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IlNoYXphIEhvc3BpdGFsIiwicHJlZmVycmVkX3VzZXJuYW1lIjoic2hhemEuaG9zcGl0YWxAZXhhbXBsZS5jb20iLCJnaXZlbl9uYW1lIjoiU2hhemEiLCJmYW1pbHlfbmFtZSI6Ikhvc3BpdGFsIiwiZW1haWwiOiJzaGF6YS5ob3NwaXRhbEBleGFtcGxlLmNvbSJ9.YkupNzCCrWK1rSbwR9iqxoHDHI5rEuLfM7ObNwoike5F2SEpmq5ym_dA_91n-R6HhzLsADiKomaLDK7-LLZqpcVdSK3onMhPJf05EkJY9UI7F1CVzG2yyBh6f8R2wnJ8Zr89VefWlkuS2OmInum_wwGxzI_2JRqVVryOyagIFzbmGjoSIDwISkQ0JU74Ks9r3L3KOHqzyqdUWaS4S5pASZf-WGcA-K9mThDA2mk4J75RkjL7nIFtp7SggrA43WtGo7pVNWluEvj_v8zrFohWYghSdR19HKnFxP75ZQCR511dY5YPGZ69As5k1n8wko61rBoiyNDONrgaPl5qS_I3BA
-
+@AdminToken = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NTk1OTk0MDYsImlhdCI6MTc1OTU2MzQwNiwianRpIjoib25ydHJvOjkzYmM4NWVkLTEwZDgtNjVkMi1kMDU0LTNiMWQ1MjQ3MjBlOCIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI3NTdiY2M4OC1hZGQ1LTRhMDktOTM1Ny04ZWNlZTJkZDNhNWIiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6ImE2MTFhNGJmLWM1M2MtNDBjNS1hNGIyLTg0NWQ3MmJjZDkyZSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6Im1vaGFtYWQgYWRtaW4iLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhZG1pbkBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoibW9oYW1hZCIsImZhbWlseV9uYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSJ9.zNjEMNK5IqH0G1kGQzLsr0mOZDSACbaUNWEmR4T5kLRQSm1vhtMaELsrvhaLdbD4nyo3AG7c2qQU7DTxJ52HfEVx4WCt0okHzstF6AXhydgd7YtOXB50iupTLI9PntfTpmzfiygt0tNHfmY5m5DYZCFS7ZDFh3v3tThIiSoW1db2U6vTwBAqqlhC5E1D0ekLFSuVTtgy7Ng_-_qXMjB0LFoX-XsYuhHDm650pJsSQAUuWEUvK2pssJ4G_QqoHwVI9pytP6W-8ruKLH_ok43ea0jBPR0JJFjZtI5e7aczPUyIHjGW9gdN9tMwVTKUKu0YsfLD1rqdO6lnq8joESJ-ew
+@HelathCare = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NTk1OTk4OTQsImlhdCI6MTc1OTU2Mzg5NCwianRpIjoib25ydHJvOjM3YjBlYzcxLWNmMjktYzFiYi1mZDBlLTE2N2RjZDFjNDhkOSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI4NDRmYWZhNC1lODM3LTRhZmUtYjFjNy1mYzNiYmRhYTA2MmQiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6IjA2NjBiZWUxLTlhYzUtNGRmOS04N2M4LTg2YmM1NmFhMzFlYyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IktoYWxlZCBDbGluaWMiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJraGFsZWQuY2xpbmljQGV4YW1wbGUuY29tIiwiZ2l2ZW5fbmFtZSI6IktoYWxlZCIsImZhbWlseV9uYW1lIjoiQ2xpbmljIiwiZW1haWwiOiJraGFsZWQuY2xpbmljQGV4YW1wbGUuY29tIn0.ZFWx0_NTgyLEgaDVGL4OJvvoYLZAsL3bomKVpSU8958A-bJXrvZCNh7VcQw8DVYgU0WPQG4GgFIAmNDRWGfJ1Wbf4onqvYXo1yZTghEfm70TMkeXoSyDc9hJ48pV7FfEoaSSTAZ-0IUhe5YQvL7udvkiW2Tfk1SgySNdLB5yzWBF_hEs--nUL-6DCpmRN5cWDoUHqbdKQg1uAZhviAQ2z75ZxwtArfvcgV5oKG0IPAMZh5EAiok6oDwMFQXr6mHhj0jim9ZqqZjZDkpbj8ZLBQw8AbIixo3WFSqKK8wR8rL6FFP4EuCy0aLsQTO_PEGWb6FZAuqpIjSwiAcucZDOvA
+@endpoint=health-care-facilities
 ### Create a Health Care Facility
-POST {{baseUrl}}/api/healthCareFacilities
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NTkzNzEyMTksImlhdCI6MTc1OTMzNTIxOSwianRpIjoib25ydHJvOjdjYWUxMjk4LTUwZDEtMjk3Yi1iNThlLTE4Yjg0ZTc2YzU4NiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJiNGE3M2VkNy05Mzg1LTQ1YTYtOTA0Ni05NzJmMTkzMWQ2YmEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6IjFlZTY4ZWI3LWNkZTktNDFiMS1iYzIwLTBhYmUxZTY1YTQxNSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6Im1vaGFtYWQgYWRtaW4iLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhZG1pbkBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoibW9oYW1hZCIsImZhbWlseV9uYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSJ9.y44Z92KKTpmdx1Tg-BXGrreyny7-XOB6vL2QvI91n6XgM-ur8YOrthYz1g1DyRiY3k8Ai9Zza0tdnrWs3u-zsXIp5-fRCa5v0KFkaER2EMa0csc6RTZdYvba0gT25a5haUYtTgCcGbrEQT5_GzA7qAe2-TOfsHt2qxIGuqqc_XN0spUoPqRxAxwSOaBJXzYCiGyG6z_dcMntjgQwfso9CpCitpgQtQOgdZw75MzXtuTK9NAW_ZzEhEe7ZERxN_VxzA-tLodM0s0YSRcECt7RUPYwiFNPpV1TAKEOF0RAxQjYeAfY3DMBuXNBLl52HgAd-bOCp8_GRTeyRsFYupufZQ
+POST {{baseUrl}}/api/health-care-facilities
+Authorization: {{AdminToken}}
+Content-Type: application/json
+
+ {
+    "firstName": "Khaled",
+    "lastName": "Clinic",
+    "email": "khaled.clinic@example.com",
+    "password": "12er56ui90MO@",
+    "name": "Khaled Specialty Clinic",
+    "type": 0,
+    "street": "220 Coastal Rd",
+    "city": "Tartus",
+    "state": "Tartus Governorate",
+    "country": "Syria",
+    "zipCode": "49005",
+    "gpsLatitude": 34.887,
+    "gpsLongitude": 35.8869
+  }
+
+###
+POST http://localhost:5001/api/users/login
 Content-Type: application/json
 
 {
-  "firstName": "Shaza",
-  "lastName": "Hospital",
-  "email": "shaza.hospital@example.com",
-  "password": "SecurePassword123!",
-  "name": "Shaza Hospital",
-  "type": 0,
-  "street": "123 Main St",
-  "city": "Damascus",
-  "state": "Rif Dimashq",
-  "country": "Syria",
-  "zipCode": "11001",
-  "gpsLatitude": 33.5138,
-  "gpsLongitude": 36.2765
+  "Email": "khaled.clinic@example.com",
+  "Password": "12er56ui90MO@"
 }
 
 
+
+
 ### get all
-GEt {{baseUrl}}/api/healthCareFacilities
-Authorization: {{Token}}
-
-### get by id
-GEt {{baseUrl}}/api/healthCareFacilities/b3f3a709-3762-4f5a-99a8-0d1ab4c27d5e
-Authorization: {{Token}}
-
-### get by User Id
-GEt {{baseUrl}}/api/healthCareFacilities/me
-Authorization: {{Token}}
+GEt {{baseUrl}}/api/health-care-facilities
 
 ### by Latitude and Longitude 
-GET {{baseUrl}}/api/healthCareFacilities?GPSLatitude=33.5138&GPSLongitude=36.2765&radiusKm=2
-Authorization: Bearer {{Token}}
+GET {{baseUrl}}/api/{{endpoint}}?GPSLatitude=33.5138&GPSLongitude=36.2765&radiusKm=2
 
+### get by id
+GEt {{baseUrl}}/api/{{endpoint}}/6b3ab5d4-c7e6-46db-a371-02f554acf223
+
+### get by User Id
+GEt {{baseUrl}}/api/{{endpoint}}/me
+Authorization: {{HelathCare}}
 
 ### Update a Health Care Facility
-PUT {{baseUrl}}/api/healthCareFacilities/b3f3a709-3762-4f5a-99a8-0d1ab4c27d5e
-Authorization: {{Token}}
+PUT {{baseUrl}}/api/{{endpoint}}/8f939023-614d-417c-b1de-54a9d6e9ae06
+Authorization: {{AdminToken}}
 Content-Type: application/json
 
 {
@@ -55,11 +63,27 @@ Content-Type: application/json
   "gpsLatitude": 33.5139,
   "gpsLongitude": 36.2766
 }
+
 ###
-POST http://localhost:5001/api/users/login
+PUT {{baseUrl}}/api/{{endpoint}}/me
+Authorization: {{HelathCare}}
 Content-Type: application/json
 
 {
-  "email": "shaza.hospital@example.com",
-  "password": "SecurePassword123!"
+  "name": "Shaza Hospital Updated me",
+  "street": "456 Updated Street",
+  "city": "Damascus",
+  "state": "Rif Dimashq",
+  "country": "Syria",
+  "zipCode": "11002",
+  "gpsLatitude": 33.5139,
+  "gpsLongitude": 36.2766
 }
+
+
+###  active health care facility
+PATCH {{baseUrl}}/api/health-care-facilities/6b3ab5d4-c7e6-46db-a371-02f554acf223/activate
+Authorization: {{AdminToken}}
+### desactive health care facility
+PATCH {{baseUrl}}/api/health-care-facilities/6b3ab5d4-c7e6-46db-a371-02f554acf223/deactivate
+Authorization: {{AdminToken}}

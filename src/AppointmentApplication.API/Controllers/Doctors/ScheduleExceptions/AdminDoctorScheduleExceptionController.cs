@@ -26,7 +26,7 @@ public sealed class AdminDoctorScheduleExceptionController(ISender sender, LinkS
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointName("create-doctor-schedule-exception")]
+    [EndpointName("admin-create-doctor-schedule-exception")]
     [EndpointSummary("Creates a new Doctor Schedule Exception.")]
     [EndpointDescription("Adds a new schedule exception for a doctor.")]
     public async Task<IActionResult> Create(
@@ -42,7 +42,7 @@ public sealed class AdminDoctorScheduleExceptionController(ISender sender, LinkS
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointName("get-doctor-schedule-exception-by-id")]
+    [EndpointName("admin-get-doctor-schedule-exception-by-id")]
     [EndpointSummary("Get Doctor Schedule Exception by Id.")]
     [EndpointDescription("Retrieves a single doctor schedule exception.")]
     public async Task<IActionResult> GetById(
@@ -55,7 +55,7 @@ public sealed class AdminDoctorScheduleExceptionController(ISender sender, LinkS
 
     [HttpGet]
     [MapToApiVersion("0.1")]
-    [EndpointName("list-doctor-schedule-exceptions")]
+    [EndpointName("admin-list-doctor-schedule-exceptions")]
     [EndpointSummary("Get Doctor Schedule Exceptions.")]
     [EndpointDescription("Retrieves doctor schedule exceptions with optional filtering and pagination.")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -72,7 +72,7 @@ public sealed class AdminDoctorScheduleExceptionController(ISender sender, LinkS
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointName("update-doctor-schedule-exception")]
+    [EndpointName("admin-update-doctor-schedule-exception")]
     [EndpointSummary("Updates an existing Doctor Schedule Exception.")]
     [EndpointDescription("Updates the details of an existing doctor schedule exception.")]
     public async Task<IActionResult> Update(
@@ -88,7 +88,7 @@ public sealed class AdminDoctorScheduleExceptionController(ISender sender, LinkS
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointName("delete-doctor-schedule-exception")]
+    [EndpointName("admin-delete-doctor-schedule-exception")]
     [EndpointSummary("Deletes a Doctor Schedule Exception.")]
     [EndpointDescription("Removes a doctor schedule exception from the system.")]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)

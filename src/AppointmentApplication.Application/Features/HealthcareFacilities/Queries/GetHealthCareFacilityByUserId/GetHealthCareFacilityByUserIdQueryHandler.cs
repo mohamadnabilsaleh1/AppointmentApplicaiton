@@ -38,8 +38,6 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
                 .Include(u => u.User)
                 .FirstOrDefaultAsync(cancellationToken);
             var dto = healthCareFacility.ToDtoWithUser();
-
-
             return dto;
         }
 

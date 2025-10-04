@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.OutputCaching;
 namespace AppointmentApplication.API.Controllers.HealthCareFacilities.Doctors
 {
     [Route("api/health-care-facility/{healthCareFacilityId:guid}/doctors")]
-    [Authorize(Roles = Roles.HealthCareFacility)]
+    [Authorize]
     public sealed class AdminHealthCareFacilityDoctorsController : ApiController
     {
         private readonly ISender _sender;
@@ -29,34 +29,38 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilities.Doctors
             _linkService = linkService;
         }
 
-        // GET ALL doctors for a health care facility
-        [HttpGet(Name = "get-doctors")]
+        [HttpGet]
+        [MapToApiVersion("0.1")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [MapToApiVersion("0.1")]
         [OutputCache(Duration = 60)]
+        [EndpointName("GetDoctors")]
+        [EndpointSummary("Retrieve all doctors for a healthcare facility")]
+        [EndpointDescription("Fetches a list of all doctors associated with a specific healthcare facility by its ID.")]
         public async Task<IActionResult> GetDoctors(
             Guid healthCareFacilityId,
             [FromQuery] DoctorQueryParameters queryParameters,
             CancellationToken cancellationToken)
         {
             // logic: fetch all doctors by healthCareFacilityId
-            return Ok();
+            return Ok(); // placeholder
         }
 
-        // GET doctor by ID
-        [HttpGet("{id:guid}", Name = "get-doctor-by-id")]
+        [HttpGet("{id:guid}")]
+        [MapToApiVersion("0.1")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [MapToApiVersion("0.1")]
+        [EndpointName("GetDoctorById")]
+        [EndpointSummary("Retrieve a doctor by ID for a healthcare facility")]
+        [EndpointDescription("Fetches a specific doctor by their ID within the context of the given healthcare facility.")]
         public async Task<IActionResult> GetDoctorById(
             Guid healthCareFacilityId,
             Guid id,
             CancellationToken cancellationToken)
         {
             // logic: fetch doctor by id within the healthCareFacilityId
-            return Ok();
+            return Ok(); // placeholder
         }
 
         // HATEOAS links
@@ -64,8 +68,8 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilities.Doctors
         {
             return new List<LinkDto>
             {
-                _linkService.Create("get-doctor-by-id", "self", HttpMethods.Get, new { healthCareFacilityId, id = doctorId }),
-                _linkService.Create("get-doctors", "all", HttpMethods.Get, new { healthCareFacilityId })
+                _linkService.Create("GetDoctorById", "self", HttpMethods.Get, new { healthCareFacilityId, id = doctorId }),
+                _linkService.Create("GetDoctors", "all", HttpMethods.Get, new { healthCareFacilityId })
             };
         }
     }

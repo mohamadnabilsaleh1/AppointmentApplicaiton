@@ -1,29 +1,34 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-
 using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Dtos;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Mappers;
 using AppointmentApplication.Application.Shared.Interfaces;
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.Shared.Results;
-
 using MediatR;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Commands.UpdateHealthcareFacility;
 
-public class UpdateHealthcareFacilityCommandHandler(
-    ILogger<UpdateHealthcareFacilityCommandHandler> logger,
-    IAppDbContext context)
-    : IRequestHandler<UpdateHealthcareFacilityCommand, Result<HealthCareFacility>>
+public class UpdateHealthcareFacilityByIdCommandHandler 
+    : IRequestHandler<UpdateHealthcareFacilityByIdCommand, Result<Updated>>
 {
-    private readonly ILogger<UpdateHealthcareFacilityCommandHandler> _logger = logger;
-    private readonly IAppDbContext _context = context;
+    private readonly ILogger<UpdateHealthcareFacilityByIdCommandHandler> _logger;
+    private readonly IAppDbContext _context;
 
-    public async Task<Result<HealthCareFacility>> Handle(
-        UpdateHealthcareFacilityCommand request,
+    public UpdateHealthcareFacilityByIdCommandHandler(
+        ILogger<UpdateHealthcareFacilityByIdCommandHandler> logger,
+        IAppDbContext context)
+    {
+        _logger = logger;
+        _context = context;
+    }
+
+    public async Task<Result<Updated>> Handle(
+        UpdateHealthcareFacilityByIdCommand request,
         CancellationToken cancellationToken)
     {
         // 1. Find the existing facility
@@ -94,24 +99,8 @@ public class UpdateHealthcareFacilityCommandHandler(
         }
 
         // 7. Save changes
-        var saveResult = await _context.SaveChangesAsync(cancellationToken);
-
-        if (saveResult <= 0)
-        {
-            _logger.LogError("Failed to save healthcare facility update to database. Facility ID: {FacilityId}", request.FacilityId);
-            return ApplicationHealthCareFacilityErrors.DatabaseSaveFailed("No changes were saved to the database");
-        }
-
-        // 8. Reload the facility to get updated data
-        var updatedFacility = await _context.HealthcareFacilities
-            .FirstOrDefaultAsync(f => f.Id == request.FacilityId, cancellationToken);
-
-        _logger.LogInformation(
-            "Healthcare Facility Updated Successfully. ID: {FacilityId}, Name: {FacilityName}",
-            request.FacilityId, request.Name);
-
-        return updatedFacility!;
-
+        await _context.SaveChangesAsync(cancellationToken);
+        return Result.Updated;
     }
 
     private static bool IsValidCoordinates(double latitude, double longitude)

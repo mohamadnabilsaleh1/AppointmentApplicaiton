@@ -1,8 +1,12 @@
 using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Dtos.HealthCareFacilities;
 using AppointmentApplication.API.Services;
+using AppointmentApplication.Application.Abstractions.Authentication;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.ActivateHealthcareFacilityById;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.DeactivateHealthcareFacilityById;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.UpdateHealthcareFacility;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.UpdateHealthcareFacilityByUserId;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Dtos;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Mappers;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Queries.GetHealthCareFacilities;
@@ -12,9 +16,10 @@ using AppointmentApplication.Application.Shared.Services;
 using AppointmentApplication.Contracts.Requests;
 using AppointmentApplication.Contracts.Requests.HealthCareFacilities;
 
-
 using Asp.Versioning;
+
 using MediatR;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
@@ -26,11 +31,13 @@ public sealed class HealthCareFacilityController : ApiController
 {
     private readonly ISender _sender;
     private readonly LinkService _linkService;
+    private readonly IUserContext _userContext; // للحصول على الـ UserId الحالي
 
-    public HealthCareFacilityController(ISender sender, LinkService linkService)
+    public HealthCareFacilityController(ISender sender, LinkService linkService, IUserContext userContext)
     {
         _sender = sender;
         _linkService = linkService;
+        _userContext = userContext;
     }
 
     [HttpPost]
@@ -82,14 +89,15 @@ public sealed class HealthCareFacilityController : ApiController
     }
 
     [HttpGet]
-    [MapToApiVersion("0.1")]
-    [EndpointSummary("Get Health Care Facilities.")]
-    [EndpointDescription("Retrieves health care facilities with optional search and pagination.")]
-    [EndpointName("GetHealthCareFacilities")]
+
     [ProducesResponseType(typeof(PaginationResult<HealthcareFacilityDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
     [OutputCache(Duration = 60)]
+    [MapToApiVersion("0.1")]
+    [EndpointSummary("Get Health Care Facilities.")]
+    [EndpointDescription("Retrieves health care facilities with optional search and pagination.")]
+    [EndpointName("GetHealthCareFacilities")]
     public async Task<IActionResult> GetHealthCareFacilities(
         [FromQuery] HealthCareFacilityQueryParameters queryParameters,
         CancellationToken cancellationToken)
@@ -138,7 +146,7 @@ public sealed class HealthCareFacilityController : ApiController
             Problem);
     }
 
-    [HttpGet("{id:guid}", Name = "GetHealthCareFacilityById")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(HealthcareFacilityDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -180,7 +188,7 @@ public sealed class HealthCareFacilityController : ApiController
         CancellationToken cancellationToken)
     {
         var result = await _sender.Send(
-            new UpdateHealthcareFacilityCommand(
+            new UpdateHealthcareFacilityByIdCommand(
                 id,
                 request.Name,
                 request.Street,
@@ -193,40 +201,12 @@ public sealed class HealthCareFacilityController : ApiController
             cancellationToken);
 
         return result.Match(
-            response =>
-            {
-                var dto = response.ToDto();
-                var links = CreateLinks(response.Id.ToString(), null);
-
-                var resource = new
-                {
-                    data = dto,
-                    links
-                };
-
-                return Ok(resource);
-            },
+            response => NoContent(),
             Problem);
     }
 
-    [HttpDelete("{id:guid}", Name = "DeleteHealthCareFacility")]
-    [Authorize(Roles = Roles.Admin)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-    [MapToApiVersion("0.1")]
-    [EndpointSummary("Deletes an existing Health Care Facility.")]
-    [EndpointDescription("Removes the specified Health Care Facility by its ID.")]
-    [EndpointName("DeleteHealthCareFacility")]
-    public async Task<IActionResult> DeleteHealthCareFacility(Guid id, CancellationToken cancellationToken)
-    {
-        // var result = await _sender.Send(new DeleteHealthCareFacilityCommand(id), cancellationToken);
-        // return result.Match<IActionResult>(_ => NoContent(), Problem);
-        return NoContent();
-    }
 
-    [HttpGet("me", Name = "Get-HealthCareFacility-Me")]
+    [HttpGet("me")]
     [Authorize(Roles = Roles.HealthCareFacility)]
     [ProducesResponseType(typeof(HealthcareFacilityDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -234,10 +214,10 @@ public sealed class HealthCareFacilityController : ApiController
     [MapToApiVersion("0.1")]
     [EndpointSummary("Get Health Care Facility of logged-in user.")]
     [EndpointDescription("Retrieves the Health Care Facility associated with the authenticated user.")]
-    [EndpointName("Get-HealthCareFacility-Me")]
+    [EndpointName("GetHealthCareFacilityMe")]
     public async Task<IActionResult> GetHealthCareFacilityMe(Guid id, string? fields, CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new GetHealthCareFacilityByUserIdQuery(), cancellationToken);
+        var result = await _sender.Send(new GetHealthCareFacilityByUserIdQuery(_userContext.UserId), cancellationToken);
 
         return result.Match(
             facility =>
@@ -262,13 +242,65 @@ public sealed class HealthCareFacilityController : ApiController
     [MapToApiVersion("0.1")]
     [EndpointSummary("Update Health Care Facility of logged-in user.")]
     [EndpointDescription("Updates the Health Care Facility data associated with the authenticated user.")]
-    [EndpointName("Update-HealthCareFacility-Me")]
+    [EndpointName("UpdateHealthCareFacilityMe")]
     public async Task<IActionResult> UpdateHealthCareFacilityMe(
         [FromBody] UpdateHealthcareFacilityRequest request,
-        string? fields,
         CancellationToken cancellationToken)
     {
-        return Ok();
+
+        var result = await _sender.Send(
+            new UpdateHealthcareFacilityByUserIdCommand(
+                _userContext.UserId,
+                request.Name,
+                request.Street,
+                request.City,
+                request.State,
+                request.Country,
+                request.ZipCode,
+                request.GPSLatitude,
+                request.GPSLongitude),
+            cancellationToken);
+
+        return result.Match(
+            response => NoContent(),
+            Problem);
+    }
+    [HttpPatch("{id:guid}/activate")]
+    [Authorize(Roles = Roles.Admin)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+    [MapToApiVersion("0.1")]
+    [EndpointSummary("Activate a Health Care Facility.")]
+    [EndpointDescription("Sets the IsActive flag of a Health Care Facility to true.")]
+    [EndpointName("ActivateHealthCareFacility")]
+    public async Task<IActionResult> ActivateHealthCareFacility(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new ActivateHealthcareFacilityByIdCommand(id), cancellationToken);
+
+        return result.Match(
+            _ => NoContent(),
+            Problem);
+    }
+
+    [HttpPatch("{id:guid}/deactivate")]
+    [Authorize(Roles = Roles.Admin)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+    [MapToApiVersion("0.1")]
+    [EndpointSummary("Deactivate a Health Care Facility.")]
+    [EndpointDescription("Sets the IsActive flag of a Health Care Facility to false.")]
+    [EndpointName("DeactivateHealthCareFacility")]
+    public async Task<IActionResult> DeactivateHealthCareFacility(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new DeactivateHealthcareFacilityByIdCommand(id), cancellationToken);
+
+        return result.Match(
+            _ => NoContent(),
+            Problem);
     }
 
     private List<LinkDto> CreateLinks(HealthCareFacilityQueryParameters parameters, bool hasNextPage, bool hasPreviousPage)
@@ -297,7 +329,6 @@ public sealed class HealthCareFacilityController : ApiController
             }));
         }
 
-
         if (hasPreviousPage)
         {
             links.Add(_linkService.Create(nameof(GetHealthCareFacilities), "previous-page", HttpMethods.Get, new
@@ -310,7 +341,6 @@ public sealed class HealthCareFacilityController : ApiController
             }));
         }
 
-
         return links;
     }
 
@@ -321,10 +351,11 @@ public sealed class HealthCareFacilityController : ApiController
             _linkService.Create(nameof(GetHealthCareFacilityById), "self", HttpMethods.Get, new { id, fields }),
             _linkService.Create(nameof(CreateHealthCareFacility), "create", HttpMethods.Post),
             _linkService.Create(nameof(UpdateHealthCareFacility), "update", HttpMethods.Put, new { id }),
-            _linkService.Create(nameof(DeleteHealthCareFacility), "delete", HttpMethods.Delete, new { id }),
             _linkService.Create(nameof(GetHealthCareFacilityMe), "get-me", HttpMethods.Get),
             _linkService.Create(nameof(UpdateHealthCareFacilityMe), "update-me", HttpMethods.Put),
             _linkService.Create(nameof(GetHealthCareFacilities), "all", HttpMethods.Get),
+            _linkService.Create(nameof(DeactivateHealthCareFacility), "deactivate", HttpMethods.Patch, new { id }),
+            _linkService.Create(nameof(ActivateHealthCareFacility), "activate", HttpMethods.Patch, new { id })
         };
     }
 }

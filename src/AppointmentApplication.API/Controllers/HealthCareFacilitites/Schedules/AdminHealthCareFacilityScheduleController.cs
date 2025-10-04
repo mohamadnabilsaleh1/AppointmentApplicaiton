@@ -29,13 +29,14 @@ public sealed class AdminHealthCareFacilityScheduleController : ApiController
         _linkService = linkService;
     }
 
-    [HttpPost(Name = "AdminCreateHealthCareFacilitySchedule")]
+    [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
     [EndpointSummary("Creates a new Health Care Facility Schedule")]
     [EndpointDescription("Adds a new schedule to the currently authenticated health care facility's availability.")]
+    [EndpointName("AdminCreateHealthCareFacilitySchedule")]
     public async Task<IActionResult> CreateHealthCareFacilitySchedule(
         [FromBody] CreateHealthcareFacilityScheduleRequest request,
         CancellationToken cancellationToken)
@@ -53,13 +54,14 @@ public sealed class AdminHealthCareFacilityScheduleController : ApiController
         return Ok();
     }
 
-    [HttpGet("{id:guid}", Name = "AdminGetHealthCareFacilityScheduleById")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
     [EndpointSummary("Get Health Care Facility Schedule by ID")]
     [EndpointDescription("Retrieves a specific schedule for the currently authenticated health care facility.")]
+    [EndpointName("AdminGetHealthCareFacilityScheduleById")]
     public async Task<IActionResult> GetHealthCareFacilityScheduleById(Guid id, CancellationToken cancellationToken)
     {
         // Implementation example:
@@ -75,13 +77,14 @@ public sealed class AdminHealthCareFacilityScheduleController : ApiController
         return Ok();
     }
 
-    [HttpGet(Name = "AdminGetHealthCareFacilitySchedules")]
+    [HttpGet]
     [MapToApiVersion("0.1")]
     [EndpointSummary("Get Health Care Facility Schedules")]
     [EndpointDescription("Retrieves all schedules for the currently authenticated health care facility with pagination support.")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [OutputCache(Duration = 60)]
+    [EndpointName("AdminGetHealthCareFacilitySchedules")]
     public async Task<IActionResult> GetHealthCareFacilitySchedules(CancellationToken cancellationToken)
     {
         // Implementation example:
@@ -106,7 +109,7 @@ public sealed class AdminHealthCareFacilityScheduleController : ApiController
         return Ok();
     }
 
-    [HttpPut("{id:guid}", Name = "AdminUpdateHealthCareFacilitySchedule")]
+    [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -114,6 +117,7 @@ public sealed class AdminHealthCareFacilityScheduleController : ApiController
     [MapToApiVersion("0.1")]
     [EndpointSummary("Updates a Health Care Facility Schedule")]
     [EndpointDescription("Modifies an existing schedule for the currently authenticated health care facility.")]
+    [EndpointGroupName("AdminUpdateHealthCareFacilitySchedule")]
     public async Task<IActionResult> UpdateHealthCareFacilitySchedule(
         Guid id,
         [FromBody] UpdateHealthcareFacilityScheduleRequest request,
@@ -132,13 +136,14 @@ public sealed class AdminHealthCareFacilityScheduleController : ApiController
         return Ok();
     }
 
-    [HttpDelete("{id:guid}", Name = "AdminDeleteHealthCareFacilitySchedule")]
+    [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
     [EndpointSummary("Deletes a Health Care Facility Schedule")]
     [EndpointDescription("Removes a specific schedule from the currently authenticated health care facility.")]
+    [EndpointName("AdminDeleteHealthCareFacilitySchedule")]
     public async Task<IActionResult> DeleteHealthCareFacilitySchedule(Guid id, CancellationToken cancellationToken)
     {
         // Implementation example:

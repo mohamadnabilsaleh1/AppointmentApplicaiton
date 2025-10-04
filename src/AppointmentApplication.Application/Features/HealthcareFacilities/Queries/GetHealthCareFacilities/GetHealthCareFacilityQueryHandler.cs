@@ -32,6 +32,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
                 .Include(f => f.Departments)
                 .Include(f => f.Schedules)
                 .Include(f => f.ScheduleExceptions)
+                .Where(f => f.IsActive) // ✅ filter active facilities
                 .AsQueryable();
 
             // Apply other dynamic filters first

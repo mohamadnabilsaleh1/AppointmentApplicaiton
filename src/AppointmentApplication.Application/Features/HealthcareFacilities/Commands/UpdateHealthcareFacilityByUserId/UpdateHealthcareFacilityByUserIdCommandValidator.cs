@@ -1,11 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.UpdateHealthcareFacility;
+
 using FluentValidation;
-using System.Text.RegularExpressions;
 
-namespace AppointmentApplication.Application.Features.HealthcareFacilities.Commands.UpdateHealthcareFacility;
+namespace AppointmentApplication.Application.Features.HealthcareFacilities.Commands.UpdateHealthcareFacilityByUserId;
 
-public sealed class UpdateHealthcareFacilityCommandValidator : AbstractValidator<UpdateHealthcareFacilityCommand>
+public class UpdateHealthcareFacilityByUserIdCommandValidator : AbstractValidator<UpdateHealthcareFacilityByIdCommand>
 {
-    public UpdateHealthcareFacilityCommandValidator()
+    public UpdateHealthcareFacilityByUserIdCommandValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Facility name is required")
@@ -40,3 +46,4 @@ public sealed class UpdateHealthcareFacilityCommandValidator : AbstractValidator
             .InclusiveBetween(-180, 180).WithMessage("GPS longitude must be between -180 and 180 degrees");
     }
 }
+
