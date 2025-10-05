@@ -56,8 +56,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
                 pageSize: request.PageSize,
                 fields: request.Fields,
                 toDtoFunc: list => list.ToDtos(),
-                filters: filters
-            );
+                filters: filters);
 
             // إذا تم تحديد GPS، نحسب المسافة بعد التحويل لـ IEnumerable
             if (request.GPSLatitude.HasValue && request.GPSLongitude.HasValue)
@@ -74,8 +73,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
                             userLat,
                             userLng,
                             (double)((ExpandoObject)dto).GetPropertyValue("GPSLatitude"),
-                            (double)((ExpandoObject)dto).GetPropertyValue("GPSLongitude")
-                        )
+                            (double)((ExpandoObject)dto).GetPropertyValue("GPSLongitude"))
                     })
                     .Where(x => x.Distance <= radiusKm)
                     .OrderBy(x => x.Distance)

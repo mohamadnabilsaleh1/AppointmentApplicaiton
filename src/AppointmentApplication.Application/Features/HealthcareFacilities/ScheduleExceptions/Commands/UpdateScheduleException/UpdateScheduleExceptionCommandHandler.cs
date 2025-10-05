@@ -48,7 +48,6 @@ public class UpdateScheduleExceptionCommandHandler : IRequestHandler<UpdateSched
 
         await _context.SaveChangesAsync(cancellationToken);
 
-
         return Result.Updated;
     }
 }

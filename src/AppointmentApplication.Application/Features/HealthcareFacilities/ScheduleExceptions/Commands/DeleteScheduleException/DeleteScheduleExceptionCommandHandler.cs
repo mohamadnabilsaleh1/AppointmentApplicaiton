@@ -31,7 +31,7 @@ public class DeleteScheduleExceptionCommandHandler : IRequestHandler<DeleteSched
             return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.UserId);
         }
 
-        var deleteResult = facility.RemoveScheduleException(request.ExceptionId);
+        var deleteResult = facility.DeleteScheduleException(request.ExceptionId);
         if (deleteResult.IsError)
         {
             return deleteResult.Errors;

@@ -38,8 +38,7 @@ public record HealthcareFacilityDto(
         double gpsLongitude,
         List<DepartmentDto> departmentDtos,
         List<ScheduleDto> scheduleDtos,
-        List<ScheduleExceptionDto> scheduleExceptionDtos
-    )
+        List<ScheduleExceptionDto> scheduleExceptionDtos)
         : this(
             id,
             name,

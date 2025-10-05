@@ -8,7 +8,9 @@ using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules
 using AppointmentApplication.Application.HealthcareFacilities.Schedules.Queries;
 using AppointmentApplication.Application.Shared.Interfaces;
 using AppointmentApplication.Domain.Shared.Results;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Queries;

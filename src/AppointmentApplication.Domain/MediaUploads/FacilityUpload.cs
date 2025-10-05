@@ -7,7 +7,7 @@ using AppointmentApplication.Domain.HealthcareFacilities;
 
 namespace AppointmentApplication.Domain.MediaUploads;
 
-public class FacilityUpload:AuditableEntity
+public class FacilityUpload : AuditableEntity
 {
     private FacilityUpload() { }
 

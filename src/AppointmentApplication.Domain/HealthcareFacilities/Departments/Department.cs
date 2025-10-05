@@ -53,7 +53,7 @@ public sealed class Department : AuditableEntity
     }
 
     // ✅ Update
-    public Result<Updated> UpdateDetails(string name, string description)
+    public Result<Updated> Update(string name, string description)
     {
         if (string.IsNullOrWhiteSpace(name))
         {

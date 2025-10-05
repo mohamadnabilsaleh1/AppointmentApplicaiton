@@ -92,8 +92,6 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<PatientUpload> PatientUploads { get; set; }
     public DbSet<FacilityUpload> FacilityUploads { get; set; }
 
-
-
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         UpdateAuditableEntities();

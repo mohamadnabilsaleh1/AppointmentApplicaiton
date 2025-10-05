@@ -8,7 +8,7 @@ using AppointmentApplication.Domain.Doctors;
 
 namespace AppointmentApplication.Domain.Prescriptions;
 
-public class Prescription:AuditableEntity
+public class Prescription : AuditableEntity
 {
     private Prescription() { }
 

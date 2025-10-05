@@ -227,7 +227,7 @@ public sealed class HealthCareFacility : AuditableEntity
     }
 
     // ✅ Remove Schedule
-    public Result<Deleted> RemoveSchedule(Guid scheduleId)
+    public Result<Deleted> DeleteSchedule(Guid scheduleId)
     {
         var schedule = _schedules.FirstOrDefault(s => s.Id == scheduleId);
         if (schedule == null)
@@ -345,7 +345,7 @@ public sealed class HealthCareFacility : AuditableEntity
         return Result.Updated;
     }
 
-    public Result<Deleted> RemoveScheduleException(Guid exceptionId)
+    public Result<Deleted> DeleteScheduleException(Guid exceptionId)
     {
         var scheduleException = _scheduleExceptions.FirstOrDefault(se => se.Id == exceptionId);
         if (scheduleException == null)
@@ -394,6 +394,46 @@ public sealed class HealthCareFacility : AuditableEntity
 
         var department = departmentResult.Value;
         _departments.Add(department);
+        return department;
+    }
+
+    public Result<Updated> UpdateDepartment(Guid id, string name, string description)
+    {
+        var department = _departments.FirstOrDefault(d => d.Id == id);
+        if (department is null)
+        {
+            return DepartmentErrors.DepartmentNotFound;
+        }
+
+        var departmentResult = department.Update(name, description);
+        if (departmentResult.IsError)
+        {
+            return departmentResult.Errors;
+        }
+
+        return Result.Updated;
+    }
+
+    public Result<Deleted> DeleteDepartment(Guid exceptionId)
+    {
+        var department = _departments.FirstOrDefault(se => se.Id == exceptionId);
+        if (department == null)
+        {
+            return DepartmentErrors.DepartmentNotFound;
+        }
+
+        _departments.Remove(department);
+        return Result.Deleted;
+    }
+
+    public Result<Department> GetDepartmentById(Guid exceptionId)
+    {
+        var department = _departments.FirstOrDefault(se => se.Id == exceptionId);
+        if (department == null)
+        {
+            return HealthCareFacilityScheduleExceptionErrors.ScheduleExceptionNotFound;
+        }
+
         return department;
     }
 

@@ -12,7 +12,7 @@ using AppointmentApplication.Domain.Prescriptions;
 
 namespace AppointmentApplication.Domain.Appointments;
 
-public class Appointment:AuditableEntity
+public class Appointment : AuditableEntity
 {
     private Appointment() { }
 

@@ -7,7 +7,7 @@ using AppointmentApplication.Domain.MedicalRecords;
 
 namespace AppointmentApplication.Domain.MedicalRecordAttachments;
 
-public class MedicalRecordAttachment:AuditableEntity
+public class MedicalRecordAttachment : AuditableEntity
 {
     private MedicalRecordAttachment() { }
 

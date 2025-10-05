@@ -2,17 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-
 using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Services;
 using AppointmentApplication.Contracts.Requests.Departments;
-
 using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
-
 namespace AppointmentApplication.API.Controllers
 {
     [Route("api/health-care-facility/me/departments")]
@@ -90,35 +87,21 @@ namespace AppointmentApplication.API.Controllers
             return Ok(); // placeholder
         }
 
-        [HttpPatch("{id:guid}/activate")]
+        [HttpDelete("{id:guid}")]
         [MapToApiVersion("0.1")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [EndpointName("AdminActivateDepartment")]
-        [EndpointSummary("Activates a Department.")]
-        [EndpointDescription("Activates a previously deactivated department.")]
-        public async Task<IActionResult> ActivateDepartment(
+        [EndpointName("AdminDeleteDepartment")]
+        [EndpointSummary("Deletes a Department.")]
+        [EndpointDescription("Deletes a department.")]
+        public async Task<IActionResult> DeleteDepartment(
             Guid id,
             CancellationToken cancellationToken)
         {
             return Ok(); // placeholder
         }
 
-        [HttpPatch("{id:guid}/deactivate")]
-        [MapToApiVersion("0.1")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [EndpointName("AdminDeactivateDepartment")]
-        [EndpointSummary("Deactivates a Department.")]
-        [EndpointDescription("Deactivates a department (soft delete).")]
-        public async Task<IActionResult> DeactivateDepartment(
-            Guid id,
-            CancellationToken cancellationToken)
-        {
-            return Ok(); // placeholder
-        }
 
         private List<LinkDto> CreateLinks(string id, string? fields)
         {
@@ -127,8 +110,7 @@ namespace AppointmentApplication.API.Controllers
                 _linkService.Create(nameof(GetDepartmentById), "self", HttpMethods.Get, new { id, fields }),
                 _linkService.Create(nameof(CreateDepartment), "create", HttpMethods.Post),
                 _linkService.Create(nameof(UpdateDepartment), "update", HttpMethods.Put, new { id }),
-                _linkService.Create(nameof(ActivateDepartment), "activate", HttpMethods.Patch, new { id }),
-                _linkService.Create(nameof(DeactivateDepartment), "deactivate", HttpMethods.Patch, new { id }),
+                _linkService.Create(nameof(DeleteDepartment), "delete", HttpMethods.Delete, new { id }),
                 _linkService.Create(nameof(GetDepartments), "all", HttpMethods.Get)
             };
         }

@@ -11,5 +11,5 @@ using MediatR;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queries.GetHealthCareFacilityByUserId
 {
-    public sealed record GetHealthCareFacilityByUserIdQuery(Guid UserId):IRequest<Result<HealthcareFacilityWithUserDto>>;
+    public sealed record GetHealthCareFacilityByUserIdQuery(Guid UserId) : IRequest<Result<HealthcareFacilityWithUserDto>>;
 }

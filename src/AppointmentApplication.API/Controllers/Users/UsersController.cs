@@ -55,8 +55,7 @@ public class UsersController(ISender sender) : ApiController
                     actionName: nameof(GetUserById),
                     routeValues: new { id = userId },
                     value: new { Id = userId, request.Email, request.FirstName, request.LastName }),
-            Problem
-        );
+            Problem);
     }
 
     /// <summary>
@@ -90,8 +89,7 @@ public class UsersController(ISender sender) : ApiController
 
         return result.Match<IActionResult>(
             accessToken => Ok(accessToken),
-            Problem
-        );
+            Problem);
     }
 
     [HttpGet("me")]
@@ -110,7 +108,6 @@ public class UsersController(ISender sender) : ApiController
 
         return result.Match<IActionResult>(
             user => Ok(user),    // إذا تم العثور على المستخدم نرجع 200 OK مع بياناته
-            Problem              // إذا لم يتم العثور أو حدث خطأ نرجع ProblemDetails
-        );
+            Problem);              // إذا لم يتم العثور أو حدث خطأ نرجع ProblemDetails
     }
 }

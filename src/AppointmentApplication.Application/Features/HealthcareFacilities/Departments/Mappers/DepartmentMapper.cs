@@ -16,11 +16,8 @@ public static class DepartmentMapper
 
         return new DepartmentDto(
             entity.Id,
-            entity.FacilityId,
             entity.Name,
-            entity.Description,
-            entity.IsActive,
-            entity.CreatedAtUtc);
+            entity.Description);
     }
 
     public static List<DepartmentDto> ToDtos(this IEnumerable<Department> entities)

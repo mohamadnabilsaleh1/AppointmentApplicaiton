@@ -9,5 +9,5 @@ using MediatR;
 
 namespace AppointmentApplication.Application.Features.Users.RegisterUser
 {
-    public sealed record RegisterUserCommand(string Email, string FirstName, string LastName, string Password) :IRequest<Result<Guid>>;
+    public sealed record RegisterUserCommand(string Email, string FirstName, string LastName, string Password) : IRequest<Result<Guid>>;
 }

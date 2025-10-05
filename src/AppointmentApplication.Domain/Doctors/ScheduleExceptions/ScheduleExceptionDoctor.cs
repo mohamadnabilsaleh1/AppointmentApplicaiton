@@ -7,7 +7,7 @@ using AppointmentApplication.Domain.Shared.Enums;
 
 namespace AppointmentApplication.Domain.Doctors.ScheduleExceptions;
 
-public class ScheduleExceptionDoctor:AuditableEntity
+public class ScheduleExceptionDoctor : AuditableEntity
 {
     private ScheduleExceptionDoctor() { }
 

@@ -7,9 +7,6 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Depar
 
 public record DepartmentDto(
     Guid Id,
-    Guid HealthcareFacilityId,
     string Name,
-    string Description,
-    bool IsActive,
-    DateTime CreatedAt
+    string Description
 );

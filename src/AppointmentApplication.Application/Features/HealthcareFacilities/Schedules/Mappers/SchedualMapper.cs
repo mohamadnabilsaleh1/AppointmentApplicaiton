@@ -19,8 +19,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Sched
                 entity.DayOfWeek,
                 entity.StartTime,
                 entity.EndTime,
-                entity.Note
-                );
+                entity.Note);
         }
 
         public static List<ScheduleDto> ToDtos(this IEnumerable<HealthCareFacilitySchedule> entities)

@@ -37,10 +37,8 @@ public class GetSchedulesQueryHandler : IRequestHandler<GetSchedulesQuery, Resul
             return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.UserId);
         }
 
-        var schedules = facility.Schedules
-            .Select(schedule => schedule.ToDto())
-            .ToList();
-            
+        var schedules = facility.Schedules.ToDtos();
+
         return schedules;
     }
 }

@@ -11,7 +11,7 @@ using AppointmentApplication.Domain.Patients;
 
 namespace AppointmentApplication.Domain.MedicalRecords;
 
-public class MedicalRecord:AuditableEntity
+public class MedicalRecord : AuditableEntity
 {
     private MedicalRecord() { }
 

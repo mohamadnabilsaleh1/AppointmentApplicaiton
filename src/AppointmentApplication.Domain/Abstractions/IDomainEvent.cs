@@ -5,6 +5,6 @@ using System.Threading.Tasks;
 using MediatR;
 
 namespace AppointmentApplication.Domain.Abstractions;
-    public interface IDomainEvent:INotification
+    public interface IDomainEvent : INotification
     {
     }

@@ -6,7 +6,7 @@ using AppointmentApplication.Domain.Abstractions;
 
 namespace AppointmentApplication.Domain.Doctors.Specializations;
 
-public class Specialization:AuditableEntity
+public class Specialization : AuditableEntity
 {
     private Specialization() { }
 

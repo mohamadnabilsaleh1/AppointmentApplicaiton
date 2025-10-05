@@ -6,7 +6,7 @@ using AppointmentApplication.Domain.Abstractions;
 
 namespace AppointmentApplication.Domain.Billings.BillingPayments;
 
-public class BillingPayment:AuditableEntity
+public class BillingPayment : AuditableEntity
 {
     private BillingPayment() { }
 

@@ -28,20 +28,21 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Depar
         public async Task<Result<DepartmentDto>> Handle(CreateDepartmentCommand request, CancellationToken cancellationToken)
         {
             var facility = await _context.HealthcareFacilities
-                .Include(f => f.ScheduleExceptions)
+                .Include(f => f.Departments)
                 .FirstOrDefaultAsync(f => f.UserId == request.UserId, cancellationToken);
 
             if (facility is null)
             {
                 return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.UserId);
             }
+
             var departmentResult = facility.AddDepartment(request.Name, request.Description);
             if (departmentResult.IsError)
             {
                 return departmentResult.Errors;
 
             }
-            _context.Departments.Add(departmentResult.Value);
+
             await _context.SaveChangesAsync(cancellationToken);
             return departmentResult.Value.ToDto();
 

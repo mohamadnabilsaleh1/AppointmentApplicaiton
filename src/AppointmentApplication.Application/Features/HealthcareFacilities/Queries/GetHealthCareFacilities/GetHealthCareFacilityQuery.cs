@@ -25,8 +25,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
         double? GPSLatitude = null,
         double? GPSLongitude = null,
         double RadiusKm = 10 // الافتراضي 10 كم
-    ) : ICachedQuery<Result<PaginationResult<ExpandoObject>>>,
-        IRequest<Result<PaginationResult<ExpandoObject>>>
+    ) : ICachedQuery<Result<PaginationResult<ExpandoObject>>>
     {
         public string CacheKey => "healthCareFacilities";
         public string[] Tags => new[] { "healthCareFacility" };

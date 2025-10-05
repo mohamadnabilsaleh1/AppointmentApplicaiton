@@ -25,7 +25,7 @@ public class DeleteScheduleCommandHandler : IRequestHandler<DeleteScheduleComman
     public async Task<Result<Deleted>> Handle(DeleteScheduleCommand request, CancellationToken cancellationToken)
     {
         var facility = await _context.HealthcareFacilities
-            .Include(f => f.Schedules)
+        .Include(f => f.Schedules)
             .FirstOrDefaultAsync(f => f.UserId == request.UserId, cancellationToken);
 
         if (facility is null)
@@ -33,7 +33,7 @@ public class DeleteScheduleCommandHandler : IRequestHandler<DeleteScheduleComman
             return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.UserId);
         }
 
-        var deleteResult = facility.RemoveSchedule(request.ScheduleId);
+        var deleteResult = facility.DeleteDepartment(request.ScheduleId);
         if (deleteResult.IsError)
         {
             return deleteResult.Errors;
