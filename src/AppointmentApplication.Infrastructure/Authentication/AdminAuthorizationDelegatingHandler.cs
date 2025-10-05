@@ -41,7 +41,7 @@ internal sealed class AdminAuthorizationDelegatingHandler : DelegatingHandler
     {
         var authorizationRequestParameters = new KeyValuePair<string, string>[]
         {
-            new("client_id","appointment-admin-client"),
+            new("client_id", "appointment-admin-client"),
             new("client_secret", "TlHc7qYW7Yo13ki7ea2ojhmAL81J2JDs"),
             new("scope", "openid"),
             new("grant_type", "client_credentials")

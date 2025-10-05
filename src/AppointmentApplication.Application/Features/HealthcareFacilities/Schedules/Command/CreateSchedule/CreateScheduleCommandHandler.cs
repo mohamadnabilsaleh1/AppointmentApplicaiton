@@ -58,7 +58,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Sched
 
             // إضافة وحفظ
 
-            _context.ScheduleHealthcareFacilities.Add(scheduleResult.Value);
+            _context.HealthcareFacilitySchedules.Add(scheduleResult.Value);
             await _context.SaveChangesAsync(cancellationToken);
 
             return scheduleResult.Value.ToDto();

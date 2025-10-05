@@ -41,8 +41,8 @@ public interface IAppDbContext
     DbSet<Permission> Permissions { get; set; }
     DbSet<RolePermission> RolePermissions { get; set; }
     DbSet<HealthCareFacility> HealthcareFacilities { get; set; }
-    DbSet<HealthCareFacilitySchedule> ScheduleHealthcareFacilities { get; set; }
-    DbSet<HealthCareFacilityScheduleException> ScheduleExceptionHealthcareFacilities { get; set; }
+    DbSet<HealthCareFacilitySchedule> HealthcareFacilitySchedules { get; set; }
+    DbSet<HealthCareFacilityScheduleException> HealthcareFacilityScheduleExceptions { get; set; }
     DbSet<Department> Departments { get; set; }
 
     // Contact Information

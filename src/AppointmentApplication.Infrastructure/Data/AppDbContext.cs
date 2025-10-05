@@ -51,8 +51,9 @@ public class AppDbContext : DbContext, IAppDbContext
 
     // Healthcare Facility Entities
     public DbSet<HealthCareFacility> HealthcareFacilities { get; set; }
-    public DbSet<HealthCareFacilitySchedule> ScheduleHealthcareFacilities { get; set; }
-    public DbSet<HealthCareFacilityScheduleException> ScheduleExceptionHealthcareFacilities { get; set; }
+
+    public DbSet<HealthCareFacilitySchedule> HealthcareFacilitySchedules { get; set; }
+    public DbSet<HealthCareFacilityScheduleException> HealthcareFacilityScheduleExceptions { get; set; }
     public DbSet<Department> Departments { get; set; }
 
     // Contact Information
@@ -90,6 +91,8 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<Review> Reviews { get; set; }
     public DbSet<PatientUpload> PatientUploads { get; set; }
     public DbSet<FacilityUpload> FacilityUploads { get; set; }
+
+
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

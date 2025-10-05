@@ -7,6 +7,5 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Sched
 {
     public class ApplicationScheduleExceptionErrors
     {
-        
     }
 }

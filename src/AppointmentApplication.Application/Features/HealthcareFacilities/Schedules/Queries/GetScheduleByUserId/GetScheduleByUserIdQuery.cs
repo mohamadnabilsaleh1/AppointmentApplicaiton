@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+// 📁 Application/HealthcareFacilities/Schedules/Queries/GetScheduleByIdQuery.cs
+using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Dtos;
+using AppointmentApplication.Domain.Shared.Results;
+using MediatR;
 
-namespace AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Queries.GetScheduleByUserId
-{
-    public class GetScheduleByUserIdQuery
-    {
-        
-    }
-}
+namespace AppointmentApplication.Application.HealthcareFacilities.Schedules.Queries;
+
+public sealed record GetScheduleByUserIdQuery(
+    Guid UserId,
+    Guid ScheduleId) : IRequest<Result<ScheduleDto>>;

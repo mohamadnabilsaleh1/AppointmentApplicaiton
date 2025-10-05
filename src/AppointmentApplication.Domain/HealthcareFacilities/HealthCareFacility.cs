@@ -384,6 +384,19 @@ public sealed class HealthCareFacility : AuditableEntity
         return _scheduleExceptions.Any(se => se.Date == date);
     }
 
+    public Result<Department> AddDepartment(string name, string description)
+    {
+        var departmentResult = Department.Create(Id, name, description);
+        if (departmentResult.IsError)
+        {
+            return departmentResult.Errors;
+        }
+
+        var department = departmentResult.Value;
+        _departments.Add(department);
+        return department;
+    }
+
     private static DaysOfWeek GetDayOfWeekFromDate(DateOnly date)
     {
         return date.DayOfWeek switch
