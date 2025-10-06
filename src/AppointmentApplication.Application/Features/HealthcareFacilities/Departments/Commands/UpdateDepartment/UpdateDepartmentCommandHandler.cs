@@ -42,8 +42,6 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Depar
 
             await _context.SaveChangesAsync(cancellationToken);
             return Result.Updated;
-
         }
-
     }
 }

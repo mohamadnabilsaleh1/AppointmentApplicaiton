@@ -7,8 +7,6 @@ using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.
 
 using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Dtos;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Mappers;
-using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Mappers;
-
 using AppointmentApplication.Application.Shared.Interfaces;
 using AppointmentApplication.Domain.Shared.Results;
 
@@ -16,26 +14,26 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Queries.GetDepartments
+namespace AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Queries.GetDepartmentsById
 {
-    public class GetDepartmentsQueryHandler : IRequestHandler<GetDepartmentsQuery, Result<List<DepartmentDto>>>
+    public class GetDepartmentsByIdQueryHandler: IRequestHandler<GetDepartmentsByIdQuery, Result<List<DepartmentDto>>>
     {
         private readonly IAppDbContext _context;
 
-        public GetDepartmentsQueryHandler(IAppDbContext context)
+        public GetDepartmentsByIdQueryHandler(IAppDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Result<List<DepartmentDto>>> Handle(GetDepartmentsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<DepartmentDto>>> Handle(GetDepartmentsByIdQuery request, CancellationToken cancellationToken)
         {
             var facility = await _context.HealthcareFacilities
             .Include(f => f.Departments)
-            .FirstOrDefaultAsync(f => f.UserId == request.UserId, cancellationToken);
+            .FirstOrDefaultAsync(f => f.Id == request.HealthCareFacilityId, cancellationToken);
 
             if (facility is null)
             {
-                return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.UserId);
+                return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.HealthCareFacilityId);
             }
 
             var departments = facility.Departments.ToDtos();
@@ -44,6 +42,3 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Depar
         }
     }
 }
-
-/*
-*/

@@ -12,7 +12,7 @@ using MediatR;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Queries.GetDepartments
 {
-    public sealed record GetDepartmentsQuery(Guid UserId) : ICachedQuery<Result<List<DepartmentDto>>>
+    public sealed record GetDepartmentsByUserIdQuery(Guid UserId) : ICachedQuery<Result<List<DepartmentDto>>>
     {
         public string CacheKey => "departments";
         public string[] Tags => new[] { "departments" };

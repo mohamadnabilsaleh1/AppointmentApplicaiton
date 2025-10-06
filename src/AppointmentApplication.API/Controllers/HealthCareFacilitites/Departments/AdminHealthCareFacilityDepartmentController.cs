@@ -2,27 +2,39 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+
 using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Services;
+using AppointmentApplication.Application.Abstractions.Authentication;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Commands;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Commands.DeleteDepartment;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Commands.UpdateDepartment;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Queries.GetDepartmentById;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Queries.GetDepartmentByUserId;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Queries.GetDepartments;
 using AppointmentApplication.Contracts.Requests.Departments;
+
 using Asp.Versioning;
+
 using MediatR;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 namespace AppointmentApplication.API.Controllers
 {
-    [Route("api/health-care-facility/me/departments")]
+    [Route("api/health-care-facilities/me/departments")]
     [Authorize(Roles = Roles.HealthCareFacility)]
     public sealed class AdminHealthCareFacilityDepartmentController : ApiController
     {
         private readonly ISender _sender;
         private readonly LinkService _linkService;
-
-        public AdminHealthCareFacilityDepartmentController(ISender sender, LinkService linkService)
+        private readonly IUserContext _userContext;
+        public AdminHealthCareFacilityDepartmentController(ISender sender, LinkService linkService, IUserContext userContext)
         {
             _sender = sender;
             _linkService = linkService;
+            _userContext = userContext;
         }
 
         [HttpPost]
@@ -37,7 +49,20 @@ namespace AppointmentApplication.API.Controllers
             [FromBody] CreateDepartmentRequest request,
             CancellationToken cancellationToken)
         {
-            return Ok(); // placeholder
+            var result = await _sender.Send(new CreateDepartmentCommand(_userContext.UserId, request.Name, request.Description), cancellationToken);
+
+            return result.Match(
+                schedule =>
+                {
+                    var links = CreateLinks(schedule.Id.ToString(), null);
+                    var resource = new { data = schedule, links };
+
+                    return CreatedAtAction(
+                        nameof(GetDepartmentById),
+                        new { id = schedule.Id },
+                        resource);
+                },
+                Problem);
         }
 
         [HttpGet("{id:guid}")]
@@ -53,7 +78,15 @@ namespace AppointmentApplication.API.Controllers
             string? fields,
             CancellationToken cancellationToken)
         {
-            return Ok(); // placeholder
+            var result = await _sender.Send(new GetDepartmentByUserIdQuery(_userContext.UserId, id), cancellationToken);
+            return result.Match(
+                schedule =>
+                {
+                    var links = CreateLinks(id.ToString(), null);
+                    var resource = new { data = schedule, links };
+                    return Ok(resource);
+                },
+                Problem);
         }
 
         [HttpGet]
@@ -67,7 +100,14 @@ namespace AppointmentApplication.API.Controllers
         public async Task<IActionResult> GetDepartments(
             CancellationToken cancellationToken)
         {
-            return Ok(); // placeholder
+            var result = await _sender.Send(new GetDepartmentsByUserIdQuery(_userContext.UserId), cancellationToken);
+            return result.Match(
+                schedules =>
+                {
+                    var resource = new { data = schedules };
+                    return Ok(resource);
+                },
+                Problem);
         }
 
         [HttpPut("{id:guid}")]
@@ -84,7 +124,8 @@ namespace AppointmentApplication.API.Controllers
             [FromBody] UpdateDepartmentRequest request,
             CancellationToken cancellationToken)
         {
-            return Ok(); // placeholder
+            var result = await _sender.Send(new UpdateDepartmentCommand(_userContext.UserId, id, request.Name, request.Description), cancellationToken);
+            return result.Match<IActionResult>(_ => NoContent(), Problem);
         }
 
         [HttpDelete("{id:guid}")]
@@ -99,9 +140,9 @@ namespace AppointmentApplication.API.Controllers
             Guid id,
             CancellationToken cancellationToken)
         {
-            return Ok(); // placeholder
+            var result = await _sender.Send(new DeleteDepartmentCommand(_userContext.UserId, id), cancellationToken);
+            return result.Match<IActionResult>(_ => NoContent(), Problem);
         }
-
 
         private List<LinkDto> CreateLinks(string id, string? fields)
         {

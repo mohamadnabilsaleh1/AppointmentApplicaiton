@@ -5,10 +5,14 @@ using System.Threading.Tasks;
 
 using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Services;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Queries.GetDepartmentById;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Queries.GetDepartmentsById;
 using AppointmentApplication.Contracts.Requests.Departments;
 
 using Asp.Versioning;
+
 using MediatR;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
@@ -36,9 +40,17 @@ namespace AppointmentApplication.API.Controllers
         [EndpointName("GetDepartments")]
         [EndpointSummary("Get all Departments for the Facility.")]
         [EndpointDescription("Retrieves a list of all departments belonging to the specified healthcare facility.")]
-        public async Task<IActionResult> GetDepartments(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetDepartments(Guid facilityId, CancellationToken cancellationToken)
         {
-            return Ok(); // placeholder
+            var result = await _sender.Send(new GetDepartmentsByIdQuery(facilityId), cancellationToken);
+
+            return result.Match(
+                schedule =>
+                {
+                    var resource = new { data = schedule };
+                    return Ok(resource);
+                },
+                Problem);
         }
 
         [HttpGet("{id:guid}")]
@@ -49,18 +61,29 @@ namespace AppointmentApplication.API.Controllers
         [EndpointName("GetDepartmentById")]
         [EndpointSummary("Get Department by Id.")]
         [EndpointDescription("Retrieves the details of a specific department by its Id.")]
-        public async Task<IActionResult> GetDepartmentById(Guid id, string? fields, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetDepartmentById(Guid id, Guid facilityId, string? fields, CancellationToken cancellationToken)
         {
-            return Ok(); // placeholder
+            var result = await _sender.Send(new GetDepartmentByIdQuery(facilityId, id), cancellationToken);
+
+            return result.Match(
+                schedule =>
+                {
+                    var links = CreateLinks(facilityId, id);
+                    var resource = new { data = schedule, links };
+                    return Ok(resource);
+                },
+                Problem);
         }
 
-        private List<LinkDto> CreateLinks(Guid? id = null, string? fields = null)
+        private List<LinkDto> CreateLinks(Guid facilityId, Guid? scheduleId = null)
         {
-            return new List<LinkDto>
+            var links = new List<LinkDto>
             {
-                _linkService.Create(nameof(GetDepartments), "self", HttpMethods.Get),
-                _linkService.Create(nameof(GetDepartmentById), "self", HttpMethods.Get, new { id, fields })
+                _linkService.Create(nameof(GetDepartments), "all", HttpMethods.Get, new { facilityId }),
+                _linkService.Create(nameof(GetDepartmentById), "self", HttpMethods.Get, new { facilityId, id = scheduleId })
             };
+
+            return links;
         }
     }
 }
