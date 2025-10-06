@@ -32,7 +32,7 @@ internal sealed class RegisterUserCommandHandler : IRequestHandler<RegisterUserC
 
     public async Task<Result<Guid>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        Role role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Patient", cancellationToken);
+        Role role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Admin", cancellationToken) ?? Role.Admin;
         // استخدم Role.Patient مباشرة
         var createUser = User.Create(Guid.NewGuid(), request.FirstName, request.LastName, request.Email, role);
         var user = createUser.Value;

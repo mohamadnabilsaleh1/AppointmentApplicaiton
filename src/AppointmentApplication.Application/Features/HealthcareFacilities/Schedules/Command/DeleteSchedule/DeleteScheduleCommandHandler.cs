@@ -33,7 +33,7 @@ public class DeleteScheduleCommandHandler : IRequestHandler<DeleteScheduleComman
             return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.UserId);
         }
 
-        var deleteResult = facility.DeleteDepartment(request.ScheduleId);
+        var deleteResult = facility.DeleteSchedule(request.ScheduleId);
         if (deleteResult.IsError)
         {
             return deleteResult.Errors;

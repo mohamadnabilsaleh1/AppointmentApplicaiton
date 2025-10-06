@@ -45,7 +45,6 @@ public class CreateScheduleExceptionCommandHandler : IRequestHandler<CreateSched
             return exceptionResult.Errors;
         }
 
-        _context.HealthcareFacilityScheduleExceptions.Add(exceptionResult.Value);
         await _context.SaveChangesAsync(cancellationToken);
 
         return exceptionResult.Value.ToDto();

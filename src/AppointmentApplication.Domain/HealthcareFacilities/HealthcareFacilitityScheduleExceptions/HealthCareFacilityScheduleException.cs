@@ -17,7 +17,7 @@ public sealed class HealthCareFacilityScheduleException : AuditableEntity
     public Status Status { get; private set; }
     public string Reason { get; private set; } = string.Empty;
 
-    public HealthCareFacility Facility { get; private set; } = default!;
+    public HealthCareFacility? HealthCareFacility { get;  set; }
 
 #pragma warning disable CS8618
     private HealthCareFacilityScheduleException() { }

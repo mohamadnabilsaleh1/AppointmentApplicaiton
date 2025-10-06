@@ -78,7 +78,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -135,7 +135,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -190,7 +190,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -226,7 +226,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -286,7 +286,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("SpecializationID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("UserId")
@@ -335,7 +335,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(30);
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -387,7 +387,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -440,7 +440,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -475,7 +475,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -512,7 +512,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -550,24 +550,30 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("Type")
+                    b.Property<string>("Type")
+                        .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UserId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("HealthcareFacilities");
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("HealthCareFacilities", (string)null);
                 });
 
-            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions.ScheduleExceptionHealthcareFacility", b =>
+            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions.HealthCareFacilityScheduleException", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -590,7 +596,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("FacilityId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FacilityId1")
+                    b.Property<Guid?>("HealthCareFacilityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastModifiedBy")
@@ -608,19 +614,19 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FacilityId");
 
-                    b.HasIndex("FacilityId1");
+                    b.HasIndex("HealthCareFacilityId");
 
-                    b.ToTable("ScheduleExceptionHealthcareFacilities");
+                    b.ToTable("HealthcareFacilityScheduleExceptions");
                 });
 
-            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.Schedules.ScheduleHealthcareFacility", b =>
+            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.Schedules.HealthCareFacilitySchedule", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -640,7 +646,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("FacilityId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FacilityId1")
+                    b.Property<Guid?>("HealthCareFacilityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsAvailable")
@@ -661,16 +667,16 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FacilityId");
 
-                    b.HasIndex("FacilityId1");
+                    b.HasIndex("HealthCareFacilityId");
 
-                    b.ToTable("ScheduleHealthcareFacilities");
+                    b.ToTable("HealthcareFacilitySchedules");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.MediaUploads.FacilityUpload", b =>
@@ -715,7 +721,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("UploadedAt")
@@ -777,7 +783,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("UploadedAt")
@@ -839,7 +845,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("UploadedAt")
@@ -911,7 +917,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasDefaultValue("Active");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -945,7 +951,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -971,7 +977,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -1009,7 +1015,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("UserId")
@@ -1045,7 +1051,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -1078,7 +1084,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -1127,7 +1133,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -1169,7 +1175,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -1215,7 +1221,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -1257,7 +1263,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -1379,7 +1385,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("UpdatedAtdUtc")
+                    b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -1584,7 +1590,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "HealthcareFacility")
                         .WithMany("Departments")
                         .HasForeignKey("FacilityId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("HealthcareFacility");
@@ -1592,10 +1598,15 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", b =>
                 {
-                    b.HasOne("AppointmentApplication.Domain.Users.User", "User")
+                    b.HasOne("AppointmentApplication.Domain.Users.User", null)
                         .WithMany("HealthCareFacilities")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("AppointmentApplication.Domain.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
 
                     b.OwnsOne("AppointmentApplication.Domain.HealthcareFacilities.Address", "Address", b1 =>
                         {
@@ -1629,7 +1640,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
                             b1.HasKey("HealthCareFacilityId");
 
-                            b1.ToTable("HealthcareFacilities");
+                            b1.ToTable("HealthCareFacilities");
 
                             b1.WithOwner()
                                 .HasForeignKey("HealthCareFacilityId");
@@ -1641,7 +1652,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions.ScheduleExceptionHealthcareFacility", b =>
+            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions.HealthCareFacilityScheduleException", b =>
                 {
                     b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", null)
                         .WithMany("ScheduleExceptions")
@@ -1649,30 +1660,26 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "Facility")
+                    b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "HealthCareFacility")
                         .WithMany()
-                        .HasForeignKey("FacilityId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HealthCareFacilityId");
 
-                    b.Navigation("Facility");
+                    b.Navigation("HealthCareFacility");
                 });
 
-            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.Schedules.ScheduleHealthcareFacility", b =>
+            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.Schedules.HealthCareFacilitySchedule", b =>
                 {
                     b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", null)
                         .WithMany("Schedules")
                         .HasForeignKey("FacilityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "Facility")
-                        .WithMany()
-                        .HasForeignKey("FacilityId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Facility");
+                    b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "HealthCareFacility")
+                        .WithMany()
+                        .HasForeignKey("HealthCareFacilityId");
+
+                    b.Navigation("HealthCareFacility");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.MediaUploads.FacilityUpload", b =>

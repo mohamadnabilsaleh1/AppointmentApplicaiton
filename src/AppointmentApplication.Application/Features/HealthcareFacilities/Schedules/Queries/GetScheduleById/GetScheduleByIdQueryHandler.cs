@@ -28,7 +28,7 @@ public class GetScheduleByIdQueryHandler : IRequestHandler<GetScheduleByIdQuery,
     {
         var facility = await _context.HealthcareFacilities
             .Include(f => f.Schedules)
-            .FirstOrDefaultAsync(f => f.UserId == request.HealthCareFacilityId, cancellationToken);
+            .FirstOrDefaultAsync(f => f.Id == request.HealthCareFacilityId, cancellationToken);
 
         if (facility is null)
         {

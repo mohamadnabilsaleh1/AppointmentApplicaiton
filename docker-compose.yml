@@ -75,6 +75,7 @@ services:
     networks:
       - appointmentapp-net
     restart: unless-stopped
+    
   Appointment-idp:
     image: quay.io/keycloak/keycloak:latest
     container_name: Appointment.Identity

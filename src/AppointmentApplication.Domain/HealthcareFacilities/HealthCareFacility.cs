@@ -19,7 +19,7 @@ namespace AppointmentApplication.Domain.HealthcareFacilities;
 public sealed class HealthCareFacility : AuditableEntity
 {
     public Guid UserId { get; private set; }
-    public User User { get; private set; } = null!;
+    public User? User { get; set; }
     public string Name { get; private set; }
     public HealthCareType Type { get; private set; }
     public Address Address { get; private set; }
@@ -119,6 +119,7 @@ public sealed class HealthCareFacility : AuditableEntity
 
     // ✅ Add Schedule
     public Result<HealthCareFacilitySchedule> AddSchedule(
+        Guid id,
         DaysOfWeek dayOfWeek,
         TimeSpan startTime,
         TimeSpan endTime,
@@ -142,7 +143,7 @@ public sealed class HealthCareFacility : AuditableEntity
         }
 
         var scheduleResult = HealthCareFacilitySchedule.Create(
-            Id, dayOfWeek, startTime, endTime, status, true, note);
+            id, dayOfWeek, startTime, endTime, status, true, note);
 
         if (scheduleResult.IsError)
         {

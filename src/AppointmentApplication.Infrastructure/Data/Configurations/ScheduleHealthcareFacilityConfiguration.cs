@@ -23,6 +23,6 @@ public class ScheduleHealthcareFacilityConfiguration : IEntityTypeConfiguration<
         builder.HasOne<HealthCareFacility>()
             .WithMany(f => f.Schedules)
             .HasForeignKey(s => s.FacilityId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

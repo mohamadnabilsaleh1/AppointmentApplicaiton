@@ -45,6 +45,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Sched
             // إنشاء الجدول
 
             var scheduleResult = facility.AddSchedule(
+                facility.Id,
                 request.DayOfWeek,
                 request.StartTime,
                 request.EndTime,

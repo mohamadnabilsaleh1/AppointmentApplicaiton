@@ -5,5 +5,5 @@ using MediatR;
 
 namespace AppointmentApplication.Application.HealthcareFacilities.Schedules.Queries;
 
-public sealed record GetSchedulesQuery(
+public sealed record GetSchedulesByUserIdQuery(
     Guid UserId) : IRequest<Result<List<ScheduleDto>>>;

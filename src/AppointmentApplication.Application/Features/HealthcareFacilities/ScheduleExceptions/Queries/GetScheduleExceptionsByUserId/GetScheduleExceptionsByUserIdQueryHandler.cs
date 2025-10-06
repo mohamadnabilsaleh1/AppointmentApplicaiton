@@ -17,16 +17,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.ScheduleExceptions.Queries;
 
-public class GetScheduleExceptionsQueryHandler : IRequestHandler<GetScheduleExceptionsQuery, Result<List<ScheduleExceptionDto>>>
+public class GetScheduleExceptionsByUserIdQueryHandler : IRequestHandler<GetScheduleExceptionsByUserIdQuery, Result<List<ScheduleExceptionDto>>>
 {
     private readonly IAppDbContext _context;
 
-    public GetScheduleExceptionsQueryHandler(IAppDbContext context)
+    public GetScheduleExceptionsByUserIdQueryHandler(IAppDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Result<List<ScheduleExceptionDto>>> Handle(GetScheduleExceptionsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<List<ScheduleExceptionDto>>> Handle(GetScheduleExceptionsByUserIdQuery request, CancellationToken cancellationToken)
     {
         var facility = await _context.HealthcareFacilities
             .Include(f => f.ScheduleExceptions)

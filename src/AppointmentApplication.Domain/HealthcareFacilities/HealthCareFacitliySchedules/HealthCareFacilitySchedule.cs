@@ -17,7 +17,7 @@ public sealed class HealthCareFacilitySchedule : AuditableEntity
     public bool IsAvailable { get; private set; } = true;
     public string Note { get; private set; } = string.Empty;
 
-    public HealthCareFacility Facility { get; private set; } = null!;
+    public HealthCareFacility? HealthCareFacility { get;  set; }
 
 #pragma warning disable CS8618
     private HealthCareFacilitySchedule() { }

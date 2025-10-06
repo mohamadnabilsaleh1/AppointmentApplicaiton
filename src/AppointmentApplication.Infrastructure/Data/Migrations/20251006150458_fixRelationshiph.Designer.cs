@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppointmentApplication.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251003200413_AddMigationseverthing")]
-    partial class AddMigationseverthing
+    [Migration("20251006150458_fixRelationshiph")]
+    partial class fixRelationshiph
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -570,7 +570,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.ToTable("HealthcareFacilities");
                 });
 
-            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions.ScheduleExceptionHealthcareFacility", b =>
+            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions.HealthCareFacilityScheduleException", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -593,7 +593,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("FacilityId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FacilityId1")
+                    b.Property<Guid?>("FacilityId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastModifiedBy")
@@ -620,10 +620,10 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
                     b.HasIndex("FacilityId1");
 
-                    b.ToTable("ScheduleExceptionHealthcareFacilities");
+                    b.ToTable("HealthcareFacilityScheduleExceptions");
                 });
 
-            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.Schedules.ScheduleHealthcareFacility", b =>
+            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.Schedules.HealthCareFacilitySchedule", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -643,7 +643,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("FacilityId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FacilityId1")
+                    b.Property<Guid?>("FacilityId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsAvailable")
@@ -673,7 +673,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
                     b.HasIndex("FacilityId1");
 
-                    b.ToTable("ScheduleHealthcareFacilities");
+                    b.ToTable("HealthcareFacilitySchedules");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.MediaUploads.FacilityUpload", b =>
@@ -1644,7 +1644,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions.ScheduleExceptionHealthcareFacility", b =>
+            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions.HealthCareFacilityScheduleException", b =>
                 {
                     b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", null)
                         .WithMany("ScheduleExceptions")
@@ -1654,14 +1654,12 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
                     b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "Facility")
                         .WithMany()
-                        .HasForeignKey("FacilityId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FacilityId1");
 
                     b.Navigation("Facility");
                 });
 
-            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.Schedules.ScheduleHealthcareFacility", b =>
+            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.Schedules.HealthCareFacilitySchedule", b =>
                 {
                     b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", null)
                         .WithMany("Schedules")
@@ -1671,9 +1669,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
                     b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "Facility")
                         .WithMany()
-                        .HasForeignKey("FacilityId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FacilityId1");
 
                     b.Navigation("Facility");
                 });

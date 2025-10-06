@@ -5,7 +5,7 @@ using MediatR;
 
 namespace AppointmentApplication.Application.HealthcareFacilities.ScheduleExceptions.Queries;
 
-public sealed record GetScheduleExceptionsQuery(
+public sealed record GetScheduleExceptionsByUserIdQuery(
     Guid UserId,
     DateOnly? StartDate = null,
     DateOnly? EndDate = null) : IRequest<Result<List<ScheduleExceptionDto>>>;

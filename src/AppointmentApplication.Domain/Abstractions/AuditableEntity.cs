@@ -16,7 +16,7 @@ public abstract class AuditableEntity : Entity
 
     public string? CreatedBy { get; set; }
 
-    public DateTime UpdatedAtdUtc { get; set; }
+    public DateTime? UpdatedAtdUtc { get; set; }
 
     public string? LastModifiedBy { get; set; }
 }

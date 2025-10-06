@@ -1,31 +1,37 @@
 using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Services;
+using AppointmentApplication.Application.Abstractions.Authentication;
+using AppointmentApplication.Application.HealthcareFacilities.ScheduleExceptions.Commands;
+using AppointmentApplication.Application.HealthcareFacilities.ScheduleExceptions.Queries;
 using AppointmentApplication.Contracts.Requests.HealthCareFacilitites.ScheduleExceptions;
 using AppointmentApplication.Domain.Users;
 
 using Asp.Versioning;
+
 using MediatR;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 
 namespace AppointmentApplication.API.Controllers;
 
-[Route("api/health-care-facility/me/schedule-exceptions")]
+[Route("api/health-care-facilities/me/schedule-exceptions")]
 [Authorize(Roles = Roles.HealthCareFacility)]
 public sealed class AdminHealthCareFacilityScheduleExceptionController : ApiController
 {
     private readonly ISender _sender;
     private readonly LinkService _linkService;
-
-    public AdminHealthCareFacilityScheduleExceptionController(ISender sender, LinkService linkService)
+    private readonly IUserContext _userContext;
+    public AdminHealthCareFacilityScheduleExceptionController(ISender sender, LinkService linkService, IUserContext userContext)
     {
         _sender = sender;
         _linkService = linkService;
+        _userContext = userContext;
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
@@ -36,7 +42,21 @@ public sealed class AdminHealthCareFacilityScheduleExceptionController : ApiCont
         [FromBody] CreateHealthCareFacilityScheduleExceptionRequest request,
         CancellationToken cancellationToken)
     {
-        return NoContent();
+        var result = await _sender.Send(new CreateScheduleExceptionCommand(_userContext.UserId, request.Date, request.StartTime, request.EndTime, request.Status, request.Reason), cancellationToken);
+
+        return result.Match(
+            schedule =>
+            {
+                var links = CreateLinks(schedule.Id.ToString(), null);
+                var resource = new { data = schedule, links };
+
+                // ✅ الحل: استخدام CreatedAtAction بدلاً من CreatedAtRoute
+                return CreatedAtAction(
+                    nameof(GetHealthCareFacilityScheduleExceptionById),
+                    new { id = schedule.Id },
+                    resource);
+            },
+            Problem);
     }
 
     [HttpGet("{id:guid}")]
@@ -52,7 +72,15 @@ public sealed class AdminHealthCareFacilityScheduleExceptionController : ApiCont
         string? fields,
         CancellationToken cancellationToken)
     {
-        return Ok();
+        var result = await _sender.Send(new GetScheduleExceptionByUserIdQuery(_userContext.UserId, id), cancellationToken);
+        return result.Match(
+            schedule =>
+            {
+                var links = CreateLinks(id.ToString(), null);
+                var resource = new { data = schedule, links };
+                return Ok(resource);
+            },
+            Problem);
     }
 
     [HttpGet]
@@ -66,7 +94,14 @@ public sealed class AdminHealthCareFacilityScheduleExceptionController : ApiCont
     public async Task<IActionResult> GetHealthCareFacilityScheduleExceptions(
         CancellationToken cancellationToken)
     {
-        return Ok();
+        var result = await _sender.Send(new GetScheduleExceptionsByUserIdQuery(_userContext.UserId), cancellationToken);
+        return result.Match(
+            schedules =>
+            {
+                var resource = new { data = schedules };
+                return Ok(resource);
+            },
+            Problem);
     }
 
     [HttpPut("{id:guid}")]
@@ -83,7 +118,8 @@ public sealed class AdminHealthCareFacilityScheduleExceptionController : ApiCont
         [FromBody] UpdateHealthCareFacilityScheduleExceptionRequest request,
         CancellationToken cancellationToken)
     {
-        return NoContent();
+        var result = await _sender.Send(new UpdateScheduleExceptionCommand(_userContext.UserId, id, request.Date, request.StartTime, request.EndTime, request.Status, request.Reason), cancellationToken);
+        return result.Match<IActionResult>(_ => NoContent(), Problem);
     }
 
     [HttpDelete("{id:guid}")]
@@ -98,7 +134,8 @@ public sealed class AdminHealthCareFacilityScheduleExceptionController : ApiCont
         Guid id,
         CancellationToken cancellationToken)
     {
-        return NoContent();
+        var result = await _sender.Send(new DeleteScheduleExceptionCommand(_userContext.UserId, id), cancellationToken);
+        return result.Match<IActionResult>(_ => NoContent(), Problem);
     }
 
     private List<LinkDto> CreateLinks(string id, string? fields)

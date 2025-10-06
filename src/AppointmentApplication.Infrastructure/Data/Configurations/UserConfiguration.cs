@@ -24,7 +24,10 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
 
             builder.HasIndex(user => user.Email).IsUnique();
             builder.HasIndex(user => user.IdentityId).IsUnique();
-
+            builder.HasMany(u => u.HealthCareFacilities)
+                        .WithOne()
+                        .HasForeignKey(h => h.UserId)
+                        .OnDelete(DeleteBehavior.Restrict);
             // 🔑 Many-to-Many User <-> Role
             // builder.HasMany(u => u.Roles)
             //        .WithMany(r => r.Users)

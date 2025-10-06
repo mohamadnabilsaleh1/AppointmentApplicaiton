@@ -1,5 +1,7 @@
 using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Services;
+using AppointmentApplication.Application.Features.HealthcareFacilities.ScheduleExceptions.Queries.GetScheduleExceptionsById;
+using AppointmentApplication.Application.HealthcareFacilities.ScheduleExceptions.Queries;
 using AppointmentApplication.Domain.Users;
 
 using Asp.Versioning;
@@ -12,7 +14,7 @@ using Microsoft.AspNetCore.OutputCaching;
 
 namespace AppointmentApplication.API.Controllers;
 
-[Route("api/health-care-facility/{healthcareId:guid}/schedule-exceptions")]
+[Route("api/health-care-facilities/{facilityId:guid}/schedule-exceptions")]
 [Authorize]
 public sealed class HealthCareFacilityScheduleExceptionController : ApiController
 {
@@ -34,12 +36,20 @@ public sealed class HealthCareFacilityScheduleExceptionController : ApiControlle
     [EndpointName("GetHealthCareFacilityScheduleExceptions")]
     [EndpointSummary("Retrieve all schedule exceptions for a healthcare facility")]
     [EndpointDescription("Fetches all schedule exceptions associated with the specified healthcare facility.")]
-    public async Task<IActionResult> GetHealthCareFacilityScheduleException(
-        Guid healthcareId,
+    public async Task<IActionResult> GetHealthCareFacilityScheduleExceptions(
+        Guid facilityId,
         CancellationToken cancellationToken)
     {
         // Implementation placeholder
-        return Ok();
+        var result = await _sender.Send(new GetScheduleExceptionsByIdQuery(facilityId), cancellationToken);
+
+        return result.Match(
+            schedule =>
+            {
+                var resource = new { data = schedule };
+                return Ok(resource);
+            },
+            Problem);
     }
 
     // GET schedule exception by Id
@@ -48,25 +58,34 @@ public sealed class HealthCareFacilityScheduleExceptionController : ApiControlle
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointName("GetHealthCareFacilityScheduleExceptionById")]
+    [EndpointName("GetHealthCareFacilityScheduleExceptionsById")]
     [EndpointSummary("Retrieve a schedule exception by ID")]
     [EndpointDescription("Fetches a specific schedule exception for the specified healthcare facility by its unique ID.")]
-    public async Task<IActionResult> GetHealthCareFacilityScheduleExceptionById(
-        Guid healthcareId,
+    public async Task<IActionResult> GetHealthCareFacilityScheduleExceptionsById(
+        Guid facilityId,
         Guid id,
         CancellationToken cancellationToken)
     {
-        // Implementation placeholder
-        return Ok();
+        var result = await _sender.Send(new GetScheduleExceptionByIdQuery(facilityId, id), cancellationToken);
+
+        return result.Match(
+            schedule =>
+            {
+                var links = CreateLinks(facilityId, id);
+                var resource = new { data = schedule, links };
+                return Ok(resource);
+            },
+            Problem);
     }
 
-    private List<LinkDto> CreateLinks(Guid healthcareId, Guid? id = null)
+    private List<LinkDto> CreateLinks(Guid facilityId, Guid? scheduleId = null)
     {
         var links = new List<LinkDto>
-        {
-            _linkService.Create(nameof(GetHealthCareFacilityScheduleException), "self", HttpMethods.Get, new { healthcareId }),
-            _linkService.Create(nameof(GetHealthCareFacilityScheduleExceptionById), "self", HttpMethods.Get, new { healthcareId, id })
-        };
+            {
+                _linkService.Create(nameof(GetHealthCareFacilityScheduleExceptions), "all", HttpMethods.Get, new { facilityId }),
+                _linkService.Create(nameof(GetHealthCareFacilityScheduleExceptionsById), "self", HttpMethods.Get, new { facilityId, id = scheduleId })
+            };
+
         return links;
     }
 }

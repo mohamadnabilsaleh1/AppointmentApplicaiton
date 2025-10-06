@@ -23,6 +23,6 @@ public class ScheduleExceptionHealthcareFacilityConfiguration : IEntityTypeConfi
         builder.HasOne<HealthCareFacility>()
             .WithMany(f => f.ScheduleExceptions)
             .HasForeignKey(s => s.FacilityId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

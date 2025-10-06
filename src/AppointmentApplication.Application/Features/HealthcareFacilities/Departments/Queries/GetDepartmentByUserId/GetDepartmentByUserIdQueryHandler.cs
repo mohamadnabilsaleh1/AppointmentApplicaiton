@@ -24,6 +24,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Depar
         {
             _context = context;
         }
+
         public async Task<Result<DepartmentDto>> Handle(GetDepartmentByUserIdQuery request, CancellationToken cancellationToken)
         {
             var facility = await _context.HealthcareFacilities

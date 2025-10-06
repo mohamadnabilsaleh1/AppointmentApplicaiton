@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AppointmentApplication.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddMigationseverthing : Migration
+    public partial class Initia : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -351,7 +351,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScheduleExceptionHealthcareFacilities",
+                name: "HealthcareFacilityScheduleExceptions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -370,15 +370,15 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ScheduleExceptionHealthcareFacilities", x => x.Id);
+                    table.PrimaryKey("PK_HealthcareFacilityScheduleExceptions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ScheduleExceptionHealthcareFacilities_HealthcareFacilities_FacilityId",
+                        name: "FK_HealthcareFacilityScheduleExceptions_HealthcareFacilities_FacilityId",
                         column: x => x.FacilityId,
                         principalTable: "HealthcareFacilities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ScheduleExceptionHealthcareFacilities_HealthcareFacilities_FacilityId1",
+                        name: "FK_HealthcareFacilityScheduleExceptions_HealthcareFacilities_FacilityId1",
                         column: x => x.FacilityId1,
                         principalTable: "HealthcareFacilities",
                         principalColumn: "Id",
@@ -386,7 +386,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScheduleHealthcareFacilities",
+                name: "HealthcareFacilitySchedules",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -405,15 +405,15 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ScheduleHealthcareFacilities", x => x.Id);
+                    table.PrimaryKey("PK_HealthcareFacilitySchedules", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ScheduleHealthcareFacilities_HealthcareFacilities_FacilityId",
+                        name: "FK_HealthcareFacilitySchedules_HealthcareFacilities_FacilityId",
                         column: x => x.FacilityId,
                         principalTable: "HealthcareFacilities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ScheduleHealthcareFacilities_HealthcareFacilities_FacilityId1",
+                        name: "FK_HealthcareFacilitySchedules_HealthcareFacilities_FacilityId1",
                         column: x => x.FacilityId1,
                         principalTable: "HealthcareFacilities",
                         principalColumn: "Id",
@@ -1016,6 +1016,26 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_HealthcareFacilityScheduleExceptions_FacilityId",
+                table: "HealthcareFacilityScheduleExceptions",
+                column: "FacilityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HealthcareFacilityScheduleExceptions_FacilityId1",
+                table: "HealthcareFacilityScheduleExceptions",
+                column: "FacilityId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HealthcareFacilitySchedules_FacilityId",
+                table: "HealthcareFacilitySchedules",
+                column: "FacilityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HealthcareFacilitySchedules_FacilityId1",
+                table: "HealthcareFacilitySchedules",
+                column: "FacilityId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MedicalRecordAttachments_MedicalRecordID",
                 table: "MedicalRecordAttachments",
                 column: "MedicalRecordID");
@@ -1144,26 +1164,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                 column: "DoctorId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScheduleExceptionHealthcareFacilities_FacilityId",
-                table: "ScheduleExceptionHealthcareFacilities",
-                column: "FacilityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ScheduleExceptionHealthcareFacilities_FacilityId1",
-                table: "ScheduleExceptionHealthcareFacilities",
-                column: "FacilityId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ScheduleHealthcareFacilities_FacilityId",
-                table: "ScheduleHealthcareFacilities",
-                column: "FacilityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ScheduleHealthcareFacilities_FacilityId1",
-                table: "ScheduleHealthcareFacilities",
-                column: "FacilityId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_users_Email",
                 table: "users",
                 column: "Email",
@@ -1193,6 +1193,12 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "FacilityUploads");
+
+            migrationBuilder.DropTable(
+                name: "HealthcareFacilityScheduleExceptions");
+
+            migrationBuilder.DropTable(
+                name: "HealthcareFacilitySchedules");
 
             migrationBuilder.DropTable(
                 name: "MedicalRecordAttachments");
@@ -1226,12 +1232,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ScheduleExceptionDoctors");
-
-            migrationBuilder.DropTable(
-                name: "ScheduleExceptionHealthcareFacilities");
-
-            migrationBuilder.DropTable(
-                name: "ScheduleHealthcareFacilities");
 
             migrationBuilder.DropTable(
                 name: "Billings");

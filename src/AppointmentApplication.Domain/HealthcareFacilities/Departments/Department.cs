@@ -11,9 +11,7 @@ public sealed class Department : AuditableEntity
     public Guid FacilityId { get; private set; }
     public string Name { get; private set; } = string.Empty;
     public string Description { get; private set; } = string.Empty;
-    public bool IsActive { get; private set; } = true;
-
-    public HealthCareFacility HealthcareFacility { get; private set; } = null!;
+    public HealthCareFacility? HealthcareFacility { get;  set; }
 
     private readonly List<DoctorDepartment> _doctorDepartments = new();
     public IReadOnlyCollection<DoctorDepartment> DoctorDepartments => _doctorDepartments.AsReadOnly();
@@ -28,7 +26,6 @@ public sealed class Department : AuditableEntity
         FacilityId = healthcareFacilityId;
         Name = name;
         Description = description;
-        IsActive = true;
     }
 
     // ✅ Create
@@ -94,26 +91,4 @@ public sealed class Department : AuditableEntity
         return Result.Success;
     }
 
-    // ✅ Soft delete
-    public Result<Deleted> Deactivate()
-    {
-        if (!IsActive)
-        {
-            return DepartmentErrors.AlreadyInactive;
-        }
-
-        IsActive = false;
-        return Result.Deleted;
-    }
-
-    public Result<Updated> Activate()
-    {
-        if (IsActive)
-        {
-            return DepartmentErrors.AlreadyActive;
-        }
-
-        IsActive = true;
-        return Result.Updated;
-    }
 }

@@ -1,6 +1,9 @@
 using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Services;
+using AppointmentApplication.Application.Abstractions.Authentication;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Queries.GetHealthCareFacilityByUserId;
+using AppointmentApplication.Application.HealthcareFacilities.Schedules.Commands;
+using AppointmentApplication.Application.HealthcareFacilities.Schedules.Queries;
 using AppointmentApplication.Application.Shared.Services;
 using AppointmentApplication.Contracts.Requests.HealthCareFacilitites;
 using AppointmentApplication.Domain.Shared.Results;
@@ -16,17 +19,20 @@ using Microsoft.AspNetCore.OutputCaching;
 
 namespace AppointmentApplication.API.Controllers;
 
+[ApiController]
 [Route("api/health-care-facilities/me/schedules")]
 [Authorize(Roles = Roles.HealthCareFacility)]
 public sealed class AdminHealthCareFacilityScheduleController : ApiController
 {
     private readonly ISender _sender;
     private readonly LinkService _linkService;
+    private readonly IUserContext _userContext;
 
-    public AdminHealthCareFacilityScheduleController(ISender sender, LinkService linkService)
+    public AdminHealthCareFacilityScheduleController(ISender sender, LinkService linkService, IUserContext userContext)
     {
         _sender = sender;
         _linkService = linkService;
+        _userContext = userContext;
     }
 
     [HttpPost]
@@ -41,20 +47,24 @@ public sealed class AdminHealthCareFacilityScheduleController : ApiController
         [FromBody] CreateHealthcareFacilityScheduleRequest request,
         CancellationToken cancellationToken)
     {
-        // Implementation example:
-        // var result = await _sender.Send(new CreateHealthCareFacilityScheduleCommand(request), cancellationToken);
-        // return result.Match(
-        //     schedule => {
-        //         var links = CreateLinks(schedule.Id.ToString(), null);
-        //         var resource = new { data = schedule, links };
-        //         return CreatedAtRoute("GetHealthCareFacilityScheduleById", new { id = schedule.Id }, resource);
-        //     },
-        //     Problem);
+        var result = await _sender.Send(new CreateScheduleCommand(_userContext.UserId, request.DayOfWeek, request.StartTime, request.EndTime, request.Status, request.Note), cancellationToken);
 
-        return Ok();
+        return result.Match(
+            schedule =>
+            {
+                var links = CreateLinks(schedule.Id.ToString(), null);
+                var resource = new { data = schedule, links };
+
+                // ✅ الحل: استخدام CreatedAtAction بدلاً من CreatedAtRoute
+                return CreatedAtAction(
+                    nameof(GetHealthCareFacilityScheduleById),
+                    new { id = schedule.Id },
+                    resource);
+            },
+            Problem);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:guid}", Name = "GetHealthCareFacilityScheduleById")] // ✅ إضافة Name للـ Route
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -64,17 +74,15 @@ public sealed class AdminHealthCareFacilityScheduleController : ApiController
     [EndpointName("AdminGetHealthCareFacilityScheduleById")]
     public async Task<IActionResult> GetHealthCareFacilityScheduleById(Guid id, CancellationToken cancellationToken)
     {
-        // Implementation example:
-        // var result = await _sender.Send(new GetHealthCareFacilityScheduleByIdQuery(id), cancellationToken);
-        // return result.Match(
-        //     schedule => {
-        //         var links = CreateLinks(id.ToString(), null);
-        //         var resource = new { data = schedule, links };
-        //         return Ok(resource);
-        //     },
-        //     Problem);
-
-        return Ok();
+        var result = await _sender.Send(new GetScheduleByUserIdQuery(_userContext.UserId, id), cancellationToken);
+        return result.Match(
+            schedule =>
+            {
+                var links = CreateLinks(id.ToString(), null);
+                var resource = new { data = schedule, links };
+                return Ok(resource);
+            },
+            Problem);
     }
 
     [HttpGet]
@@ -87,26 +95,14 @@ public sealed class AdminHealthCareFacilityScheduleController : ApiController
     [EndpointName("AdminGetHealthCareFacilitySchedules")]
     public async Task<IActionResult> GetHealthCareFacilitySchedules(CancellationToken cancellationToken)
     {
-        // Implementation example:
-        // var result = await _sender.Send(new GetHealthCareFacilitySchedulesQuery(), cancellationToken);
-        // return result.Match(
-        //     paginationResult => {
-        //         var links = CreatePaginationLinks(paginationResult);
-        //         var resource = new {
-        //             data = paginationResult.Items,
-        //             pagination = new {
-        //                 paginationResult.Page,
-        //                 paginationResult.PageSize,
-        //                 paginationResult.TotalCount,
-        //                 paginationResult.TotalPages
-        //             },
-        //             links
-        //         };
-        //         return Ok(resource);
-        //     },
-        //     Problem);
-
-        return Ok();
+        var result = await _sender.Send(new GetSchedulesByUserIdQuery(_userContext.UserId), cancellationToken);
+        return result.Match(
+            schedules =>
+            {
+                var resource = new { data = schedules };
+                return Ok(resource);
+            },
+            Problem);
     }
 
     [HttpPut("{id:guid}")]
@@ -123,17 +119,8 @@ public sealed class AdminHealthCareFacilityScheduleController : ApiController
         [FromBody] UpdateHealthcareFacilityScheduleRequest request,
         CancellationToken cancellationToken)
     {
-        // Implementation example:
-        // var result = await _sender.Send(new UpdateHealthCareFacilityScheduleCommand(id, request), cancellationToken);
-        // return result.Match(
-        //     schedule => {
-        //         var links = CreateLinks(id.ToString(), null);
-        //         var resource = new { data = schedule, links };
-        //         return Ok(resource);
-        //     },
-        //     Problem);
-
-        return Ok();
+        var result = await _sender.Send(new UpdateScheduleCommand(_userContext.UserId, id, request.DayOfWeek, request.StartTime, request.EndTime, request.Status, request.IsAvailable, request.Note), cancellationToken);
+        return result.Match<IActionResult>(_ => NoContent(), Problem);
     }
 
     [HttpDelete("{id:guid}")]
@@ -146,11 +133,8 @@ public sealed class AdminHealthCareFacilityScheduleController : ApiController
     [EndpointName("AdminDeleteHealthCareFacilitySchedule")]
     public async Task<IActionResult> DeleteHealthCareFacilitySchedule(Guid id, CancellationToken cancellationToken)
     {
-        // Implementation example:
-        // var result = await _sender.Send(new DeleteHealthCareFacilityScheduleCommand(id), cancellationToken);
-        // return result.Match<IActionResult>(_ => NoContent(), Problem);
-
-        return NoContent();
+        var result = await _sender.Send(new DeleteScheduleCommand(_userContext.UserId, id), cancellationToken);
+        return result.Match<IActionResult>(_ => NoContent(), Problem);
     }
 
     private List<LinkDto> CreateLinks(string id, string? fields)
