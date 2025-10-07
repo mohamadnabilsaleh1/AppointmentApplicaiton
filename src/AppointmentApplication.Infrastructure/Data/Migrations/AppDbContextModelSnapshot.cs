@@ -283,8 +283,8 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid>("SpecializationID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Specialization")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
@@ -295,8 +295,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FacilityId");
-
-                    b.HasIndex("SpecializationID");
 
                     b.HasIndex("UserId");
 
@@ -450,37 +448,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.HasIndex("DoctorId1");
 
                     b.ToTable("ScheduleDoctors");
-                });
-
-            modelBuilder.Entity("AppointmentApplication.Domain.Doctors.Specializations.Specialization", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime?>("UpdatedAtdUtc")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Specializations");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.Departments.Department", b =>
@@ -1519,20 +1486,12 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AppointmentApplication.Domain.Doctors.Specializations.Specialization", "Specialization")
-                        .WithMany("Doctors")
-                        .HasForeignKey("SpecializationID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("AppointmentApplication.Domain.Users.User", "User")
                         .WithMany("Doctors")
                         .HasForeignKey("UserId")
                         .IsRequired();
 
                     b.Navigation("HealthcareFacility");
-
-                    b.Navigation("Specialization");
 
                     b.Navigation("User");
                 });
@@ -1898,11 +1857,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Navigation("Schedules");
 
                     b.Navigation("TreatmentCapacity");
-                });
-
-            modelBuilder.Entity("AppointmentApplication.Domain.Doctors.Specializations.Specialization", b =>
-                {
-                    b.Navigation("Doctors");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.Departments.Department", b =>

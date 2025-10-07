@@ -4,6 +4,7 @@ using System.Linq;
 
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Doctors;
+using AppointmentApplication.Domain.Doctors.Enums;
 using AppointmentApplication.Domain.HealthcareFacilities.Departments;
 using AppointmentApplication.Domain.HealthcareFacilities.Enums;
 using AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptionHealthcareFacilities;
@@ -436,6 +437,77 @@ public sealed class HealthCareFacility : AuditableEntity
         }
 
         return department;
+    }
+
+    public Result<Updated> ActivateDoctor(Guid DoctorId)
+    {
+        var doctor = _doctors.FirstOrDefault(d => d.Id == DoctorId);
+
+        if (doctor == null)
+        {
+            return DoctorErrors.DoctorNotFound;
+        }
+
+        doctor.Activate();
+        return Result.Updated;
+    }
+
+    public Result<Updated> Deactivate(Guid DoctorId)
+    {
+        var doctor = _doctors.FirstOrDefault(d => d.Id == DoctorId);
+
+        if (doctor == null)
+        {
+            return DoctorErrors.DoctorNotFound;
+        }
+
+        doctor.Deactivate();
+        return Result.Updated;
+    }
+
+    public Result<Doctor> GetDoctorById(Guid doctorId)
+    {
+        var doctor = _doctors.FirstOrDefault(s => s.Id == doctorId);
+        if (doctor == null)
+        {
+            return DoctorErrors.DoctorNotFound;
+        }
+
+        return doctor;
+    }
+
+    public Result<Doctor> AddDoctor(
+        Guid userId,
+        string firstName,
+        string lastName,
+        Gender gender,
+        DateOnly dateOfBirth,
+        Specialization specialization,
+        string licenseNumber)
+    {
+        // 3️⃣ Create doctor domain object
+        var doctorResult = Doctor.Create(
+            userId,
+            Id,
+            firstName,
+            lastName,
+            gender,
+            dateOfBirth,
+            specialization,
+            licenseNumber
+        );
+
+        if (doctorResult.IsError)
+        {
+            return doctorResult.Errors;
+        }
+
+        var doctor = doctorResult.Value;
+
+        // 5️⃣ Add to facility’s collection
+        _doctors.Add(doctor);
+
+        return doctor;
     }
 
     private static DaysOfWeek GetDayOfWeekFromDate(DateOnly date)

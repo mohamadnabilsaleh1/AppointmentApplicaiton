@@ -15,18 +15,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queries.GetHealthCareFacilities
 {
-    public class GetHealthCareFacilityQueryHandler(
-        IAppDbContext context,
-        DataShapingService dataShapingService,
-        DynamicQueryService dynamicQueryService
-    ) : IRequestHandler<GetHealthCareFacilityQuery, Result<PaginationResult<ExpandoObject>>>
+    public class GetHealthCareFacilityQueryHandler : IRequestHandler<GetHealthCareFacilityQuery, Result<PaginationResult<ExpandoObject>>>
     {
-        private readonly IAppDbContext _context = context;
-        private readonly DynamicQueryService _dynamicQueryService = dynamicQueryService;
+        private readonly IAppDbContext _context;
+        private readonly DynamicQueryService _dynamicQueryService;
+        private readonly DataShapingService _dataShapingService;
+
+        public GetHealthCareFacilityQueryHandler(
+            IAppDbContext context,
+            DataShapingService dataShapingService,
+            DynamicQueryService dynamicQueryService)
+        {
+            _context = context;
+            _dataShapingService = dataShapingService;
+            _dynamicQueryService = dynamicQueryService;
+        }
 
         public async Task<Result<PaginationResult<ExpandoObject>>> Handle(
-    GetHealthCareFacilityQuery request,
-    CancellationToken cancellationToken)
+            GetHealthCareFacilityQuery request,
+            CancellationToken cancellationToken)
         {
             IQueryable<HealthCareFacility> query = _context.HealthcareFacilities
                 .Include(f => f.Departments)
@@ -37,14 +44,14 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
 
             // Apply other dynamic filters first
             var filters = new Dictionary<string, object?>
-    {
-        { "Type", request.Type },
-        { "Address.Street", request.Street },
-        { "Address.City", request.City },
-        { "Address.State", request.State },
-        { "Address.Country", request.Country },
-        { "Address.ZipCode", request.ZipCode }
-    };
+            {
+                { "Type", request.Type },
+                { "Address.Street", request.Street },
+                { "Address.City", request.City },
+                { "Address.State", request.State },
+                { "Address.Country", request.Country },
+                { "Address.ZipCode", request.ZipCode }
+            };
 
             // Execute dynamic query service to get filtered IQueryable
             var dynamicQueryResult = await _dynamicQueryService.ExecuteAsync<HealthCareFacility, HealthcareFacilityDto>(
@@ -111,5 +118,3 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
         private static double Deg2Rad(double deg) => deg * (Math.PI / 180.0);
     }
 }
-
-

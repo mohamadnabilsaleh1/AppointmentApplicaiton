@@ -3,7 +3,9 @@ using AppointmentApplication.Application.Shared.Interfaces;
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.Shared.Results;
 using AppointmentApplication.Domain.Users;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -98,13 +100,7 @@ public class CreateHealthcareFacilityCommandHandler(
         _context.Users.Add(user);
         _context.HealthcareFacilities.Add(createHealthCareFacilityResult.Value);
 
-        var saveResult = await _context.SaveChangesAsync(cancellationToken);
-
-        if (saveResult <= 0)
-        {
-            _logger.LogError("Failed to save healthcare facility and user to database.");
-            return ApplicationHealthCareFacilityErrors.DatabaseSaveFailed("No changes were saved to the database");
-        }
+        await _context.SaveChangesAsync(cancellationToken);
 
         var healthCareFacility = createHealthCareFacilityResult.Value;
         _logger.LogInformation(

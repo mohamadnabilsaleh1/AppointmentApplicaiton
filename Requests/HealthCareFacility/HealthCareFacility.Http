@@ -90,5 +90,3 @@ Authorization: {{AdminToken}}
 ### desactive health care facility
 PATCH {{baseUrl}}/api/health-care-facilities/6b3ab5d4-c7e6-46db-a371-02f554acf223/deactivate
 Authorization: {{AdminToken}}
-
-

@@ -21,13 +21,8 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
             builder.Property(e => e.LicenseNumber).IsRequired().HasMaxLength(50);
             builder.Property(e => e.IsActive).IsRequired();
             builder.Property(e => e.CreatedAtUtc).IsRequired();
+            builder.Property(e => e.Specialization).IsRequired();
             builder.Property(e => e.UpdatedAtdUtc);
-
-            // Specialization relationship
-            builder.HasOne(d => d.Specialization)
-                   .WithMany(s => s.Doctors)
-                   .HasForeignKey(d => d.SpecializationID)
-                   .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasQueryFilter(e => e.IsActive);
 
@@ -47,6 +42,9 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
                    .HasForeignKey<DoctorTreatmentCapacity>(tc => tc.DoctorId)
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasQueryFilter(e => e.IsActive);
+
         }
     }
 }

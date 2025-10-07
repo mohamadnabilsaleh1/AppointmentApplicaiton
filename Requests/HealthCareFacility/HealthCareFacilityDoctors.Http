@@ -1,0 +1,81 @@
+@baseUrl = http://localhost:5001
+@AdminToken = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NTk3ODc1MjIsImlhdCI6MTc1OTc1MTUyMiwianRpIjoib25ydHJvOmY1NmIxZmVjLWE2N2MtNjc0Yy03ZGY4LTdkMjYzNWRlNjZhZCIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIzNGMwMzcxZS0xMmEzLTRkM2MtYTJkNS1mNmJlNDUyOWRjNDMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6ImM4ZjBmYzRjLWViYTUtNGZmOS04Nzk2LWE1NGFjN2UyMWFhOCIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6Im1vaGFtYWQgYWRtaW4iLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhZG1pbkBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoibW9oYW1hZCIsImZhbWlseV9uYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSJ9.YcPr3EOJ9VsZ4UIYTyMnXBuMLfgkkHma-NGCQmEW5FUUi74zn0Jtk1VYhw3xDIsz9xZCV6IauZdLICQq4rI57Z4aWOANJqSXcpGobYCAvKIP41nm018-2PzusgBJIqqRPXnhubCowy4770J5ppmlrcFk1mKhG0U8viA_YS6DaH2I8w5xcgCMbSkIMpYl1sH5d2k9UP1sYrVSye5bI_hxQxf28P_IU7bDdgj7R0gvxRzOapDrnkHiJ1hKDAxwdna0r92IdYiYpuyidGq-Tm6jbEfF-iQKJdaiDFfn7Jj1TNbS8xA1H4AXWR-WWJq_KEG2JWDby1nyGVUe0FUL0hZGLw
+
+@HelathCare = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NTk4ODk1NzYsImlhdCI6MTc1OTg1MzU3NiwianRpIjoib25ydHJvOjY1MzYzMzM3LTM5NDgtYjQyNC1iY2JmLTBkNzgyOWYyMjczMSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJkY2M3YWVkZi1mZDk3LTQ2MzAtYjQxOC02YjZjMzExOGRhNjgiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6IjlmNjJlNzRiLTY1MjEtNDg1YS1hOTE0LTQzZjc1NDgwZWY0MCIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IktoYWxlZCBDbGluaWMiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJraGFsZWQuY2xpbmljQGV4YW1wbGUuY29tIiwiZ2l2ZW5fbmFtZSI6IktoYWxlZCIsImZhbWlseV9uYW1lIjoiQ2xpbmljIiwiZW1haWwiOiJraGFsZWQuY2xpbmljQGV4YW1wbGUuY29tIn0.H5b6SDW8aXr3UOabRpz5ig6P1yOqcQwtXewC7HnWBDBYbjgtCW82DVIih3RC-5FB6Soi57_kKjlgbASZ1nJ40D8YV0l5OGPn9lpt6otWoQKSIUlnCt1lpnyNbQ68QB6n5UkcZRToc9I2N0Pj-KtoHRnEEowJ_gUe1wp-sL_2UPnO8kVH1ar5rllOjfp61fvQ76Ysn7g9YnS9lXgE_KrTX2fQ1k12yIOqmqbCe3DZJdY5AO4_GCNVFy687HHP-MyWO1928K2YOLZ8j5uj1XrS_pjKEvg_Dmiz5W6BBKJootbRXXwhXzLYF4nRDheteSUSY4IsCdztKzXn70pValrY5g
+@endpoint=health-care-facilities
+@doctorId = 74350655-f0a7-486a-b9f9-65c0bac318b2
+### Create a Health Care Facility
+POST {{baseUrl}}/api/health-care-facilities
+Authorization: {{AdminToken}}
+Content-Type: application/json
+
+ {
+    "firstName": "Khaled",
+    "lastName": "Clinic",
+  "Email": "khaled.clinic@example.com",
+  "Password": "12er56ui90MO@",
+    "name": "khaled",
+    "type": 0,
+    "street": "220 Coastal Rd",
+    "city": "Tartus",
+    "state": "Tartus Governorate",
+    "country": "Syria",
+    "zipCode": "49005",
+    "gpsLatitude": 34.887,
+    "gpsLongitude": 35.8869
+  }
+
+###
+POST http://localhost:5001/api/users/login
+Content-Type: application/json
+
+{
+  "Email": "khaled.clinic@example.com",
+  "Password": "12er56ui90MO@"
+}
+
+
+
+
+
+### create Doctor
+
+POST {{baseUrl}}/api/health-care-facilities/me/doctors
+Authorization: {{HelathCare}}
+Content-Type: application/json
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "abdala.doe@example.com",
+    "password": "password123",
+    "gender": 1,
+    "dateOfBirth": "1985-05-15",
+    "specialization": 2,
+    "licenseNumber": "MED123456"
+}
+
+
+
+
+
+
+
+
+### get doctors 
+GET {{baseUrl}}/api/health-care-facilities/me/doctors
+Authorization: {{HelathCare}}
+
+### get doctor by id
+
+
+GET {{baseUrl}}/api/health-care-facilities/me/doctors/{{doctorId}}
+Authorization: {{HelathCare}}
+
+
+###
+GET {{baseUrl}}/api/health-care-facilities/08ab65af-cdb4-4f2f-910f-cd45a1ba5eaf/doctors
+
+
+###
+GET {{baseUrl}}/api/health-care-facilities/08ab65af-cdb4-4f2f-910f-cd45a1ba5eaf/doctors/{{doctorId}}

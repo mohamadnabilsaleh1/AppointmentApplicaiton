@@ -24,12 +24,5 @@ namespace AppointmentApplication.Contracts.Requests.Doctors
 
         [Required(ErrorMessage = "Date of birth is required")]
         public DateOnly DateOfBirth { get; set; }
-
-        [Required(ErrorMessage = "Specialization ID is required")]
-        public Guid SpecializationId { get; set; }
-
-        [Required(ErrorMessage = "License number is required")]
-        [StringLength(50, ErrorMessage = "License number cannot exceed 50 characters")]
-        public string LicenseNumber { get; set; } = string.Empty;
     }
 }

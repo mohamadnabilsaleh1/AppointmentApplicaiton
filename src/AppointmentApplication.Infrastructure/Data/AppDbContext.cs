@@ -14,7 +14,6 @@ using AppointmentApplication.Domain.Doctors;
 using AppointmentApplication.Domain.Doctors.DoctorsTreatmentCapabilities;
 using AppointmentApplication.Domain.Doctors.ScheduleExceptions;
 using AppointmentApplication.Domain.Doctors.Schedules;
-using AppointmentApplication.Domain.Doctors.Specializations;
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.HealthcareFacilities.Departments;
 using AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions;
@@ -61,7 +60,6 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<Phone> Phones { get; set; }
 
     // Medical Entities
-    public DbSet<Specialization> Specializations { get; set; }
     public DbSet<Allergy> Allergies { get; set; }
     public DbSet<PatientChronicDisease> ChronicDiseases { get; set; }
 

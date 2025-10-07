@@ -1,6 +1,6 @@
 namespace AppointmentApplication.Domain.Doctors.Enums;
 
-public enum SpecializationId
+public enum Specialization
 {
     None = 0,
     Cardiology,

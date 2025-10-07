@@ -6,28 +6,34 @@ using System.Threading.Tasks;
 using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Dtos.HealthCareFacilities;
 using AppointmentApplication.API.Services;
+using AppointmentApplication.Application.Abstractions.Authentication;
+using AppointmentApplication.Application.Features.Doctors.Commands.CreateDoctor;
 using AppointmentApplication.Contracts.Requests.Doctors;
 using AppointmentApplication.Domain.Users;
 
 using Asp.Versioning;
+
 using MediatR;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 
 namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Doctors
 {
-    [Route("api/health-care-facility/me/doctors")]
+    [Route("api/health-care-facilities/me/doctors")]
     [Authorize(Roles = Roles.HealthCareFacility)]
     public sealed class AdminHealthCareFacilityDoctorsController : ApiController
     {
         private readonly ISender _sender;
         private readonly LinkService _linkService;
+        private readonly IUserContext _userContext; // للحصول على الـ UserId الحالي
 
-        public AdminHealthCareFacilityDoctorsController(ISender sender, LinkService linkService)
+        public AdminHealthCareFacilityDoctorsController(ISender sender, LinkService linkService, IUserContext userContext)
         {
             _sender = sender;
             _linkService = linkService;
+            _userContext = userContext;
         }
 
         [HttpGet]
@@ -66,9 +72,31 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Doctors
         [EndpointDescription("Adds a new doctor to the currently authenticated health care facility.")]
         public async Task<IActionResult> CreateDoctor([FromBody] CreateDoctorRequest request, CancellationToken cancellationToken)
         {
-            var createdDoctorId = Guid.NewGuid(); // placeholder
-            return CreatedAtRoute("GetDoctorById", new { id = createdDoctorId }, request);
+
+            var result = await _sender.Send(
+                new CreateDoctorCommand(_userContext.UserId, request.FirstName, request.LastName, request.Email, request.Password, request.Gender, request.LicenseNumber, request.Specialization, request.DateOfBirth),
+                cancellationToken);
+
+            return result.Match(
+                response =>
+                {
+                    var dto = response;
+                    var links = CreateLinks(response.Id); // HATEOAS links
+
+                    var resource = new
+                    {
+                        data = dto,
+                        links
+                    };
+
+                    return CreatedAtRoute(
+                        routeName: nameof(GetDoctorById),
+                        routeValues: new { id = response.Id, apiVersion = "0.1" },
+                        value: resource);
+                },
+                Problem);
         }
+
 
         [HttpPut("{id:guid}")]
         [MapToApiVersion("0.1")]

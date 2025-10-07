@@ -51,8 +51,6 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Schedules
                 Problem);
         }
 
-
-
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
