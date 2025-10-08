@@ -66,8 +66,8 @@ public class AppDbContext : DbContext, IAppDbContext
     // Doctor Entities
     public DbSet<Doctor> Doctors { get; set; }
     public DbSet<DoctorDepartment> DoctorDepartments { get; set; }
-    public DbSet<ScheduleDoctor> ScheduleDoctors { get; set; }
-    public DbSet<ScheduleExceptionDoctor> ScheduleExceptionDoctors { get; set; }
+    public DbSet<DoctorSchedule> ScheduleDoctors { get; set; }
+    public DbSet<DoctorScheduleException> ScheduleExceptionDoctors { get; set; }
     public DbSet<DoctorTreatmentCapacity> DoctorTreatmentCapacities { get; set; }
 
     // Patient Entities

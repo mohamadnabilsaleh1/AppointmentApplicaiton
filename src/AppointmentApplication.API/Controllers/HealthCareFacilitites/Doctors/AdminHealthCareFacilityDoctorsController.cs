@@ -8,6 +8,7 @@ using AppointmentApplication.API.Dtos.HealthCareFacilities;
 using AppointmentApplication.API.Services;
 using AppointmentApplication.Application.Abstractions.Authentication;
 using AppointmentApplication.Application.Features.Doctors.Commands.CreateDoctor;
+using AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorByUserId;
 using AppointmentApplication.Contracts.Requests.Doctors;
 using AppointmentApplication.Domain.Users;
 
@@ -44,9 +45,16 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Doctors
         [EndpointName("AdminGetDoctors")]
         [EndpointSummary("Retrieve all doctors")]
         [EndpointDescription("Fetches all doctors for the currently authenticated health care facility.")]
-        public async Task<IActionResult> GetDoctors(DoctorQueryParameters doctorQueryParameters, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetDoctors(CancellationToken cancellationToken)
         {
-            return Ok(new List<object>()); // placeholder
+            var result = await _sender.Send(new GetDoctorsByUserIdQuery(_userContext.UserId), cancellationToken);
+            return result.Match(
+                doctors =>
+                {
+                    var resource = new { data = doctors };
+                    return Ok(resource);
+                },
+                Problem);
         }
 
         [HttpGet("{id:guid}")]

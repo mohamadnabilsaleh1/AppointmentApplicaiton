@@ -19,25 +19,3 @@ namespace AppointmentApplication.Application.Features.Doctors.Dtos
         int Age
     );
 }
-
-/*
-  Guid UserId,
-        string FirstName,
-        string LastName,
-        string Email,
-        string Password,
-        Gender Gender,
-        string LicenseNumber,
-        Specialization Specialization,
-        DateOnly DateOfBirth
-*/
-
-/*
-public record ScheduleDto(
-    Guid Id,
-    DaysOfWeek DayOfWeek,
-    TimeSpan StartTime,
-    TimeSpan EndTime,
-    string Note
-);
-*/

@@ -56,8 +56,8 @@ public interface IAppDbContext
     DbSet<Doctor> Doctors { get; set; }
 
     DbSet<DoctorDepartment> DoctorDepartments { get; set; }
-    DbSet<ScheduleDoctor> ScheduleDoctors { get; set; }
-    DbSet<ScheduleExceptionDoctor> ScheduleExceptionDoctors { get; set; }
+    DbSet<DoctorSchedule> ScheduleDoctors { get; set; }
+    DbSet<DoctorScheduleException> ScheduleExceptionDoctors { get; set; }
     DbSet<DoctorTreatmentCapacity> DoctorTreatmentCapacities { get; set; }
 
     // Patient Entities

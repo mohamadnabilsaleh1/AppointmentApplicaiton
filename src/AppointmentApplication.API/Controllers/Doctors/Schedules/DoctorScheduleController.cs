@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
 using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Services;
-using AppointmentApplication.Contracts.Requests.Doctors.Schedules;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Queries.GetSchedulesByIdQuery;
+using AppointmentApplication.Application.HealthcareFacilities.Schedules.Queries;
+using AppointmentApplication.Contracts.Requests.HealthCareFacilitites;
+using AppointmentApplication.Domain.Shared.Results;
 
 using Asp.Versioning;
 
@@ -15,52 +13,74 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 
-namespace AppointmentApplication.API.Controllers;
-
-[Route("api/doctors/{doctor-id:guid}/schedules")]
-[Authorize(Roles = $"{Roles.Doctor}")]
-public sealed class DoctorScheduleController(ISender sender, LinkService linkService) : ApiController
+namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Schedules
 {
-    [HttpGet("{schedule-id:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [MapToApiVersion("0.1")]
-    [EndpointName("get-schedule")]
-    [EndpointSummary("Get Doctor Schedule by Id.")]
-    [EndpointDescription("Retrieves a single doctor schedule.")]
-    public async Task<IActionResult> GetSchedule(
-        [FromRoute(Name = "doctor-id")] Guid doctorId,
-        [FromRoute(Name = "schedule-id")] Guid scheduleId,
-        [FromQuery] string? fields,
-        CancellationToken cancellationToken)
+    [Route("api/health-care-facilities/{facilityId:guid}/schedules")]
+    [Authorize]
+    [ApiController]
+    public sealed class DoctorScheduleController : ApiController
     {
-        return Ok();
-    }
+        private readonly ISender _sender;
+        private readonly LinkService _linkService;
 
-    [HttpGet]
-    [MapToApiVersion("0.1")]
-    [EndpointName("list-schedules")]
-    [EndpointSummary("Get Doctor Schedules.")]
-    [EndpointDescription("Retrieves doctor schedules with optional filtering and pagination.")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [OutputCache(Duration = 60)]
-    public async Task<IActionResult> GetSchedules(
-        [FromRoute(Name = "doctor-id")] Guid doctorId,
-        CancellationToken cancellationToken)
-    {
-        return Ok();
-    }
-
-    private List<LinkDto> CreateLinks(Guid doctorId, Guid scheduleId, string? fields)
-    {
-        var links = new List<LinkDto>
+        public DoctorScheduleController(ISender sender, LinkService linkService)
         {
-            linkService.Create(nameof(GetSchedule), "self", HttpMethods.Get, new { doctorId, scheduleId, fields }),
-            linkService.Create(nameof(GetSchedules), "all", HttpMethods.Get, new { doctorId })
-        };
+            _sender = sender;
+            _linkService = linkService;
+        }
 
-        return links;
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [MapToApiVersion("0.1")]
+        [EndpointName("GetHealthCareFacilityScheduleById")]
+        [EndpointSummary("Get Health Care Facility Schedule by ID")]
+        [EndpointDescription("Retrieves a specific schedule for a health care facility by its unique identifier.")]
+        public async Task<IActionResult> GetDoctorScheduleById(Guid facilityId, Guid id, CancellationToken cancellationToken)
+        {
+            var result = await _sender.Send(new GetScheduleByIdQuery(facilityId, id), cancellationToken);
+
+            return result.Match(
+                schedule =>
+                {
+                    var links = CreateLinks(facilityId, id);
+                    var resource = new { data = schedule, links };
+                    return Ok(resource);
+                },
+                Problem);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [MapToApiVersion("0.1")]
+        [OutputCache(Duration = 60)]
+        [EndpointName("GetHealthCareFacilitySchedules")]
+        [EndpointSummary("Get Health Care Facility Schedules")]
+        [EndpointDescription("Retrieves all available schedules for a specific health care facility. Results are cached for 60 seconds.")]
+        public async Task<IActionResult> GetDoctorSchedules(Guid facilityId, CancellationToken cancellationToken)
+        {
+            var result = await _sender.Send(new GetSchedulesByIdQuery(facilityId), cancellationToken);
+
+            return result.Match(
+                schedules =>
+                {
+                    var resource = new { data = schedules };
+                    return Ok(resource);
+                },
+                Problem);
+        }
+
+        private List<LinkDto> CreateLinks(Guid facilityId, Guid? scheduleId = null)
+        {
+            var links = new List<LinkDto>
+            {
+                _linkService.Create(nameof(GetDoctorSchedules), "all", HttpMethods.Get, new { facilityId }),
+                _linkService.Create(nameof(GetDoctorScheduleById), "self", HttpMethods.Get, new { facilityId, id = scheduleId })
+            };
+
+            return links;
+        }
     }
 }
