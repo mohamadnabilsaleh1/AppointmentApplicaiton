@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using AppointmentApplication.Application.Features.Doctors.Errors;
+
 using AppointmentApplication.Application.Features.Doctors.Schedules.Mapper;
 
 using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
@@ -36,7 +38,7 @@ public class GetSchedulesByUserIdQueryHandler : IRequestHandler<GetSchedulesByUs
 
         if (doctor is null)
         {
-            return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.UserId);
+            return ApplicationDoctorErrors.DoctorNotFound(request.UserId);
         }
 
         var schedules = doctor.Schedules.ToDtos();

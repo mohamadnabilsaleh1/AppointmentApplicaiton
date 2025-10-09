@@ -21,11 +21,6 @@ namespace AppointmentApplication.Application.Features.Doctors.Errors
         public static readonly Error UserCreationFailed =
             Error.Failure("ApplicationDoctor.UserCreationFailed", "Failed to create user account for the doctor.");
 
-
-        // 🧩 Facility-Related Errors
-        public static Error FacilityNotFound(Guid facilityId) =>
-            Error.NotFound("ApplicationDoctor.FacilityNotFound", $"Healthcare facility with ID '{facilityId}' was not found.");
-
         public static Error FacilityNotActive(string facilityName) =>
             Error.Validation("ApplicationDoctor.FacilityNotActive", $"The healthcare facility '{facilityName}' is inactive and cannot add new doctors.");
 

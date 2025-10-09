@@ -6,6 +6,7 @@ using AppointmentApplication.Application.Abstractions.Authentication;
 using AppointmentApplication.Application.Features.Doctors.Dtos;
 using AppointmentApplication.Application.Features.Doctors.Errors;
 using AppointmentApplication.Application.Features.Doctors.Mappers;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
 using AppointmentApplication.Application.Shared.Interfaces;
 using AppointmentApplication.Domain.Doctors;
 using AppointmentApplication.Domain.HealthcareFacilities;
@@ -38,7 +39,7 @@ namespace AppointmentApplication.Application.Features.Doctors.Commands.CreateDoc
             if (facility == null)
             {
                 _logger.LogWarning("Doctor creation failed. Facility not found for UserId: {UserId}", request.UserId);
-                return ApplicationDoctorErrors.FacilityNotFound(request.UserId);
+                return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.UserId);
             }
 
             if (!facility.IsActive)

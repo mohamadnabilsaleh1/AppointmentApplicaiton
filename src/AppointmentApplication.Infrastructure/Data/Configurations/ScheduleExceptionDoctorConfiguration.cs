@@ -23,6 +23,6 @@ public class ScheduleExceptionDoctorConfiguration : IEntityTypeConfiguration<Doc
         builder.HasOne<Doctor>()
             .WithMany(d => d.ScheduleExceptions)
             .HasForeignKey(s => s.DoctorId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

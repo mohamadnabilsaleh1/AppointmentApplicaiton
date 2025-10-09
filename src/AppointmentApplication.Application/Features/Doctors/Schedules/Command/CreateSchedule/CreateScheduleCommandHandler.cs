@@ -2,6 +2,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
+using AppointmentApplication.Application.Features.Doctors.Errors;
+
 using AppointmentApplication.Application.Features.Doctors.Schedules.Mapper;
 
 using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
@@ -41,7 +43,7 @@ namespace AppointmentApplication.Application.Features.Doctors.Schedules.Commands
 
             if (doctor is null)
             {
-                return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.UserId);
+                return ApplicationDoctorErrors.DoctorNotFound(request.UserId);
             }
 
             // إنشاء الجدول

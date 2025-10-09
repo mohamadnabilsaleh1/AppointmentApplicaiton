@@ -3,26 +3,28 @@ using AppointmentApplication.Domain.Doctors.Schedules;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AppointmentApplication.Infrastructure.Data.Configurations;
-
-public class ScheduleDoctorConfiguration : IEntityTypeConfiguration<DoctorSchedule>
+namespace AppointmentApplication.Infrastructure.Data.Configurations
 {
-    public void Configure(EntityTypeBuilder<DoctorSchedule> builder)
+    public class ScheduleDoctorConfiguration : IEntityTypeConfiguration<DoctorSchedule>
     {
-        builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).ValueGeneratedNever();
-        builder.Property(e => e.DayOfWeek).IsRequired();
-        builder.Property(e => e.StartTime).IsRequired();
-        builder.Property(e => e.EndTime).IsRequired();
-        builder.Property(e => e.Status).IsRequired().HasMaxLength(50);
-        builder.Property(e => e.IsAvailable).IsRequired();
-        builder.Property(e => e.Note).HasMaxLength(500);
-        builder.Property(e => e.CreatedAtUtc).IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc);
+        public void Configure(EntityTypeBuilder<DoctorSchedule> builder)
+        {
+            builder.HasKey(e => e.Id);
+            builder.Property(e => e.Id).ValueGeneratedNever();
+            builder.Property(e => e.DayOfWeek).IsRequired();
+            builder.Property(e => e.StartTime).IsRequired();
+            builder.Property(e => e.EndTime).IsRequired();
+            builder.Property(e => e.Status).IsRequired().HasMaxLength(50);
+            builder.Property(e => e.IsAvailable).IsRequired();
+            builder.Property(e => e.Note).HasMaxLength(500);
+            builder.Property(e => e.CreatedAtUtc).IsRequired();
+            builder.Property(e => e.UpdatedAtdUtc);
 
-        builder.HasOne<Doctor>()
-            .WithMany(d => d.Schedules)
-            .HasForeignKey(s => s.DoctorId)
-            .OnDelete(DeleteBehavior.Restrict);
+            // ✅ Corrected relationship — explicitly use navigation property
+            builder.HasOne(s => s.Doctor)
+                .WithMany(d => d.Schedules)
+                .HasForeignKey(s => s.DoctorId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

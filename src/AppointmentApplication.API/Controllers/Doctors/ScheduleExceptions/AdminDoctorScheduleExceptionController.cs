@@ -1,9 +1,9 @@
 using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Services;
 using AppointmentApplication.Application.Abstractions.Authentication;
-using AppointmentApplication.Application.HealthcareFacilities.ScheduleExceptions.Commands;
-using AppointmentApplication.Application.HealthcareFacilities.ScheduleExceptions.Queries;
-using AppointmentApplication.Contracts.Requests.HealthCareFacilitites.ScheduleExceptions;
+using AppointmentApplication.Application.Features.Doctors.ScheduleExceptions.Mappers;
+
+using AppointmentApplication.Contracts.Requests.Doctors.ScheduleExceptions;
 using AppointmentApplication.Domain.Users;
 
 using Asp.Versioning;
@@ -17,12 +17,13 @@ using Microsoft.AspNetCore.OutputCaching;
 namespace AppointmentApplication.API.Controllers;
 
 [Route("api/doctors/me/schedule-exceptions")]
-[Authorize(Roles = Roles.HealthCareFacility)]
+[Authorize(Roles = Roles.Doctor)]
 public sealed class AdminDoctorScheduleExceptionController : ApiController
 {
     private readonly ISender _sender;
     private readonly LinkService _linkService;
     private readonly IUserContext _userContext;
+
     public AdminDoctorScheduleExceptionController(ISender sender, LinkService linkService, IUserContext userContext)
     {
         _sender = sender;
@@ -35,14 +36,22 @@ public sealed class AdminDoctorScheduleExceptionController : ApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointName("AdminCreateHealthCareFacilityScheduleException")]
+    [EndpointName("AdminCreateDoctorScheduleException")]
     [EndpointSummary("Creates a new schedule exception")]
-    [EndpointDescription("Adds a new schedule exception for the currently authenticated health care facility.")]
-    public async Task<IActionResult> CreateHealthCareFacilityScheduleException(
-        [FromBody] CreateHealthCareFacilityScheduleExceptionRequest request,
+    [EndpointDescription("Adds a new schedule exception for the currently authenticated doctor.")]
+    public async Task<IActionResult> CreateDoctorScheduleException(
+        [FromBody] CreateDoctorScheduleExceptionRequest request,
         CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new CreateScheduleExceptionCommand(_userContext.UserId, request.Date, request.StartTime, request.EndTime, request.Status, request.Reason), cancellationToken);
+        var result = await _sender.Send(
+            new CreateScheduleExceptionCommand(
+                _userContext.UserId,
+                request.Date,
+                request.StartTime,
+                request.EndTime,
+                request.Status,
+                request.Reason),
+            cancellationToken);
 
         return result.Match(
             schedule =>
@@ -50,9 +59,8 @@ public sealed class AdminDoctorScheduleExceptionController : ApiController
                 var links = CreateLinks(schedule.Id.ToString(), null);
                 var resource = new { data = schedule, links };
 
-                // ✅ الحل: استخدام CreatedAtAction بدلاً من CreatedAtRoute
                 return CreatedAtAction(
-                    nameof(GetHealthCareFacilityScheduleExceptionById),
+                    nameof(GetDoctorScheduleExceptionById),
                     new { id = schedule.Id },
                     resource);
             },
@@ -64,15 +72,18 @@ public sealed class AdminDoctorScheduleExceptionController : ApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointName("AdminGetHealthCareFacilityScheduleExceptionById")]
+    [EndpointName("AdminGetDoctorScheduleExceptionById")]
     [EndpointSummary("Retrieve a schedule exception by ID")]
-    [EndpointDescription("Fetches a specific schedule exception for the currently authenticated health care facility.")]
-    public async Task<IActionResult> GetHealthCareFacilityScheduleExceptionById(
+    [EndpointDescription("Fetches a specific schedule exception for the currently authenticated doctor.")]
+    public async Task<IActionResult> GetDoctorScheduleExceptionById(
         Guid id,
         string? fields,
         CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new GetScheduleExceptionByUserIdQuery(_userContext.UserId, id), cancellationToken);
+        var result = await _sender.Send(
+            new GetScheduleExceptionByUserIdQuery(_userContext.UserId, id),
+            cancellationToken);
+
         return result.Match(
             schedule =>
             {
@@ -88,13 +99,15 @@ public sealed class AdminDoctorScheduleExceptionController : ApiController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [OutputCache(Duration = 60)]
-    [EndpointName("AdminGetHealthCareFacilityScheduleExceptions")]
+    [EndpointName("AdminGetDoctorScheduleExceptions")]
     [EndpointSummary("Retrieve all schedule exceptions")]
-    [EndpointDescription("Fetches all schedule exceptions for the currently authenticated health care facility.")]
-    public async Task<IActionResult> GetHealthCareFacilityScheduleExceptions(
-        CancellationToken cancellationToken)
+    [EndpointDescription("Fetches all schedule exceptions for the currently authenticated doctor.")]
+    public async Task<IActionResult> GetDoctorScheduleExceptions(CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new GetScheduleExceptionsByUserIdQuery(_userContext.UserId), cancellationToken);
+        var result = await _sender.Send(
+            new GetScheduleExceptionsByUserIdQuery(_userContext.UserId),
+            cancellationToken);
+
         return result.Match(
             schedules =>
             {
@@ -110,15 +123,25 @@ public sealed class AdminDoctorScheduleExceptionController : ApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointName("AdminUpdateHealthCareFacilityScheduleException")]
+    [EndpointName("AdminUpdateDoctorScheduleException")]
     [EndpointSummary("Updates a schedule exception")]
-    [EndpointDescription("Modifies an existing schedule exception for the currently authenticated health care facility.")]
-    public async Task<IActionResult> UpdateHealthCareFacilityScheduleException(
+    [EndpointDescription("Modifies an existing schedule exception for the currently authenticated doctor.")]
+    public async Task<IActionResult> UpdateDoctorScheduleException(
         Guid id,
-        [FromBody] UpdateHealthCareFacilityScheduleExceptionRequest request,
+        [FromBody] UpdateDoctorScheduleExceptionRequest request,
         CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new UpdateScheduleExceptionCommand(_userContext.UserId, id, request.Date, request.StartTime, request.EndTime, request.Status, request.Reason), cancellationToken);
+        var result = await _sender.Send(
+            new UpdateScheduleExceptionCommand(
+                _userContext.UserId,
+                id,
+                request.Date,
+                request.StartTime,
+                request.EndTime,
+                request.Status,
+                request.Reason),
+            cancellationToken);
+
         return result.Match<IActionResult>(_ => NoContent(), Problem);
     }
 
@@ -127,14 +150,17 @@ public sealed class AdminDoctorScheduleExceptionController : ApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointName("AdminDeleteHealthCareFacilityScheduleException")]
+    [EndpointName("AdminDeleteDoctorScheduleException")]
     [EndpointSummary("Deletes a schedule exception")]
-    [EndpointDescription("Removes a specific schedule exception for the currently authenticated health care facility.")]
-    public async Task<IActionResult> DeleteHealthCareFacilityScheduleException(
+    [EndpointDescription("Removes a specific schedule exception for the currently authenticated doctor.")]
+    public async Task<IActionResult> DeleteDoctorScheduleException(
         Guid id,
         CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new DeleteScheduleExceptionCommand(_userContext.UserId, id), cancellationToken);
+        var result = await _sender.Send(
+            new DeleteScheduleExceptionCommand(_userContext.UserId, id),
+            cancellationToken);
+
         return result.Match<IActionResult>(_ => NoContent(), Problem);
     }
 
@@ -142,11 +168,11 @@ public sealed class AdminDoctorScheduleExceptionController : ApiController
     {
         return new List<LinkDto>
         {
-            _linkService.Create(nameof(GetHealthCareFacilityScheduleExceptionById), "self", HttpMethods.Get, new { id, fields }),
-            _linkService.Create(nameof(CreateHealthCareFacilityScheduleException), "create", HttpMethods.Post),
-            _linkService.Create(nameof(UpdateHealthCareFacilityScheduleException), "update", HttpMethods.Put, new { id }),
-            _linkService.Create(nameof(DeleteHealthCareFacilityScheduleException), "delete", HttpMethods.Delete, new { id }),
-            _linkService.Create(nameof(GetHealthCareFacilityScheduleExceptions), "all", HttpMethods.Get)
+            _linkService.Create(nameof(GetDoctorScheduleExceptionById), "self", HttpMethods.Get, new { id, fields }),
+            _linkService.Create(nameof(CreateDoctorScheduleException), "create", HttpMethods.Post),
+            _linkService.Create(nameof(UpdateDoctorScheduleException), "update", HttpMethods.Put, new { id }),
+            _linkService.Create(nameof(DeleteDoctorScheduleException), "delete", HttpMethods.Delete, new { id }),
+            _linkService.Create(nameof(GetDoctorScheduleExceptions), "all", HttpMethods.Get)
         };
     }
 }

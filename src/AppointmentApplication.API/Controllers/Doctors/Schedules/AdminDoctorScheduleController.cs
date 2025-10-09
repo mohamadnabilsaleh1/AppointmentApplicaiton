@@ -1,11 +1,12 @@
 using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Services;
 using AppointmentApplication.Application.Abstractions.Authentication;
-using AppointmentApplication.Application.Features.HealthcareFacilities.Queries.GetHealthCareFacilityByUserId;
-using AppointmentApplication.Application.HealthcareFacilities.Schedules.Commands;
-using AppointmentApplication.Application.HealthcareFacilities.Schedules.Queries;
+using AppointmentApplication.Application.Features.Doctors.Schedules.Commands;
+using AppointmentApplication.Application.Features.Doctors.Schedules.Queries;
+
 using AppointmentApplication.Application.Shared.Services;
-using AppointmentApplication.Contracts.Requests.HealthCareFacilitites;
+using AppointmentApplication.Contracts.Requests.Doctors;
+using AppointmentApplication.Contracts.Requests.Doctors.Schedules;
 using AppointmentApplication.Domain.Shared.Results;
 using AppointmentApplication.Domain.Users;
 
@@ -20,8 +21,8 @@ using Microsoft.AspNetCore.OutputCaching;
 namespace AppointmentApplication.API.Controllers;
 
 [ApiController]
-[Route("api/health-care-facilities/me/schedules")]
-[Authorize(Roles = Roles.HealthCareFacility)]
+[Route("api/doctors/me/schedules")]
+[Authorize(Roles = Roles.Doctor)]
 public sealed class AdminDoctorScheduleController : ApiController
 {
     private readonly ISender _sender;
@@ -40,14 +41,22 @@ public sealed class AdminDoctorScheduleController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointSummary("Creates a new Health Care Facility Schedule")]
-    [EndpointDescription("Adds a new schedule to the currently authenticated health care facility's availability.")]
-    [EndpointName("AdminCreateHealthCareFacilitySchedule")]
-    public async Task<IActionResult> CreateHealthCareFacilitySchedule(
-        [FromBody] CreateHealthcareFacilityScheduleRequest request,
+    [EndpointSummary("Creates a new Doctor Schedule")]
+    [EndpointDescription("Adds a new schedule to the currently authenticated doctor's availability.")]
+    [EndpointName("AdminCreateDoctorSchedule")]
+    public async Task<IActionResult> CreateDoctorSchedule(
+        [FromBody] CreateDoctorScheduleRequest request,
         CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new CreateScheduleCommand(_userContext.UserId, request.DayOfWeek, request.StartTime, request.EndTime, request.Status, request.Note), cancellationToken);
+        var result = await _sender.Send(
+            new CreateScheduleCommand(
+                _userContext.UserId,
+                request.DayOfWeek,
+                request.StartTime,
+                request.EndTime,
+                request.Status,
+                request.Note),
+            cancellationToken);
 
         return result.Match(
             schedule =>
@@ -55,24 +64,23 @@ public sealed class AdminDoctorScheduleController : ApiController
                 var links = CreateLinks(schedule.Id.ToString(), null);
                 var resource = new { data = schedule, links };
 
-                // ✅ الحل: استخدام CreatedAtAction بدلاً من CreatedAtRoute
                 return CreatedAtAction(
-                    nameof(GetHealthCareFacilityScheduleById),
+                    nameof(GetDoctorScheduleById),
                     new { id = schedule.Id },
                     resource);
             },
             Problem);
     }
 
-    [HttpGet("{id:guid}", Name = "GetHealthCareFacilityScheduleById")] // ✅ إضافة Name للـ Route
+    [HttpGet("{id:guid}", Name = "GetDoctorScheduleById")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointSummary("Get Health Care Facility Schedule by ID")]
-    [EndpointDescription("Retrieves a specific schedule for the currently authenticated health care facility.")]
-    [EndpointName("AdminGetHealthCareFacilityScheduleById")]
-    public async Task<IActionResult> GetHealthCareFacilityScheduleById(Guid id, CancellationToken cancellationToken)
+    [EndpointSummary("Get Doctor Schedule by ID")]
+    [EndpointDescription("Retrieves a specific schedule for the currently authenticated doctor.")]
+    [EndpointName("AdminGetDoctorScheduleById")]
+    public async Task<IActionResult> GetDoctorScheduleById(Guid id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetScheduleByUserIdQuery(_userContext.UserId, id), cancellationToken);
         return result.Match(
@@ -87,13 +95,13 @@ public sealed class AdminDoctorScheduleController : ApiController
 
     [HttpGet]
     [MapToApiVersion("0.1")]
-    [EndpointSummary("Get Health Care Facility Schedules")]
-    [EndpointDescription("Retrieves all schedules for the currently authenticated health care facility with pagination support.")]
+    [EndpointSummary("Get Doctor Schedules")]
+    [EndpointDescription("Retrieves all schedules for the currently authenticated doctor with pagination support.")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [OutputCache(Duration = 60)]
-    [EndpointName("AdminGetHealthCareFacilitySchedules")]
-    public async Task<IActionResult> GetHealthCareFacilitySchedules(CancellationToken cancellationToken)
+    [EndpointName("AdminGetDoctorSchedules")]
+    public async Task<IActionResult> GetDoctorSchedules(CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetSchedulesByUserIdQuery(_userContext.UserId), cancellationToken);
         return result.Match(
@@ -111,15 +119,26 @@ public sealed class AdminDoctorScheduleController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointSummary("Updates a Health Care Facility Schedule")]
-    [EndpointDescription("Modifies an existing schedule for the currently authenticated health care facility.")]
-    [EndpointGroupName("AdminUpdateHealthCareFacilitySchedule")]
-    public async Task<IActionResult> UpdateHealthCareFacilitySchedule(
+    [EndpointSummary("Updates a Doctor Schedule")]
+    [EndpointDescription("Modifies an existing schedule for the currently authenticated doctor.")]
+    [EndpointGroupName("AdminUpdateDoctorSchedule")]
+    public async Task<IActionResult> UpdateDoctorSchedule(
         Guid id,
-        [FromBody] UpdateHealthcareFacilityScheduleRequest request,
+        [FromBody] UpdateDoctorScheduleRequest request,
         CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new UpdateScheduleCommand(_userContext.UserId, id, request.DayOfWeek, request.StartTime, request.EndTime, request.Status, request.IsAvailable, request.Note), cancellationToken);
+        var result = await _sender.Send(
+            new UpdateScheduleCommand(
+                _userContext.UserId,
+                id,
+                request.DayOfWeek,
+                request.StartTime,
+                request.EndTime,
+                request.Status,
+                request.IsAvailable,
+                request.Note),
+            cancellationToken);
+
         return result.Match<IActionResult>(_ => NoContent(), Problem);
     }
 
@@ -128,10 +147,10 @@ public sealed class AdminDoctorScheduleController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [MapToApiVersion("0.1")]
-    [EndpointSummary("Deletes a Health Care Facility Schedule")]
-    [EndpointDescription("Removes a specific schedule from the currently authenticated health care facility.")]
-    [EndpointName("AdminDeleteHealthCareFacilitySchedule")]
-    public async Task<IActionResult> DeleteHealthCareFacilitySchedule(Guid id, CancellationToken cancellationToken)
+    [EndpointSummary("Deletes a Doctor Schedule")]
+    [EndpointDescription("Removes a specific schedule from the currently authenticated doctor.")]
+    [EndpointName("AdminDeleteDoctorSchedule")]
+    public async Task<IActionResult> DeleteDoctorSchedule(Guid id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new DeleteScheduleCommand(_userContext.UserId, id), cancellationToken);
         return result.Match<IActionResult>(_ => NoContent(), Problem);
@@ -141,11 +160,11 @@ public sealed class AdminDoctorScheduleController : ApiController
     {
         return new List<LinkDto>
         {
-            _linkService.Create(nameof(GetHealthCareFacilityScheduleById), "self", HttpMethods.Get, new { id, fields }),
-            _linkService.Create(nameof(CreateHealthCareFacilitySchedule), "create", HttpMethods.Post),
-            _linkService.Create(nameof(UpdateHealthCareFacilitySchedule), "update", HttpMethods.Put, new { id }),
-            _linkService.Create(nameof(DeleteHealthCareFacilitySchedule), "delete", HttpMethods.Delete, new { id }),
-            _linkService.Create(nameof(GetHealthCareFacilitySchedules), "all", HttpMethods.Get)
+            _linkService.Create(nameof(GetDoctorScheduleById), "self", HttpMethods.Get, new { id, fields }),
+            _linkService.Create(nameof(CreateDoctorSchedule), "create", HttpMethods.Post),
+            _linkService.Create(nameof(UpdateDoctorSchedule), "update", HttpMethods.Put, new { id }),
+            _linkService.Create(nameof(DeleteDoctorSchedule), "delete", HttpMethods.Delete, new { id }),
+            _linkService.Create(nameof(GetDoctorSchedules), "all", HttpMethods.Get)
         };
     }
 
@@ -153,7 +172,7 @@ public sealed class AdminDoctorScheduleController : ApiController
     {
         var links = new List<LinkDto>
         {
-            _linkService.Create("GetHealthCareFacilitySchedules", "self", HttpMethods.Get, new
+            _linkService.Create("GetDoctorSchedules", "self", HttpMethods.Get, new
             {
                 page = paginationResult.Page,
                 pageSize = paginationResult.PageSize
@@ -162,7 +181,7 @@ public sealed class AdminDoctorScheduleController : ApiController
 
         if (paginationResult.Page < paginationResult.TotalPages)
         {
-            links.Add(_linkService.Create("GetHealthCareFacilitySchedules", "next-page", HttpMethods.Get, new
+            links.Add(_linkService.Create("GetDoctorSchedules", "next-page", HttpMethods.Get, new
             {
                 page = paginationResult.Page + 1,
                 pageSize = paginationResult.PageSize
@@ -171,7 +190,7 @@ public sealed class AdminDoctorScheduleController : ApiController
 
         if (paginationResult.Page > 1)
         {
-            links.Add(_linkService.Create("GetHealthCareFacilitySchedules", "previous-page", HttpMethods.Get, new
+            links.Add(_linkService.Create("GetDoctorSchedules", "previous-page", HttpMethods.Get, new
             {
                 page = paginationResult.Page - 1,
                 pageSize = paginationResult.PageSize

@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using AppointmentApplication.Application.Features.Doctors.Errors;
+
 using AppointmentApplication.Application.Features.Doctors.Schedules.Mapper;
 
 using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
@@ -30,11 +32,11 @@ public class GetScheduleByIdQueryHandler : IRequestHandler<GetScheduleByIdQuery,
     {
         var doctor = await _context.Doctors
             .Include(f => f.Schedules)
-            .FirstOrDefaultAsync(f => f.Id == request.HealthCareFacilityId, cancellationToken);
+            .FirstOrDefaultAsync(f => f.Id == request.DoctorId, cancellationToken);
 
         if (doctor is null)
         {
-            return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.HealthCareFacilityId);
+            return ApplicationDoctorErrors.DoctorNotFound(request.DoctorId);
         }
 
         var scheduleResult = doctor.GetScheduleById(request.ScheduleId);
