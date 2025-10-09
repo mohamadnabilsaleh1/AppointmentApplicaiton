@@ -494,8 +494,7 @@ public sealed class HealthCareFacility : AuditableEntity
             gender,
             dateOfBirth,
             specialization,
-            licenseNumber
-        );
+            licenseNumber);
 
         if (doctorResult.IsError)
         {

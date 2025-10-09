@@ -29,12 +29,18 @@ public static class DependencyInjection
         services.AddSingleton(TimeProvider.System);
 
         string? connectionString = configuration.GetConnectionString("DefaultConnection");
+        string? countryConnectionString = configuration.GetConnectionString("CountryConnection");
 
         ArgumentNullException.ThrowIfNull(connectionString);
+        ArgumentNullException.ThrowIfNull(countryConnectionString);
 
         services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
         services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
+
+
+        services.AddDbContext<CountryUsersDbContext>(options => options.UseSqlServer(countryConnectionString));
+        services.AddScoped<ICountryUsersDbContext>(provider => provider.GetRequiredService<CountryUsersDbContext>());
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer();

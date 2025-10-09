@@ -27,4 +27,10 @@ public static class ApplicationUserErrors
     public static readonly Error AuthenticationFailed = Error.Failure(
         "Keycloak.AuthenticationFailed",
         "Failed to acquire access token do to authentication failure");
+    public static Error CitizenNotFound() => Error.NotFound(
+        "Citizen.NotFound",
+        $"Citizen not found ");
+
+    public static Error UserAlreadyExists(string email) =>
+            Error.Conflict("ApplicationUser.UserAlreadyExists", $"A user with the email '{email}' already exists.");
 }

@@ -1,0 +1,101 @@
+@baseUrl = http://localhost:5001
+@AdminToken = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NTk3ODc1MjIsImlhdCI6MTc1OTc1MTUyMiwianRpIjoib25ydHJvOmY1NmIxZmVjLWE2N2MtNjc0Yy03ZGY4LTdkMjYzNWRlNjZhZCIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIzNGMwMzcxZS0xMmEzLTRkM2MtYTJkNS1mNmJlNDUyOWRjNDMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6ImM4ZjBmYzRjLWViYTUtNGZmOS04Nzk2LWE1NGFjN2UyMWFhOCIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6Im1vaGFtYWQgYWRtaW4iLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhZG1pbkBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoibW9oYW1hZCIsImZhbWlseV9uYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSJ9.YcPr3EOJ9VsZ4UIYTyMnXBuMLfgkkHma-NGCQmEW5FUUi74zn0Jtk1VYhw3xDIsz9xZCV6IauZdLICQq4rI57Z4aWOANJqSXcpGobYCAvKIP41nm018-2PzusgBJIqqRPXnhubCowy4770J5ppmlrcFk1mKhG0U8viA_YS6DaH2I8w5xcgCMbSkIMpYl1sH5d2k9UP1sYrVSye5bI_hxQxf28P_IU7bDdgj7R0gvxRzOapDrnkHiJ1hKDAxwdna0r92IdYiYpuyidGq-Tm6jbEfF-iQKJdaiDFfn7Jj1TNbS8xA1H4AXWR-WWJq_KEG2JWDby1nyGVUe0FUL0hZGLw
+
+@DoctorToken = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NjAwMjk3NDYsImlhdCI6MTc1OTk5Mzc0NiwianRpIjoib25ydHJvOjQ1NzE1MDQxLTA0NGMtYWFiYi1jMDhjLTIwOWE3YzhjNjE2NSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIyMGJjODQ3Mi0wNmY0LTQ3MDQtOTRlZi05M2I3OGFjYjNlNTUiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6IjkyZTM4MTc0LThhOTMtNDFlOS1iM2I2LTUwYzliNjMwYTRlNiIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6ImFsaSBodXNpbmUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhbGlAZXhhbXBsZS5jb20iLCJnaXZlbl9uYW1lIjoiYWxpIiwiZmFtaWx5X25hbWUiOiJodXNpbmUiLCJlbWFpbCI6ImFsaUBleGFtcGxlLmNvbSJ9.fxb2MzPBG7b9vXzO8cTWSo582u_OoJBpBTz5ChrIo7GbftiGtLJ2Tg_kYlMKhuhwYDzHKnevJtU2LdgEnmOe81LcAMNx7ninq_3YyHA6X9s0ix_kA9xMbFKVGpBDBZCT19SqJcnu7fpN2FQ-niGnMeV7J_ewF8QQ7m8LC081L9IPY68D6-X0DhWidx7JGLuJ7s7tSm1BFDbY0LSKXMEcWz-58XJ15c6bqAktgWMgO4dR8j8zl7GxL-VXZflZAeOjFZStYSwY2xkqKD1Spq_ncWUGiKK6TqylEIBkklWaO7VmwQmKMnVk8tkypmk924oo2V7brhi64oqJfUzM5Vx2rw
+@endpoint=doctors
+
+@scheduleId = 7fb1cd22-4335-4b1c-8b61-1b5604a45095
+
+@doctorId=73d6656b-75f5-45cd-a8ad-8c7a2746323c
+### Create a Health Care Facility
+
+### create Doctor
+
+POST {{baseUrl}}/api/health-care-facilities/me/doctors
+Authorization: {{DoctorToken}}
+Content-Type: application/json
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "do.doe@example.com",
+    "password": "password123",
+    "gender": 1,
+    "dateOfBirth": "1985-05-15",
+    "specialization": 2,
+    "licenseNumber": "MED123456"
+}
+
+
+### login doctor
+
+POST http://localhost:5001/api/users/login
+Content-Type: application/json
+
+{
+    "email": "ali@example.com",
+    "Password": "12er56ui90MO@"
+}
+
+
+### create Schdule
+
+POST {{baseUrl}}/api/doctors/me/schedule-exceptions
+Authorization: {{DoctorToken}}
+Content-Type: application/json
+
+{
+  "date": "2022-05-15",
+  "dayOfWeek": 3,
+  "startTime": "08:00:00",
+  "endTime": "12:00:00",
+  "status": 1,
+  "reason": "Morning schedule"
+}
+
+
+
+### get Schules 
+GET {{baseUrl}}/api/doctors/me/schedule-exceptions
+Authorization: {{DoctorToken}}
+
+
+# ==========================
+# 🔹 GET Health Care Facility Schedule by ID
+# ==========================
+###
+GET {{baseUrl}}/api/doctors/me/schedule-exceptions/{{scheduleId}}
+Authorization: {{DoctorToken}}
+
+# ==========================
+# 🔹 UPDATE Health Care Facility Schedule
+# ==========================
+###
+PUT {{baseUrl}}/api/doctors/me/schedule-exceptions/{{scheduleId}}
+Authorization: {{DoctorToken}}
+Content-Type: application/json
+
+{
+  "date": "2024-01-18",
+  "dayOfWeek": 4,
+  "startTime": "09:00:00",
+  "endTime": "13:00:00",
+  "status": 1,
+  "reason": "Updated morning schedule fucking"
+}
+
+# ==========================
+# 🔹 DELETE Health Care Facility Schedule
+# ==========================
+###
+DELETE {{baseUrl}}/api/doctors/me/schedule-exceptions/{{scheduleId}}
+Authorization: {{DoctorToken}}
+
+###
+GET {{baseUrl}}/api/doctors/{{doctorId}}/schedule-exceptions
+
+# ==========================
+# 🔹 GET Health Care Facility Schedule by ID
+# ==========================
+###
+GET {{baseUrl}}/api/doctors/{{doctorId}}/schedule-exceptions/bf4f45cd-d6d3-47d6-b54d-a8a44c878dd5

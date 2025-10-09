@@ -176,6 +176,7 @@ namespace AppointmentApplication.Domain.Doctors
             UpdatedAtdUtc = DateTime.UtcNow;
             return Result.Updated;
         }
+
         public static int CalculateAge(DateOnly dateOfBirth)
         {
             var today = DateOnly.FromDateTime(DateTime.Today);
@@ -187,8 +188,10 @@ namespace AppointmentApplication.Domain.Doctors
             {
                 age--;
             }
+
             return age;
         }
+
         public Result<DoctorSchedule> AddSchedule(
         Guid id,
         DaysOfWeek dayOfWeek,
@@ -449,6 +452,7 @@ namespace AppointmentApplication.Domain.Doctors
 
             return scheduleException;
         }
+
         private static DaysOfWeek GetDayOfWeekFromDate(DateOnly date)
         {
             return date.DayOfWeek switch

@@ -47,9 +47,9 @@ public class DoctorScheduleException : AuditableEntity
         TimeSpan startTime, TimeSpan endTime, Status status, string reason)
     {
         return new DoctorScheduleException(
-            doctorId, date, dayOfWeek, startTime, endTime, status, reason
-        );
+            doctorId, date, dayOfWeek, startTime, endTime, status, reason);
     }
+
     public Result<Updated> Update(DateOnly date, DaysOfWeek dayOfWeek, TimeSpan startTime,
     TimeSpan endTime, Status status, string? reason)
     {

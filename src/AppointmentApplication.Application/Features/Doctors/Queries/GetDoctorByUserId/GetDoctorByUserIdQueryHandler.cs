@@ -33,6 +33,7 @@ namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorB
             _dataShapingService = dataShapingService;
             _dynamicQueryService = dynamicQueryService;
         }
+
         public async Task<Result<DoctorDto>> Handle(GetDoctorByUserIdQuery request, CancellationToken cancellationToken)
         {
             var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.UserId == request.UserId);

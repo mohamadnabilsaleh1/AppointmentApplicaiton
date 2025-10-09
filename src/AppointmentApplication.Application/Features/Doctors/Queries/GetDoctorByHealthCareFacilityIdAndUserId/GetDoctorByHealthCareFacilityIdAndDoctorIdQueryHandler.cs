@@ -35,6 +35,7 @@ namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorB
             _dataShapingService = dataShapingService;
             _dynamicQueryService = dynamicQueryService;
         }
+
         public async Task<Result<DoctorDto>> Handle(GetDoctorByHealthCareFacilityIdAndDoctorIdQuery request, CancellationToken cancellationToken)
         {
             var healthCareFacility = await _context.HealthcareFacilities
@@ -45,11 +46,13 @@ namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorB
             {
                 return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.HealthCareFacilityId);
             }
+
             var doctor = healthCareFacility.GetDoctorById(request.DoctorId);
             if (doctor is null)
             {
                 return ApplicationDoctorErrors.DoctorNotFound(request.DoctorId);
             }
+
             return doctor.Value.ToDto();
         }
 

@@ -85,8 +85,7 @@ namespace AppointmentApplication.Application.Features.Doctors.Commands.CreateDoc
                 request.Gender,
                 request.DateOfBirth,
                 request.Specialization,
-                request.LicenseNumber
-            );
+                request.LicenseNumber);
 
             if (createDoctorResult.IsError)
             {

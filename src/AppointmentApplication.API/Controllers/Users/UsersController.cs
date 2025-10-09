@@ -7,6 +7,7 @@ using AppointmentApplication.Application.Features.Users.Dtos;
 using AppointmentApplication.Application.Features.Users.GetLoggedInUser;
 
 using AppointmentApplication.Application.Features.Users.LogInUser;
+using AppointmentApplication.Application.Features.Users.RegisterPatient;
 
 using AppointmentApplication.Application.Features.Users.RegisterUser;
 using AppointmentApplication.Contracts.Requests;
@@ -57,7 +58,41 @@ public class UsersController(ISender sender) : ApiController
                     value: new { Id = userId, request.Email, request.FirstName, request.LastName }),
             Problem);
     }
+    /// <summary>
+    /// Registers a new patient.
+    /// </summary>
+    /// <param name="request">The patient registration details.</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Created patient ID or error details.</returns>
+    [AllowAnonymous]
+    [HttpPost("register-patient")]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+    [EndpointSummary("Registers a new patient.")]
+    [EndpointDescription("Creates a new patient account in the system.")]
+    [EndpointName("RegisterPatient")]
+    public async Task<IActionResult> RegisterPatient(
+        [FromBody] RegisterPatientRequest request,
+        CancellationToken cancellationToken)
+    {
+        /*string PhoneNumber, long NationalId, string Email, string Password*/
+        var command = new RegisterPatientCommand(
+            request.PhoneNumber,
+            request.NationalId,
+            request.Email,
+            request.Password);
 
+        Result<Guid> result = await sender.Send(command, cancellationToken);
+
+        return result.Match(
+            patientId =>
+                CreatedAtAction(
+                    actionName: nameof(GetUserById),
+                    routeValues: new { id = patientId },
+                    value: new { Id = patientId, request.Email, request.PhoneNumber, request.NationalId }),
+            Problem);
+    }
     /// <summary>
     /// Gets a user by ID (stub for CreatedAtAction reference).
     /// </summary>
