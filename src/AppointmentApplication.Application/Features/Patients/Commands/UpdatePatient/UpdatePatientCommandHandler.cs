@@ -29,6 +29,7 @@ namespace AppointmentApplication.Application.Features.Patients.Commands.UpdatePa
             _logger = logger;
             _context = context;
         }
+
         public async Task<Result<Updated>> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
         {
             var patient = await _context.Patients
@@ -38,6 +39,7 @@ namespace AppointmentApplication.Application.Features.Patients.Commands.UpdatePa
                 _logger.LogWarning("Patient not found. ID: {PatientId}", request.UserId);
                 return ApplicationPatientErrors.PatientNotFound(request.UserId);
             }
+
             var updateResult = patient.Update(request.NationalId, request.Gender, request.DateOfBirth);
 
             if (updateResult.IsError)
@@ -47,6 +49,7 @@ namespace AppointmentApplication.Application.Features.Patients.Commands.UpdatePa
                     string.Join(", ", updateResult.Errors));
                 return updateResult.Errors;
             }
+
             await _context.SaveChangesAsync(cancellationToken);
             _logger.LogInformation("Patient updated successfully. ID: {PatientId}", request.UserId);
             return Result.Updated;

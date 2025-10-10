@@ -36,6 +36,7 @@ namespace AppointmentApplication.Application.Features.Patients.Queries.GetPatien
             {
                 return PatientErrors.PatientNotFound;
             }
+
             return patient.ToDto();
         }
     }

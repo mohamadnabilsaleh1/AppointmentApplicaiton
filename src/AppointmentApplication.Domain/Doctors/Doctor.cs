@@ -22,7 +22,7 @@ namespace AppointmentApplication.Domain.Doctors
     public class Doctor : AuditableEntity
     {
         public Guid UserId { get; private set; }
-        public User User { get; private set; } = null!;
+        public User? User { get;  set; }
         public Guid FacilityId { get; private set; }
         public HealthCareFacility? HealthcareFacility { get; set; }
 
@@ -47,7 +47,11 @@ namespace AppointmentApplication.Domain.Doctors
         private readonly List<Appointment> _appointments = new();
         public IReadOnlyCollection<Appointment> Appointments => _appointments.AsReadOnly();
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+
         private Doctor() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+
 
         private Doctor(
             Guid id,

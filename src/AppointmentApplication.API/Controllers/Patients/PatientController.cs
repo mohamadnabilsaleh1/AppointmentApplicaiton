@@ -57,6 +57,7 @@ public sealed class PatientController : ApiController
             },
             Problem);
     }
+
 //     [HttpPut("me", Name = "UpdateMyDoctorProfile")]
 //     [Authorize(Roles = Roles.Doctor)]
 //     [ProducesResponseType(StatusCodes.Status200OK)]

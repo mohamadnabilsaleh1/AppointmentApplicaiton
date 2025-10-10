@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.MedicalRecords;
@@ -46,16 +47,28 @@ namespace AppointmentApplication.Domain.Patients
         public static Result<Patient> Create(Guid userId, string nationalId, string firstName, string lastName, Gender gender, DateOnly dateOfBirth)
         {
             if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
+            {
                 return PatientErrors.InvalidName;
+            }
+
 
             if (string.IsNullOrWhiteSpace(nationalId))
+            {
                 return PatientErrors.NationalId;
+            }
+
 
             if (dateOfBirth >= DateOnly.FromDateTime(DateTime.UtcNow))
+            {
                 return PatientErrors.InvalidDateOfBirth;
+            }
+
 
             if (!Enum.IsDefined(typeof(Gender), gender))
+            {
                 return PatientErrors.InvalidGender;
+            }
+
 
             return new Patient(userId, nationalId, firstName, lastName, gender, dateOfBirth);
         }
@@ -63,13 +76,22 @@ namespace AppointmentApplication.Domain.Patients
         public Result<Updated> Update(string nationalId, Gender gender, DateOnly dateOfBirth)
         {
             if (string.IsNullOrWhiteSpace(nationalId))
+            {
                 return PatientErrors.NationalId;
+            }
+
 
             if (dateOfBirth >= DateOnly.FromDateTime(DateTime.UtcNow))
+            {
                 return PatientErrors.InvalidDateOfBirth;
+            }
+
 
             if (!Enum.IsDefined(typeof(Gender), gender))
+            {
                 return PatientErrors.InvalidGender;
+            }
+
 
             NationalID = nationalId;
             Gender = gender;
@@ -88,6 +110,49 @@ namespace AppointmentApplication.Domain.Patients
         {
             IsActive = true;
             return Result.Updated;
+        }
+
+        public Result<Updated> AddAllergy(Allergy allergy)
+        {
+            if (Allergies.Contains(allergy))
+            {
+                return PatientErrors.AllergyAlreadyExists;
+            }
+
+            Allergies.Add(allergy);
+            return Result.Updated;
+        }
+
+        public Result<Deleted> DeleteAllergy(Allergy allergy)
+        {
+            if (!Allergies.Contains(allergy))
+            {
+                return PatientErrors.AllergyNotFound;
+            }
+
+            Allergies.Remove(allergy);
+            return Result.Deleted;
+        }
+
+        public Result<Updated> AddChronicDiseases(ChronicDisease chronicDisease)
+        {
+            if (ChronicDiseases.Contains(chronicDisease))
+            {
+                return PatientErrors.AllergyAlreadyExists;
+            }
+
+            ChronicDiseases.Add(chronicDisease);
+            return Result.Updated;
+        }
+        public Result<Deleted> DeleteChronicDisease(ChronicDisease chronicDisease)
+        {
+            if (!ChronicDiseases.Contains(chronicDisease))
+            {
+                return PatientErrors.ChronicDiseaseNotFound;
+            }
+
+            ChronicDiseases.Remove(chronicDisease);
+            return Result.Deleted;
         }
     }
 }

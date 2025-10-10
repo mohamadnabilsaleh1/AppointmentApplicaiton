@@ -9,9 +9,13 @@ namespace AppointmentApplication.Application.Features.Patients.Errors
 {
     public static class ApplicationPatientErrors
     {
-        public static Error PatientNotFound(Guid facilityId) =>
+        public static Error PatientNotFound(Guid patientId) =>
             Error.NotFound(
                 "Patient.NotFound",
-                $"Patient with ID '{facilityId}' was not found.");
+                $"Patient with ID '{patientId}' was not found.");
+        public static Error AllergyNotFound(Guid patientId) =>
+            Error.NotFound(
+                "Allergy.NotFound",
+                $"Allergy with ID '{patientId}' was not found for the patient.");
     }
 }

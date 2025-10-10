@@ -9,9 +9,15 @@ namespace AppointmentApplication.Domain.Patients
 {
     public class PatientErrors
     {
+        // AllergyAlreadyExists
         public static readonly Error PatientNotFound =
         Error.NotFound("Patient.NotFound", "Patient not found.");
-
+        public static readonly Error AllergyNotFound =
+        Error.NotFound("Allergy.NotFound", "Allergy not found for the patient.");
+        public static readonly Error ChronicDiseaseNotFound =
+        Error.NotFound("ChronicDisease.NotFound", "Chronic disease not found for the patient.");
+        public static readonly Error AllergyAlreadyExists =
+        Error.NotFound("Allergy.AlreadyExists", "Allergy already exists for the patient.");
         public static readonly Error InvalidName =
             Error.Validation("Patient.InvalidName", "First name and last name cannot be empty.");
 
