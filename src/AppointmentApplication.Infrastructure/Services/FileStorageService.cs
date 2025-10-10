@@ -33,7 +33,6 @@ namespace AppointmentApplication.Infrastructure.Services
                 Directory.CreateDirectory(folderPath);
             }
 
-
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
             var filePath = Path.Combine(folderPath, fileName);
 
@@ -56,10 +55,8 @@ namespace AppointmentApplication.Infrastructure.Services
             var fullPath = Path.Combine(_basePath, filePath);
             if (File.Exists(fullPath))
             {
-
                 File.Delete(fullPath);
             }
-
 
             return Task.CompletedTask;
         }

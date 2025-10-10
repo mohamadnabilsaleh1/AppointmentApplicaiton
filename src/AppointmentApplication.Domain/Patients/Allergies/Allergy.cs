@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
+
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Patients.Allergies.Enums;
+using AppointmentApplication.Domain.Shared.Results;
 
 namespace AppointmentApplication.Domain.Patients.Allergies
 {
@@ -20,6 +23,10 @@ namespace AppointmentApplication.Domain.Patients.Allergies
         {
             Id = id;
             Name = name;
+        }
+        public static Result<Allergy> Create(AllergyType allergyType)
+        {
+            return new Allergy(Guid.NewGuid(), allergyType);
         }
 
         // ✅ Static predefined instances لكل نوع حساسية

@@ -16,7 +16,6 @@ public class FacilityUpload : AuditableEntity
     private FacilityUpload() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-
     public Guid FacilityId { get; private set; }
     public string FileType { get; private set; }
     public string FileURL { get; private set; }
@@ -25,7 +24,6 @@ public class FacilityUpload : AuditableEntity
     public Visibility Visibility { get; private set; }
 
     public HealthCareFacility Facility { get; private set; }
-    
 
     public static FacilityUpload Create(Guid facilityId, string fileType, string fileUrli,
         string title, string description, Visibility visibility = Visibility.Public)

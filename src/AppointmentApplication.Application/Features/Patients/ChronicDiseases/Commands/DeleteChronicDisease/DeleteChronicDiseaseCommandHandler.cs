@@ -36,14 +36,7 @@ namespace AppointmentApplication.Application.Features.Patients.ChronicDiseases.C
                 return ApplicationPatientErrors.PatientNotFound(request.UserId);
             }
 
-            var chronicDisease = await _context.ChronicDiseases
-                .FirstOrDefaultAsync(a => a.Name == request.ChronicDiseaseType, cancellationToken);
-            if (chronicDisease == null)
-            {
-                return ApplicationPatientErrors.AllergyNotFound(request.UserId);
-            }
-
-            patient.DeleteChronicDisease(chronicDisease);
+            patient.DeleteChronicDisease(request.ChronicDiseaseId);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result.Deleted;

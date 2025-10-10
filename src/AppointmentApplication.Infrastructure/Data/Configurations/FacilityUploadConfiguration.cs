@@ -1,4 +1,5 @@
 using AppointmentApplication.Domain.MediaUploads;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,9 +15,8 @@ public class FacilityUploadConfiguration : IEntityTypeConfiguration<FacilityUplo
         builder.Property(e => e.FileURL).IsRequired();
         builder.Property(e => e.Title).HasMaxLength(100);
         builder.Property(e => e.Description);
-        builder.Property(e => e.Visibility).IsRequired().HasMaxLength(20).HasDefaultValue("Public");
-        builder.Property(e => e.IsActive).IsRequired().HasDefaultValue(true);
-        builder.Property(e => e.UploadedAt).IsRequired();
+        builder.Property(e => e.Visibility).IsRequired();
+
         builder.Property(e => e.CreatedAtUtc).IsRequired();
         builder.Property(e => e.UpdatedAtdUtc);
 
@@ -25,6 +25,5 @@ public class FacilityUploadConfiguration : IEntityTypeConfiguration<FacilityUplo
             .HasForeignKey(fum => fum.FacilityId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasQueryFilter(e => e.IsActive);
     }
 }

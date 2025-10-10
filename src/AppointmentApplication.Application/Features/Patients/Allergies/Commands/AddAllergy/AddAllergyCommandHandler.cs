@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentApplication.Application.Features.Patients.Commands.AddAllergy
 {
-    public class AddAllergyCommandHandler : IRequestHandler<AddAllergyCommand, Result<Created>>
+    public class AddAllergyCommandHandler : IRequestHandler<AddAllergyCommand, Result<Allergy>>
     {
         private readonly IAppDbContext _context;
 
@@ -26,10 +26,8 @@ namespace AppointmentApplication.Application.Features.Patients.Commands.AddAller
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<Result<Created>> Handle(AddAllergyCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Allergy>> Handle(AddAllergyCommand request, CancellationToken cancellationToken)
         {
-            var allergy = await _context.Allergies
-                .FirstOrDefaultAsync(a => a.Name == request.AllergyType, cancellationToken) ?? Allergy.GetAll().FirstOrDefault(a => a.Name == request.AllergyType);
             var patient = await _context.Patients
                 .FirstOrDefaultAsync(p => p.UserId == request.UserId, cancellationToken);
 
@@ -38,10 +36,10 @@ namespace AppointmentApplication.Application.Features.Patients.Commands.AddAller
                 return ApplicationPatientErrors.PatientNotFound(request.UserId);
             }
 
-            patient.AddAllergy(allergy!);
+            var allergyResult = patient.AddAllergy(request.AllergyType);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Created;
+            return allergyResult.Value;
         }
 
     }

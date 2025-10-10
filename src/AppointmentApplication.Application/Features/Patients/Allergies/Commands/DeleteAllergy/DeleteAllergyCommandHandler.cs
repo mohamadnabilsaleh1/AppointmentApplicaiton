@@ -35,16 +35,8 @@ namespace AppointmentApplication.Application.Features.Patients.Allergies.Command
                 return ApplicationPatientErrors.PatientNotFound(request.UserId);
             }
 
-            var allergy = await _context.Allergies
-                .FirstOrDefaultAsync(a => a.Name == request.AllergyType, cancellationToken);
-            if (allergy == null)
-            {
-                return ApplicationPatientErrors.AllergyNotFound(request.UserId);
-            }
-
-            patient.DeleteAllergy(allergy);
+            patient.DeleteAllergy(request.AllergyId);
             await _context.SaveChangesAsync(cancellationToken);
-
             return Result.Deleted;
         }
 

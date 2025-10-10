@@ -1,11 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Appointments;
+using AppointmentApplication.Domain.MediaUploads;
+using AppointmentApplication.Domain.MediaUploads.Enums;
 using AppointmentApplication.Domain.MedicalRecords;
 using AppointmentApplication.Domain.Patients.Allergies;
+using AppointmentApplication.Domain.Patients.Allergies.Enums;
 using AppointmentApplication.Domain.Patients.ChronicDiseases;
+using AppointmentApplication.Domain.Patients.ChronicDiseases.Enums;
 using AppointmentApplication.Domain.Shared.Enums;
 using AppointmentApplication.Domain.Shared.Results;
 using AppointmentApplication.Domain.Users;
@@ -14,10 +19,13 @@ namespace AppointmentApplication.Domain.Patients
 {
     public class Patient : AuditableEntity
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+
         private Patient() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
         public Guid UserId { get; private set; }
-        public User? User { get; set; }
+        public User? User { get; private set; }
         public string NationalID { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
@@ -25,13 +33,23 @@ namespace AppointmentApplication.Domain.Patients
         public DateOnly DateOfBirth { get; private set; }
         public bool IsActive { get; private set; }
 
-        // 👇 Direct many-to-many
-        public ICollection<Allergy> Allergies { get; private set; } = new List<Allergy>();
-        public ICollection<ChronicDisease> ChronicDiseases { get; private set; } = new List<ChronicDisease>();
+        // ✅ Private fields for encapsulation
+        private readonly List<Allergy> _allergies = new();
+        public IReadOnlyCollection<Allergy> Allergies => _allergies.AsReadOnly();
 
-        public ICollection<Appointment> Appointments { get; private set; } = new List<Appointment>();
-        public ICollection<MedicalRecord> MedicalRecords { get; private set; } = new List<MedicalRecord>();
+        private readonly List<ChronicDisease> _chronicDiseases = new();
+        public IReadOnlyCollection<ChronicDisease> ChronicDiseases => _chronicDiseases.AsReadOnly();
 
+        private readonly List<Appointment> _appointments = new();
+        public IReadOnlyCollection<Appointment> Appointments => _appointments.AsReadOnly();
+
+        private readonly List<MedicalRecord> _medicalRecords = new();
+        public IReadOnlyCollection<MedicalRecord> MedicalRecords => _medicalRecords.AsReadOnly();
+
+        private readonly List<PatientUpload> _uploads = new();
+        public IReadOnlyCollection<PatientUpload> Uploads => _uploads.AsReadOnly();
+
+        // ✅ Constructor
         public Patient(Guid userId, string nationalId, string firstName, string lastName, Gender gender, DateOnly dateOfBirth)
         {
             Id = Guid.NewGuid();
@@ -44,6 +62,7 @@ namespace AppointmentApplication.Domain.Patients
             IsActive = true;
         }
 
+        // ✅ Factory Method
         public static Result<Patient> Create(Guid userId, string nationalId, string firstName, string lastName, Gender gender, DateOnly dateOfBirth)
         {
             if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
@@ -51,28 +70,25 @@ namespace AppointmentApplication.Domain.Patients
                 return PatientErrors.InvalidName;
             }
 
-
             if (string.IsNullOrWhiteSpace(nationalId))
             {
                 return PatientErrors.NationalId;
             }
-
 
             if (dateOfBirth >= DateOnly.FromDateTime(DateTime.UtcNow))
             {
                 return PatientErrors.InvalidDateOfBirth;
             }
 
-
             if (!Enum.IsDefined(typeof(Gender), gender))
             {
                 return PatientErrors.InvalidGender;
             }
 
-
             return new Patient(userId, nationalId, firstName, lastName, gender, dateOfBirth);
         }
 
+        // ✅ Update methods
         public Result<Updated> Update(string nationalId, Gender gender, DateOnly dateOfBirth)
         {
             if (string.IsNullOrWhiteSpace(nationalId))
@@ -80,18 +96,15 @@ namespace AppointmentApplication.Domain.Patients
                 return PatientErrors.NationalId;
             }
 
-
             if (dateOfBirth >= DateOnly.FromDateTime(DateTime.UtcNow))
             {
                 return PatientErrors.InvalidDateOfBirth;
             }
 
-
             if (!Enum.IsDefined(typeof(Gender), gender))
             {
                 return PatientErrors.InvalidGender;
             }
-
 
             NationalID = nationalId;
             Gender = gender;
@@ -112,47 +125,133 @@ namespace AppointmentApplication.Domain.Patients
             return Result.Updated;
         }
 
-        public Result<Updated> AddAllergy(Allergy allergy)
+        // ✅ Domain logic
+        public Result<Allergy> AddAllergy(AllergyType allergy)
         {
-            if (Allergies.Contains(allergy))
+            var allergyExist = _allergies.FirstOrDefault(a => a.Name == allergy);
+            if (allergyExist != null)
             {
                 return PatientErrors.AllergyAlreadyExists;
             }
-
-            Allergies.Add(allergy);
-            return Result.Updated;
+            var allergyResult = Allergy.Create(allergy);
+            if (allergyResult.IsError)
+            {
+                return allergyResult.Errors;
+            }
+            _allergies.Add(allergyResult.Value);
+            return allergyResult.Value;
         }
 
-        public Result<Deleted> DeleteAllergy(Allergy allergy)
+        public Result<Deleted> DeleteAllergy(Guid allergyId)
         {
-            if (!Allergies.Contains(allergy))
+            var allergy = _allergies.FirstOrDefault(a => a.Id == allergyId);
+            if (allergy == null)
             {
                 return PatientErrors.AllergyNotFound;
             }
 
-            Allergies.Remove(allergy);
+            _allergies.Remove(allergy);
             return Result.Deleted;
         }
 
-        public Result<Updated> AddChronicDiseases(ChronicDisease chronicDisease)
+        public Result<ChronicDisease> AddChronicDisease(ChronicDiseaseType chronicDisease)
         {
-            if (ChronicDiseases.Contains(chronicDisease))
+            var existing = _chronicDiseases.FirstOrDefault(cd => cd.Name == chronicDisease);
+            if (existing != null)
             {
-                return PatientErrors.AllergyAlreadyExists;
+                return PatientErrors.ChronicDiseaseAlreadyExists;
             }
 
-            ChronicDiseases.Add(chronicDisease);
-            return Result.Updated;
+            var chronicResult = ChronicDisease.Create(chronicDisease);
+            if (chronicResult.IsError)
+            {
+                return chronicResult.Errors;
+            }
+
+            _chronicDiseases.Add(chronicResult.Value);
+            return chronicResult.Value;
         }
-        public Result<Deleted> DeleteChronicDisease(ChronicDisease chronicDisease)
+
+        public Result<Deleted> DeleteChronicDisease(Guid chronicDiseaseId)
         {
-            if (!ChronicDiseases.Contains(chronicDisease))
+            var chronicDisease = _chronicDiseases.FirstOrDefault(cd => cd.Id == chronicDiseaseId);
+            if (chronicDisease == null)
             {
                 return PatientErrors.ChronicDiseaseNotFound;
             }
 
-            ChronicDiseases.Remove(chronicDisease);
+            _chronicDiseases.Remove(chronicDisease);
             return Result.Deleted;
+        }
+
+        public Result<PatientUpload> AddUpload(Guid patientId, string fileType, string fileUrl,
+            string title, string description, Visibility visibility = Visibility.Public)
+        {
+            var uploadResult = PatientUpload.Create(patientId, fileType, fileUrl, title, description, visibility);
+            if (uploadResult.IsError)
+            {
+                return uploadResult.Errors;
+            }
+
+            _uploads.Add(uploadResult.Value);
+            return uploadResult.Value;
+        }
+        public Result<Updated> UpdateUpload(Guid uploadId, string title, string description)
+        {
+            var upload = _uploads.FirstOrDefault(u => u.Id == uploadId);
+            if (upload == null)
+            {
+                return PatientErrors.UploadNotFound;
+            }
+
+            var updateResult = upload.Update(title, description);
+            if (updateResult.IsError)
+            {
+                return updateResult.Errors;
+            }
+
+            return Result.Updated;
+        }
+        public Result<Updated> ChangeUploadVisibilityToPublic(Guid uploadId)
+        {
+            var upload = _uploads.FirstOrDefault(u => u.Id == uploadId);
+            if (upload == null)
+            {
+                return PatientErrors.UploadNotFound;
+            }
+
+            var changeResult = upload.ChangeVisibilityToPublic();
+            if (changeResult.IsError)
+            {
+                return changeResult.Errors;
+            }
+
+            return Result.Updated;
+        }
+        public Result<Updated> ChangeUploadVisibilityToPrivate(Guid uploadId)
+        {
+            var upload = _uploads.FirstOrDefault(u => u.Id == uploadId);
+            if (upload == null)
+            {
+                return PatientErrors.UploadNotFound;
+            }
+
+            var changeResult = upload.ChangeVisibilityToPrivate();
+            if (changeResult.IsError)
+            {
+                return changeResult.Errors;
+            }
+
+            return Result.Updated;
+        }
+        public Result<PatientUpload> GetUploadedById(Guid uploadId)
+        {
+            var upload = _uploads.FirstOrDefault(u => u.Id == uploadId);
+            if (upload == null)
+            {
+                return PatientErrors.UploadNotFound;
+            }
+            return upload;
         }
     }
 }

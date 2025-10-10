@@ -13,7 +13,6 @@ namespace AppointmentApplication.Application.Features.Doctors.Errors
         public static readonly Error UnexpectedError =
             Error.Failure("ApplicationDoctor.UnexpectedError", "An unexpected error occurred while processing the doctor request.");
 
-
         // 🧩 User-Related Errors
         public static Error UserAlreadyExists(string email) =>
             Error.Conflict("ApplicationDoctor.UserAlreadyExists", $"A user with the email '{email}' already exists.");
@@ -23,7 +22,6 @@ namespace AppointmentApplication.Application.Features.Doctors.Errors
 
         public static Error FacilityNotActive(string facilityName) =>
             Error.Validation("ApplicationDoctor.FacilityNotActive", $"The healthcare facility '{facilityName}' is inactive and cannot add new doctors.");
-
 
         // 🧩 Doctor-Related Errors
         public static Error DoctorNotFound(Guid doctorId) =>

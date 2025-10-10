@@ -104,7 +104,6 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Doctors
                 Problem);
         }
 
-
         [HttpPut("{id:guid}")]
         [MapToApiVersion("0.1")]
         [ProducesResponseType(StatusCodes.Status200OK)]

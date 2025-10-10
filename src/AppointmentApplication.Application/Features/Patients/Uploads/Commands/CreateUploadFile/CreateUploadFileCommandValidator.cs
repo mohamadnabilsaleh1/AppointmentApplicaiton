@@ -7,6 +7,5 @@ namespace AppointmentApplication.Application.Features.Patients.Uploads.Commands.
 {
     public class CreateUploadFileCommandValidator
     {
-        
     }
 }

@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AppointmentApplication.Application.Features.Patients.Uploads.Commands.CreateUploadFile
 {
-    public class CreateUploadFileCommandHandler : IRequestHandler<CreateUploadFileCommand, Result<Guid>>
+    public class CreateUploadFileCommandHandler : IRequestHandler<CreateUploadFileCommand, Result<PatientUpload>>
     {
         private readonly ILogger<CreateUploadFileCommandHandler> _logger;
         private readonly IAppDbContext _context;
@@ -30,7 +30,7 @@ namespace AppointmentApplication.Application.Features.Patients.Uploads.Commands.
             _fileStorageService = fileStorageService;
         }
 
-        public async Task<Result<Guid>> Handle(CreateUploadFileCommand request, CancellationToken cancellationToken)
+        public async Task<Result<PatientUpload>> Handle(CreateUploadFileCommand request, CancellationToken cancellationToken)
         {
             var patient = _context.Patients
                 .FirstOrDefault(p => p.UserId == request.UserId);
@@ -71,8 +71,7 @@ namespace AppointmentApplication.Application.Features.Patients.Uploads.Commands.
                 "File uploaded successfully for patient {PatientId}. Upload ID: {UploadId}",
                 patient.Id, uploadResult.Value.Id);
 
-            return uploadResult.Value.Id;
-
+            return uploadResult.Value;
 
         }
     }

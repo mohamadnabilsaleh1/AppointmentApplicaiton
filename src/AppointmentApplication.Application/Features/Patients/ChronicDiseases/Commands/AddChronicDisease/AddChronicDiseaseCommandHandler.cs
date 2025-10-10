@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentApplication.Application.Features.Patients.Commands.AddChronicDisease;
 
-public class AddChronicDiseaseCommandHandler : IRequestHandler<AddChronicDiseaseCommand, Result<Created>>
+public class AddChronicDiseaseCommandHandler : IRequestHandler<AddChronicDiseaseCommand, Result<ChronicDisease>>
 {
     private readonly IAppDbContext _context;
 
@@ -22,10 +22,8 @@ public class AddChronicDiseaseCommandHandler : IRequestHandler<AddChronicDisease
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task<Result<Created>> Handle(AddChronicDiseaseCommand request, CancellationToken cancellationToken)
+    public async Task<Result<ChronicDisease>> Handle(AddChronicDiseaseCommand request, CancellationToken cancellationToken)
     {
-        var chronicDisease = await _context.ChronicDiseases
-            .FirstOrDefaultAsync(a => a.Name == request.ChronicDiseaseType, cancellationToken) ?? ChronicDisease.GetAll().FirstOrDefault(a => a.Name == request.ChronicDiseaseType);
         var patient = await _context.Patients
             .FirstOrDefaultAsync(p => p.UserId == request.UserId, cancellationToken);
 
@@ -34,9 +32,9 @@ public class AddChronicDiseaseCommandHandler : IRequestHandler<AddChronicDisease
             return ApplicationPatientErrors.PatientNotFound(request.UserId);
         }
 
-        patient.AddChronicDiseases(chronicDisease!);
+        var chronicDiseaseResult = patient.AddChronicDisease(request.ChronicDiseaseType);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return Result.Created;
+        return chronicDiseaseResult.Value;
     }
 }

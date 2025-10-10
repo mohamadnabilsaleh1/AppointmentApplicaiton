@@ -66,7 +66,6 @@ public sealed class DoctorController : ApiController
             Problem);
     }
 
-
     [HttpGet]
     [MapToApiVersion("0.1")]
     [EndpointSummary("Get Doctors.")]

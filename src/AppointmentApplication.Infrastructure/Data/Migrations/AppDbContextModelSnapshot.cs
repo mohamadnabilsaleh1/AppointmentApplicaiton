@@ -662,11 +662,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -678,15 +673,8 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("UploadedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Visibility")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasDefaultValue("Public");
+                    b.Property<int>("Visibility")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -721,15 +709,13 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PatientId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
@@ -740,19 +726,14 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("UpdatedAtdUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("UploadedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Visibility")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasDefaultValue("Public");
+                    b.Property<int>("Visibility")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PatientId");
+
+                    b.HasIndex("PatientId1");
 
                     b.ToTable("PatientUploads");
                 });
@@ -1823,6 +1804,10 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("AppointmentApplication.Domain.Patients.Patient", null)
+                        .WithMany("Uploads")
+                        .HasForeignKey("PatientId1");
+
                     b.Navigation("Patient");
                 });
 
@@ -2044,6 +2029,8 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Navigation("Appointments");
 
                     b.Navigation("MedicalRecords");
+
+                    b.Navigation("Uploads");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.Users.Role", b =>

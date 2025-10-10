@@ -42,19 +42,19 @@ public class PatientUpload : AuditableEntity
         return new PatientUpload(patientId, fileType, fileUrli, title, description, visibility);
     }
 
-    public Result<Updated> Update(string title, string description, string visibility)
+    public Result<Updated> Update(string title, string description)
     {
         Title = title;
         Description = description;
         return Result.Updated;
     }
 
-    public Result<Updated> UpdateVisibilityToPublic()
+    public Result<Updated> ChangeVisibilityToPublic()
     {
         Visibility = Visibility.Public;
         return Result.Updated;
     }
-    public Result<Updated> UpdateVisibilityToPrivate()
+    public Result<Updated> ChangeVisibilityToPrivate()
     {
         Visibility = Visibility.Private;
         return Result.Updated;

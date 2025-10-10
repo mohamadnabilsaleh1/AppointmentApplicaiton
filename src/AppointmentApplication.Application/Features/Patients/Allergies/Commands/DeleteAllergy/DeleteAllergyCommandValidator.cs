@@ -14,8 +14,8 @@ namespace AppointmentApplication.Application.Features.Patients.Allergies.Command
             RuleFor(p => p.UserId)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
 
-            RuleFor(p => p.AllergyType)
-                .IsInEnum().WithMessage("{PropertyName} is not valid.");
+            RuleFor(p => p.AllergyId)
+                .NotEmpty().WithMessage("{PropertyName} is required.");
         }
     }
 }

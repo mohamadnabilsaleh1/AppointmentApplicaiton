@@ -14,9 +14,8 @@ public class PatientUploadConfiguration : IEntityTypeConfiguration<PatientUpload
         builder.Property(e => e.FileURL).IsRequired();
         builder.Property(e => e.Title).HasMaxLength(100);
         builder.Property(e => e.Description);
-        builder.Property(e => e.Visibility).IsRequired().HasMaxLength(20).HasDefaultValue("Public");
-        builder.Property(e => e.IsActive).IsRequired().HasDefaultValue(true);
-        builder.Property(e => e.UploadedAt).IsRequired();
+        builder.Property(e => e.Visibility).IsRequired();
+
         builder.Property(e => e.CreatedAtUtc).IsRequired();
         builder.Property(e => e.UpdatedAtdUtc);
 
@@ -25,6 +24,5 @@ public class PatientUploadConfiguration : IEntityTypeConfiguration<PatientUpload
             .HasForeignKey(pu => pu.PatientId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasQueryFilter(e => e.IsActive);
     }
 }

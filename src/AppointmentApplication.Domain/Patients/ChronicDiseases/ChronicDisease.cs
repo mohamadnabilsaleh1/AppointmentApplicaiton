@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Patients.ChronicDiseases.Enums;
+using AppointmentApplication.Domain.Shared.Results;
 
 namespace AppointmentApplication.Domain.Patients.ChronicDiseases
 {
@@ -14,13 +15,17 @@ namespace AppointmentApplication.Domain.Patients.ChronicDiseases
         public ICollection<Patient> Patients { get; private set; } = new List<Patient>();
 
         // ✅ Required by EF Core
-        public ChronicDisease() { }
+        private ChronicDisease() { }
 
         // ✅ Main constructor
-        public ChronicDisease(Guid id, ChronicDiseaseType name)
+        private ChronicDisease(Guid id, ChronicDiseaseType name)
         {
             Id = id;
             Name = name;
+        }
+        public static Result<ChronicDisease> Create(ChronicDiseaseType chronicDiseaseType)
+        {
+            return new ChronicDisease(Guid.NewGuid(), chronicDiseaseType);
         }
 
         // ✅ Static predefined instances (with fixed Guids for seeding)
