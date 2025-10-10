@@ -77,6 +77,11 @@ public class HealthCareFacilityConfiguration : IEntityTypeConfiguration<HealthCa
             .WithOne(d => d.HealthcareFacility)
             .HasForeignKey(d => d.FacilityId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasOne(e => e.User) // Use navigation property
+            .WithMany(u => u.HealthCareFacilities)
+            .HasForeignKey(e => e.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Query filter
         builder.HasQueryFilter(e => e.IsActive);

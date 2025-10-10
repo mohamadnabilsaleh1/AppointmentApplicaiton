@@ -21,7 +21,6 @@ namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorB
 {
     public class GetDoctorByHealthCareFacilityIdAndDoctorIdQueryHandler : IRequestHandler<GetDoctorByHealthCareFacilityIdAndDoctorIdQuery, Result<DoctorDto>>
     {
-
         private readonly IAppDbContext _context;
         private readonly DynamicQueryService _dynamicQueryService;
         private readonly DataShapingService _dataShapingService;

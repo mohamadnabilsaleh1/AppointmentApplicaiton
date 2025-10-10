@@ -26,7 +26,6 @@ namespace AppointmentApplication.API.Controllers;
 [Route("api/doctors")]
 public sealed class DoctorController : ApiController
 {
-
     private readonly ISender _sender;
     private readonly LinkService _linkService;
     private readonly IUserContext _userContext;

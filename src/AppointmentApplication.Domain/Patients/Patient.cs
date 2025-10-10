@@ -1,66 +1,93 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.MedicalRecords;
-using AppointmentApplication.Domain.Patients.PatientAllergies;
-using AppointmentApplication.Domain.Patients.PatientChronicDiseases;
+using AppointmentApplication.Domain.Patients.Allergies;
+using AppointmentApplication.Domain.Patients.ChronicDiseases;
 using AppointmentApplication.Domain.Shared.Enums;
 using AppointmentApplication.Domain.Shared.Results;
 using AppointmentApplication.Domain.Users;
 
-namespace AppointmentApplication.Domain.Patients;
-
-public class Patient : AuditableEntity
+namespace AppointmentApplication.Domain.Patients
 {
-    private Patient() { }
-
-    public Guid UserId { get; private set; }
-    public User User { get; private set; }
-    public string NationalID { get; private set; }
-    public string FirstName { get; private set; }
-    public string LastName { get; private set; }
-    public Gender Gender { get; private set; }
-    public DateTime DateOfBirth { get; private set; }
-    public bool IsActive { get; private set; }
-
-    private readonly List<PatientAllergy> _allergies = new();
-    public IReadOnlyCollection<PatientAllergy> Allergies => _allergies.AsReadOnly();
-
-    private readonly List<PatientChronicDisease> _chronicDiseases = new();
-    public IReadOnlyCollection<PatientChronicDisease> ChronicDiseases => _chronicDiseases.AsReadOnly();
-
-    private readonly List<Appointment> _appointments = new();
-    public IReadOnlyCollection<Appointment> Appointments => _appointments.AsReadOnly();
-
-    private readonly List<MedicalRecord> _medicalRecords = new();
-    public IReadOnlyCollection<MedicalRecord> MedicalRecords => _medicalRecords.AsReadOnly();
-
-    public static Result<Patient> Create(Guid userId, string nationalId, string firstName, string lastName,
-        Gender gender, DateTime dateOfBirth)
+    public class Patient : AuditableEntity
     {
-        return new Patient
+        private Patient() { }
+
+        public Guid UserId { get; private set; }
+        public User? User { get; set; }
+        public string NationalID { get; private set; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public Gender Gender { get; private set; }
+        public DateOnly DateOfBirth { get; private set; }
+        public bool IsActive { get; private set; }
+
+        // 👇 Direct many-to-many
+        public ICollection<Allergy> Allergies { get; private set; } = new List<Allergy>();
+        public ICollection<ChronicDisease> ChronicDiseases { get; private set; } = new List<ChronicDisease>();
+
+        public ICollection<Appointment> Appointments { get; private set; } = new List<Appointment>();
+        public ICollection<MedicalRecord> MedicalRecords { get; private set; } = new List<MedicalRecord>();
+
+        public Patient(Guid userId, string nationalId, string firstName, string lastName, Gender gender, DateOnly dateOfBirth)
         {
-            Id = Guid.NewGuid(),
-            UserId = userId,
-            FirstName = firstName,
-            LastName = lastName,
-            NationalID = nationalId,
-            Gender = gender,
-            DateOfBirth = dateOfBirth,
-        };
-    }
+            Id = Guid.NewGuid();
+            UserId = userId;
+            NationalID = nationalId;
+            FirstName = firstName;
+            LastName = lastName;
+            Gender = gender;
+            DateOfBirth = dateOfBirth;
+            IsActive = true;
+        }
 
-    public void Update(string nationalId, string firstName, string lastName, Gender gender, DateTime dateOfBirth)
-    {
-        NationalID = nationalId;
-        Gender = gender;
-        DateOfBirth = dateOfBirth;
-    }
+        public static Result<Patient> Create(Guid userId, string nationalId, string firstName, string lastName, Gender gender, DateOnly dateOfBirth)
+        {
+            if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
+                return PatientErrors.InvalidName;
 
-    public void Deactivate() => IsActive = false;
-    public void Activate() => IsActive = true;
+            if (string.IsNullOrWhiteSpace(nationalId))
+                return PatientErrors.NationalId;
+
+            if (dateOfBirth >= DateOnly.FromDateTime(DateTime.UtcNow))
+                return PatientErrors.InvalidDateOfBirth;
+
+            if (!Enum.IsDefined(typeof(Gender), gender))
+                return PatientErrors.InvalidGender;
+
+            return new Patient(userId, nationalId, firstName, lastName, gender, dateOfBirth);
+        }
+
+        public Result<Updated> Update(string nationalId, Gender gender, DateOnly dateOfBirth)
+        {
+            if (string.IsNullOrWhiteSpace(nationalId))
+                return PatientErrors.NationalId;
+
+            if (dateOfBirth >= DateOnly.FromDateTime(DateTime.UtcNow))
+                return PatientErrors.InvalidDateOfBirth;
+
+            if (!Enum.IsDefined(typeof(Gender), gender))
+                return PatientErrors.InvalidGender;
+
+            NationalID = nationalId;
+            Gender = gender;
+            DateOfBirth = dateOfBirth;
+
+            return Result.Updated;
+        }
+
+        public Result<Updated> Deactivate()
+        {
+            IsActive = false;
+            return Result.Updated;
+        }
+
+        public Result<Updated> Activate()
+        {
+            IsActive = true;
+            return Result.Updated;
+        }
+    }
 }

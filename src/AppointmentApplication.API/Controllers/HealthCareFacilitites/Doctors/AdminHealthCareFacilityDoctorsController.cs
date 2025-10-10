@@ -80,7 +80,6 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Doctors
         [EndpointDescription("Adds a new doctor to the currently authenticated health care facility.")]
         public async Task<IActionResult> CreateDoctor([FromBody] CreateDoctorRequest request, CancellationToken cancellationToken)
         {
-
             var result = await _sender.Send(
                 new CreateDoctorCommand(_userContext.UserId, request.FirstName, request.LastName, request.Email, request.Password, request.Gender, request.LicenseNumber, request.Specialization, request.DateOfBirth),
                 cancellationToken);

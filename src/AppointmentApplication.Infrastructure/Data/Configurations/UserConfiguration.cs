@@ -25,26 +25,14 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
             builder.HasIndex(user => user.Email).IsUnique();
             builder.HasIndex(user => user.IdentityId).IsUnique();
             builder.HasMany(u => u.HealthCareFacilities)
-                        .WithOne()
-                        .HasForeignKey(h => h.UserId)
-                        .OnDelete(DeleteBehavior.Restrict);
-            // 🔑 Many-to-Many User <-> Role
-            // builder.HasMany(u => u.Roles)
-            //        .WithMany(r => r.Users)
-            //        .UsingEntity<Dictionary<string, object>>(
-            //             "user_roles", // join table name
-            //             j => j.HasOne<Role>()
-            //                   .WithMany()
-            //                   .HasForeignKey("RoleId")
-            //                   .OnDelete(DeleteBehavior.Restrict),
-            //             j => j.HasOne<User>()
-            //                   .WithMany()
-            //                   .HasForeignKey("UserId")
-            //                   .OnDelete(DeleteBehavior.Restrict),
-            //             j =>
-            //             {
-            //                 j.HasKey("UserId", "RoleId");
-            //             });
+                .WithOne(h => h.User) // This tells EF about the navigation property
+                .HasForeignKey(h => h.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(u => u.Patients)
+                .WithOne(p => p.User) // This tells EF about the navigation property
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

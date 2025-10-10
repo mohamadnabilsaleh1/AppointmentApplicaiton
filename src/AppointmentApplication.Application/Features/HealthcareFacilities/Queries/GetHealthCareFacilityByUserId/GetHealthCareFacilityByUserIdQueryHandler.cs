@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using AppointmentApplication.Application.Abstractions.Authentication;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
 
 using AppointmentApplication.Application.Features.HealthcareFacilities.Dtos;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Mappers;
@@ -31,12 +32,19 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
         public async Task<Result<HealthcareFacilityWithUserDto>> Handle(GetHealthCareFacilityByUserIdQuery request, CancellationToken cancellationToken)
         {
             var userId = _userContext.UserId;
-            // جلب بيانات المستخدم من قاعدة البيانات
+            var patient = await _context.Patients.ToListAsync(cancellationToken);
+            Console.WriteLine("Patinet countes ======++>>" + patient.Count);
+            
             var healthCareFacility = await _context.HealthcareFacilities
                 .AsNoTracking() // لا حاجة لتتبع التغييرات هنا
                 .Where(u => u.UserId == userId)
                 .Include(u => u.User)
                 .FirstOrDefaultAsync(cancellationToken);
+            if (healthCareFacility == null)
+            {
+                return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.UserId);
+            }
+
             var dto = healthCareFacility.ToDtoWithUser();
             return dto;
         }

@@ -19,7 +19,6 @@ namespace AppointmentApplication.Application.Features.Users.RegisterPatient
 {
     public class RegisterPatientCommandHandler : IRequestHandler<RegisterPatientCommand, Result<Guid>>
     {
-
         private readonly IAuthenticationService _authenticationService;
         private readonly IAppDbContext _context;
         private readonly ICountryUsersDbContext _countryUsersDbContext;

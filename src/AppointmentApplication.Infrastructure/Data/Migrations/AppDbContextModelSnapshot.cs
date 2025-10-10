@@ -520,14 +520,9 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("HealthCareFacilities", (string)null);
                 });
@@ -897,25 +892,135 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Name")
                         .HasMaxLength(255)
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("UpdatedAtdUtc")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
                     b.ToTable("Allergies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                            Name = 0
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000002"),
+                            Name = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000003"),
+                            Name = 2
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000004"),
+                            Name = 3
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000005"),
+                            Name = 4
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000006"),
+                            Name = 5
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000007"),
+                            Name = 6
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000008"),
+                            Name = 7
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000009"),
+                            Name = 8
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000010"),
+                            Name = 9
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000011"),
+                            Name = 10
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000012"),
+                            Name = 11
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000013"),
+                            Name = 12
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000014"),
+                            Name = 13
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000015"),
+                            Name = 14
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000016"),
+                            Name = 15
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000017"),
+                            Name = 16
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000018"),
+                            Name = 17
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000019"),
+                            Name = 18
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000020"),
+                            Name = 19
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000021"),
+                            Name = 20
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000022"),
+                            Name = 21
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000023"),
+                            Name = 22
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000024"),
+                            Name = 23
+                        });
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.Patients.ChronicDiseases.ChronicDisease", b =>
@@ -923,25 +1028,130 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Name")
                         .HasMaxLength(255)
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("UpdatedAtdUtc")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
-                    b.ToTable("ChronicDisease");
+                    b.ToTable("ChronicDiseases");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                            Name = 0
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000002"),
+                            Name = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000003"),
+                            Name = 2
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000004"),
+                            Name = 3
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000005"),
+                            Name = 4
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000006"),
+                            Name = 5
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000007"),
+                            Name = 6
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000008"),
+                            Name = 7
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000009"),
+                            Name = 8
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000010"),
+                            Name = 9
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000011"),
+                            Name = 10
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000012"),
+                            Name = 11
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000013"),
+                            Name = 12
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000014"),
+                            Name = 13
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000015"),
+                            Name = 14
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000016"),
+                            Name = 15
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000017"),
+                            Name = 16
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000018"),
+                            Name = 17
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000019"),
+                            Name = 18
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000020"),
+                            Name = 19
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000021"),
+                            Name = 20
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000022"),
+                            Name = 21
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000023"),
+                            Name = 22
+                        });
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.Patients.Patient", b =>
@@ -955,8 +1165,8 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DateOfBirth")
+                        .HasColumnType("date");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -997,72 +1207,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Patients");
-                });
-
-            modelBuilder.Entity("AppointmentApplication.Domain.Patients.PatientAllergies.PatientAllergy", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AllergyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedAtdUtc")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AllergyId");
-
-                    b.HasIndex("PatientId", "AllergyId")
-                        .IsUnique();
-
-                    b.ToTable("PatientAllergies");
-                });
-
-            modelBuilder.Entity("AppointmentApplication.Domain.Patients.PatientChronicDiseases.PatientChronicDisease", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ChronicDiseaseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedAtdUtc")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChronicDiseaseId");
-
-                    b.HasIndex("PatientId", "ChronicDiseaseId")
-                        .IsUnique();
-
-                    b.ToTable("PatientChronicDisease");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.Prescriptions.Prescription", b =>
@@ -1367,6 +1511,36 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.ToTable("users", (string)null);
                 });
 
+            modelBuilder.Entity("PatientAllergies", b =>
+                {
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AllergyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PatientId", "AllergyId");
+
+                    b.HasIndex("AllergyId");
+
+                    b.ToTable("PatientAllergies", (string)null);
+                });
+
+            modelBuilder.Entity("PatientChronicDiseases", b =>
+                {
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ChronicDiseaseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PatientId", "ChronicDiseaseId");
+
+                    b.HasIndex("ChronicDiseaseId");
+
+                    b.ToTable("PatientChronicDiseases", (string)null);
+                });
+
             modelBuilder.Entity("RoleUser", b =>
                 {
                     b.Property<int>("RolesId")
@@ -1550,15 +1724,11 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", b =>
                 {
-                    b.HasOne("AppointmentApplication.Domain.Users.User", null)
+                    b.HasOne("AppointmentApplication.Domain.Users.User", "User")
                         .WithMany("HealthCareFacilities")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("AppointmentApplication.Domain.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
 
                     b.OwnsOne("AppointmentApplication.Domain.HealthcareFacilities.Address", "Address", b1 =>
                         {
@@ -1706,47 +1876,10 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.HasOne("AppointmentApplication.Domain.Users.User", "User")
                         .WithMany("Patients")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("AppointmentApplication.Domain.Patients.PatientAllergies.PatientAllergy", b =>
-                {
-                    b.HasOne("AppointmentApplication.Domain.Patients.Allergies.Allergy", "Allergy")
-                        .WithMany("PatientAllergies")
-                        .HasForeignKey("AllergyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppointmentApplication.Domain.Patients.Patient", "Patient")
-                        .WithMany("Allergies")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Allergy");
-
-                    b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("AppointmentApplication.Domain.Patients.PatientChronicDiseases.PatientChronicDisease", b =>
-                {
-                    b.HasOne("AppointmentApplication.Domain.Patients.ChronicDiseases.ChronicDisease", "ChronicDisease")
-                        .WithMany("PatientChronicDiseases")
-                        .HasForeignKey("ChronicDiseaseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppointmentApplication.Domain.Patients.Patient", "Patient")
-                        .WithMany("ChronicDiseases")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ChronicDisease");
-
-                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.Prescriptions.Prescription", b =>
@@ -1815,6 +1948,36 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PatientAllergies", b =>
+                {
+                    b.HasOne("AppointmentApplication.Domain.Patients.Allergies.Allergy", null)
+                        .WithMany()
+                        .HasForeignKey("AllergyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppointmentApplication.Domain.Patients.Patient", null)
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PatientChronicDiseases", b =>
+                {
+                    b.HasOne("AppointmentApplication.Domain.Patients.ChronicDiseases.ChronicDisease", null)
+                        .WithMany()
+                        .HasForeignKey("ChronicDiseaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppointmentApplication.Domain.Patients.Patient", null)
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("RoleUser", b =>
                 {
                     b.HasOne("AppointmentApplication.Domain.Users.Role", null)
@@ -1876,23 +2039,9 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Navigation("Attachments");
                 });
 
-            modelBuilder.Entity("AppointmentApplication.Domain.Patients.Allergies.Allergy", b =>
-                {
-                    b.Navigation("PatientAllergies");
-                });
-
-            modelBuilder.Entity("AppointmentApplication.Domain.Patients.ChronicDiseases.ChronicDisease", b =>
-                {
-                    b.Navigation("PatientChronicDiseases");
-                });
-
             modelBuilder.Entity("AppointmentApplication.Domain.Patients.Patient", b =>
                 {
-                    b.Navigation("Allergies");
-
                     b.Navigation("Appointments");
-
-                    b.Navigation("ChronicDiseases");
 
                     b.Navigation("MedicalRecords");
                 });

@@ -44,7 +44,7 @@ public static class HealthcareFacilityMapper
             entity.Address.ToDto(),
             entity.GPSLatitude,
             entity.GPSLongitude,
-            entity.User.ToDto(),
+            entity.User is null ? string.Empty : entity.User.Email,
             entity.Departments.ToDtos(),
             entity.Schedules.ToDtos(),
             entity.ScheduleExceptions.ToDtos());

@@ -43,8 +43,6 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasQueryFilter(e => e.IsActive);
-
         }
     }
 }

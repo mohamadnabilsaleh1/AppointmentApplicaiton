@@ -15,7 +15,6 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Depar
 {
     public class GetDepartmentByIdQueryHandler : IRequestHandler<GetDepartmentByIdQuery, Result<DepartmentDto>>
     {
-
         private readonly IAppDbContext _context;
 
         public GetDepartmentByIdQueryHandler(IAppDbContext context)

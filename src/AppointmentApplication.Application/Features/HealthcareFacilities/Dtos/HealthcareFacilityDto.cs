@@ -67,7 +67,7 @@ public record HealthcareFacilityWithUserDto(
     AddressDto Address,
     double GPSLatitude,
     double GPSLongitude,
-    UserDto User,
+    string Email,
     IReadOnlyCollection<DepartmentDto> Departments,
     IReadOnlyCollection<ScheduleDto> Schedules,
     IReadOnlyCollection<ScheduleExceptionDto> ScheduleExceptions

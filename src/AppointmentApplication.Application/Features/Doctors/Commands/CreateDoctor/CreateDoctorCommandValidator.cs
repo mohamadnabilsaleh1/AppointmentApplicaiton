@@ -11,7 +11,6 @@ namespace AppointmentApplication.Application.Features.Doctors.Commands.CreateDoc
     {
         public CreateDoctorCommandValidator()
         {
-
         }
     }
 }

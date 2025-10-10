@@ -43,7 +43,8 @@ public class UpdateDcotorCommandHandler
 
         if (updateResult.IsError)
         {
-            _logger.LogWarning("Doctor facility update failed: {Errors}",
+            _logger.LogWarning(
+                "Doctor facility update failed: {Errors}",
                 string.Join(", ", updateResult.Errors));
             return updateResult.Errors;
         }

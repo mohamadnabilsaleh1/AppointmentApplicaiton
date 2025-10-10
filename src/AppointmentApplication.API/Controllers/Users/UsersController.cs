@@ -58,6 +58,7 @@ public class UsersController(ISender sender) : ApiController
                     value: new { Id = userId, request.Email, request.FirstName, request.LastName }),
             Problem);
     }
+
     /// <summary>
     /// Registers a new patient.
     /// </summary>
@@ -93,6 +94,7 @@ public class UsersController(ISender sender) : ApiController
                     value: new { Id = patientId, request.Email, request.PhoneNumber, request.NationalId }),
             Problem);
     }
+
     /// <summary>
     /// Gets a user by ID (stub for CreatedAtAction reference).
     /// </summary>

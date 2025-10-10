@@ -20,7 +20,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorsByHealthCareFacilityId
 {
-
     public class GetDoctorsByHealthCareFacilityIdQueryHandler : IRequestHandler<GetDoctorsByHealthCareFacilityIdQuery, Result<List<DoctorDto>>>
     {
         private readonly IAppDbContext _context;

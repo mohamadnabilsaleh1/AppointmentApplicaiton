@@ -28,8 +28,8 @@ namespace AppointmentApplication.Infrastructure.Data.CountryMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("BirthDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -65,7 +65,7 @@ namespace AppointmentApplication.Infrastructure.Data.CountryMigrations
                         new
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            BirthDate = new DateTime(1990, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BirthDate = new DateOnly(1990, 5, 12),
                             FirstName = "Ahmed",
                             Gender = 0,
                             LastName = "Ali",
@@ -76,7 +76,7 @@ namespace AppointmentApplication.Infrastructure.Data.CountryMigrations
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            BirthDate = new DateTime(1988, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BirthDate = new DateOnly(1988, 3, 22),
                             FirstName = "Fatima",
                             Gender = 1,
                             LastName = "Yousef",
@@ -87,7 +87,7 @@ namespace AppointmentApplication.Infrastructure.Data.CountryMigrations
                         new
                         {
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            BirthDate = new DateTime(1995, 7, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BirthDate = new DateOnly(1995, 7, 15),
                             FirstName = "Omar",
                             Gender = 0,
                             LastName = "Mahmoud",
@@ -98,7 +98,7 @@ namespace AppointmentApplication.Infrastructure.Data.CountryMigrations
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            BirthDate = new DateTime(1992, 11, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BirthDate = new DateOnly(1992, 11, 9),
                             FirstName = "Layla",
                             Gender = 1,
                             LastName = "Abdel",
@@ -109,7 +109,7 @@ namespace AppointmentApplication.Infrastructure.Data.CountryMigrations
                         new
                         {
                             Id = new Guid("55555555-5555-5555-5555-555555555555"),
-                            BirthDate = new DateTime(1985, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BirthDate = new DateOnly(1985, 1, 30),
                             FirstName = "Youssef",
                             Gender = 0,
                             LastName = "Hussein",
@@ -120,7 +120,7 @@ namespace AppointmentApplication.Infrastructure.Data.CountryMigrations
                         new
                         {
                             Id = new Guid("66666666-6666-6666-6666-666666666666"),
-                            BirthDate = new DateTime(1991, 6, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BirthDate = new DateOnly(1991, 6, 18),
                             FirstName = "Mariam",
                             Gender = 1,
                             LastName = "Saeed",
@@ -131,7 +131,7 @@ namespace AppointmentApplication.Infrastructure.Data.CountryMigrations
                         new
                         {
                             Id = new Guid("77777777-7777-7777-7777-777777777777"),
-                            BirthDate = new DateTime(1989, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BirthDate = new DateOnly(1989, 12, 5),
                             FirstName = "Ali",
                             Gender = 0,
                             LastName = "Nabil",
@@ -142,7 +142,7 @@ namespace AppointmentApplication.Infrastructure.Data.CountryMigrations
                         new
                         {
                             Id = new Guid("88888888-8888-8888-8888-888888888888"),
-                            BirthDate = new DateTime(1994, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BirthDate = new DateOnly(1994, 8, 2),
                             FirstName = "Sara",
                             Gender = 1,
                             LastName = "Fahmy",
@@ -153,7 +153,7 @@ namespace AppointmentApplication.Infrastructure.Data.CountryMigrations
                         new
                         {
                             Id = new Guid("99999999-9999-9999-9999-999999999999"),
-                            BirthDate = new DateTime(1993, 2, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BirthDate = new DateOnly(1993, 2, 25),
                             FirstName = "Hassan",
                             Gender = 0,
                             LastName = "Kamal",
@@ -164,7 +164,7 @@ namespace AppointmentApplication.Infrastructure.Data.CountryMigrations
                         new
                         {
                             Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
-                            BirthDate = new DateTime(1990, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BirthDate = new DateOnly(1990, 4, 10),
                             FirstName = "Noor",
                             Gender = 1,
                             LastName = "Salah",

@@ -24,8 +24,6 @@ using AppointmentApplication.Domain.MedicalRecords;
 using AppointmentApplication.Domain.Patients;
 using AppointmentApplication.Domain.Patients.Allergies;
 using AppointmentApplication.Domain.Patients.ChronicDiseases;
-using AppointmentApplication.Domain.Patients.PatientAllergies;
-using AppointmentApplication.Domain.Patients.PatientChronicDiseases;
 using AppointmentApplication.Domain.Prescriptions;
 using AppointmentApplication.Domain.Reviews;
 using AppointmentApplication.Domain.Shared;
@@ -61,7 +59,7 @@ public class AppDbContext : DbContext, IAppDbContext
 
     // Medical Entities
     public DbSet<Allergy> Allergies { get; set; }
-    public DbSet<PatientChronicDisease> ChronicDiseases { get; set; }
+    public DbSet<ChronicDisease> ChronicDiseases { get; set; }
 
     // Doctor Entities
     public DbSet<Doctor> Doctors { get; set; }
@@ -72,8 +70,6 @@ public class AppDbContext : DbContext, IAppDbContext
 
     // Patient Entities
     public DbSet<Patient> Patients { get; set; }
-    public DbSet<PatientAllergy> PatientAllergies { get; set; }
-    public DbSet<PatientChronicDisease> PatientChronicDiseases { get; set; }
 
     // Medical Records
     public DbSet<MedicalRecord> MedicalRecords { get; set; }

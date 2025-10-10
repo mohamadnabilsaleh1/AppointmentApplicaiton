@@ -85,31 +85,26 @@ namespace AppointmentApplication.Domain.Doctors
             // Domain validation
             if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
             {
-
                 return DoctorErrors.InvalidName;
             }
 
             if (string.IsNullOrWhiteSpace(licenseNumber))
             {
-
                 return DoctorErrors.InvalidLicenseNumber;
             }
 
             if (dateOfBirth >= DateOnly.FromDateTime(DateTime.UtcNow))
             {
-
                 return DoctorErrors.InvalidDateOfBirth;
             }
 
             if (!Enum.IsDefined(typeof(Gender), gender))
             {
-
                 return DoctorErrors.InvalidGender;
             }
 
             if (!Enum.IsDefined(typeof(Specialization), specialization))
             {
-
                 return DoctorErrors.InvalidSpecialization;
             }
 
@@ -126,7 +121,6 @@ namespace AppointmentApplication.Domain.Doctors
         {
             if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
             {
-
                 return DoctorErrors.InvalidName;
             }
 
@@ -139,7 +133,6 @@ namespace AppointmentApplication.Domain.Doctors
 
             if (!Enum.IsDefined(typeof(Gender), gender))
             {
-
                 return DoctorErrors.InvalidGender;
             }
 

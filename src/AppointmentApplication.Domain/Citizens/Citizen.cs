@@ -14,14 +14,14 @@ namespace AppointmentApplication.Domain.Citizens
         public string LastName { get; private set; }
         public string PhoneNumber { get; private set; }
         public Gender Gender { get; private set; }
-        public DateTime BirthDate { get; set; }
+        public DateOnly BirthDate { get; set; }
 
 #pragma warning disable CS8618
         private Citizen() { } // For EF Core
 #pragma warning restore CS8618
 
         // Constructor for seeding
-        public Citizen(Guid id, long nationalId, string firstName, string middleName, string lastName, string phoneNumber, DateTime birthDate,Gender gender)
+        public Citizen(Guid id, long nationalId, string firstName, string middleName, string lastName, string phoneNumber, DateOnly birthDate,Gender gender)
         {
             Id = id; 
             NationalId = nationalId;

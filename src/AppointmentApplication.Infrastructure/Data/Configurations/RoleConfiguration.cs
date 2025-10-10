@@ -25,22 +25,6 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
                     Role.Admin,
                     Role.Doctor,
                     Role.HealthCareFacility);
-
-            // A Role can have many Permissions (via RolePermission)
-            // builder.HasMany(r => r.Permissions)
-            //        .WithMany()
-            //        .UsingEntity<RolePermission>(
-            //             j => j.HasOne<Permission>()
-            //                   .WithMany()
-            //                   .HasForeignKey(rp => rp.PermissionId),
-            //             j => j.HasOne<Role>()
-            //                   .WithMany()
-            //                   .HasForeignKey(rp => rp.RoleId),
-            //             j =>
-            //             {
-            //                 j.ToTable("role_permissions");
-            //                 j.HasKey(rp => new { rp.RoleId, rp.PermissionId });
-            //             });
         }
     }
 }

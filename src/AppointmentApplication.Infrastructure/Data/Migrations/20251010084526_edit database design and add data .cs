@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace AppointmentApplication.Infrastructure.Data.CountryMigrations
+namespace AppointmentApplication.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class databaseNmae : Migration
+    public partial class editdatabasedesignandadddata : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

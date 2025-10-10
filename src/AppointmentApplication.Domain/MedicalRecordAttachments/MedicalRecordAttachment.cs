@@ -21,7 +21,7 @@ public class MedicalRecordAttachment : AuditableEntity
     public bool IsActive { get; private set; }
     public DateTime UploadedAt { get; private set; }
 
-    public MedicalRecord MedicalRecord { get; private set; }
+    public MedicalRecord? MedicalRecord { get;  set; }
 
     public static MedicalRecordAttachment Create(Guid medicalRecordId, Guid uploadedById,
         string fileType, string fileUrli, string title, string description,
