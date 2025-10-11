@@ -1845,6 +1845,7 @@
       },
       "AppointmentApplication.Contracts/1.0.0": {
         "dependencies": {
+          "AppointmentApplication.Application": "1.0.0",
           "AppointmentApplication.Domain": "1.0.0",
           "Microsoft.AspNetCore.Components.DataAnnotations.Validation": "3.2.0-rc1.20223.4"
         },

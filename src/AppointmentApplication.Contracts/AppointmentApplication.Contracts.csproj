@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AppointmentApplication.Domain\AppointmentApplication.Domain.csproj" />
+        <ProjectReference Include="..\AppointmentApplication.Application\AppointmentApplication.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation" />

@@ -30,7 +30,9 @@ namespace AppointmentApplication.Application.Features.Patients.Uploads.Commands.
         }
         public async Task<Result<Updated>> Handle(UpdateUploadFileCommand request, CancellationToken cancellationToken)
         {
-            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.UserId == request.UserId, cancellationToken);
+            var patient = await _context.Patients
+            .Include(p => p.Uploads)
+            .FirstOrDefaultAsync(p => p.UserId == request.UserId, cancellationToken);
             if (patient is null)
             {
                 _logger.LogWarning("Patient not found. ID: {PatientId}", request.UserId);
@@ -42,6 +44,8 @@ namespace AppointmentApplication.Application.Features.Patients.Uploads.Commands.
                 _logger.LogWarning("Upload not found. Upload ID: {UploadId}", request.UploadId);
                 return upload.Errors;
             }
+            await _context.SaveChangesAsync(cancellationToken);
+
             return Result.Updated;
         }
 

@@ -398,6 +398,9 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
+              "/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Application/AppointmentApplication.Application.csproj": {
+                "projectPath": "/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Application/AppointmentApplication.Application.csproj"
+              },
               "/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/AppointmentApplication.Domain.csproj": {
                 "projectPath": "/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.Domain/AppointmentApplication.Domain.csproj"
               }

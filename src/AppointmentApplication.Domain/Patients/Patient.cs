@@ -254,5 +254,16 @@ namespace AppointmentApplication.Domain.Patients
             }
             return upload;
         }
+        public Result<Deleted> DeleteUploadedFile(Guid uploadId)
+        {
+            var uploadedFiles = _uploads.FirstOrDefault(cd => cd.Id == uploadId);
+            if (uploadedFiles == null)
+            {
+                return PatientErrors.UploadNotFound;
+            }
+
+            _uploads.Remove(uploadedFiles);
+            return Result.Deleted;
+        }
     }
 }

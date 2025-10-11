@@ -1,0 +1,53 @@
+@baseUrl = http://localhost:5001
+@PatientToken = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NjAyMTY3NDgsImlhdCI6MTc2MDE4MDc0OCwianRpIjoib25ydHJvOjc3ZTM3ODgxLWE0MGItY2I3NS05ZjYxLTcyNjdiMGZkN2E2YSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJmNjBkNjJkZC03NjcxLTQzZGUtODg5OS04NjQ1ZmJkNDk3NWEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6Ijc4YWRjNzJmLWMzOTAtNGFjZS05MmVhLTJkOGQwNDE1YmVhYyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IkFobWVkIEFsaSIsInByZWZlcnJlZF91c2VybmFtZSI6Im1vaGFtYWQubmFiaWxAZXhhbXBsZS5jb20iLCJnaXZlbl9uYW1lIjoiQWhtZWQiLCJmYW1pbHlfbmFtZSI6IkFsaSIsImVtYWlsIjoibW9oYW1hZC5uYWJpbEBleGFtcGxlLmNvbSJ9.rCeUOqzZOti0U7kDsIJoEIimIHO8B7CsDyJnIZGoY7uouIsg9lPoceArIuQF0JKUIq14zof4N58fxr1d4_6ENltdWJx0DtsOxbLyKnZeoClmxQ5G_FG02s2KZOjLxlAqifCnsHttO8I1mntPVl8C2Tgbai3leYGRKsmO8mmtQMJziopKBblX0lVDl8BBneUv6EngSrfaaQ3gSo7SSqWNIkb_MDwDz_kDIx6RTh-XgOGPgkCFMH87tYgVr0Mk8S-Cz3HvvhV7GKb1Tf3pl-JZwOdas7lvrgRKmODy749OkGCit1aD3XuvIXAQrpkmS2rpmhisiQz8V5_CM9YEnlcOZA
+@uploadId = 8eb023c5-98f4-45cb-9561-eb218a95a5b7
+
+POST http://localhost:5001/api/users/login
+Content-Type: application/json
+
+{
+  "email": "mohamad.nabil@example.com",
+  "password": "StrongPassword123!"
+}
+
+### Create Upload
+POST {{baseUrl}}/api/patients/me/uploads
+Authorization: {{PatientToken}}
+Content-Type: application/json
+
+{
+  "file": "base64encodedFileHere",
+  "title": "My File",
+  "description": "File description",
+  "visibility": 1  
+}
+
+### Get Upload by ID
+GET {{baseUrl}}/api/patients/me/uploads/{{uploadId}}
+Authorization: {{PatientToken}}
+
+### Get All Uploads
+GET {{baseUrl}}/api/patients/me/uploads
+Authorization: {{PatientToken}}
+
+### Update Upload
+PUT {{baseUrl}}/api/patients/me/uploads/{{uploadId}}
+Authorization: {{PatientToken}}
+Content-Type: application/json
+
+{
+  "title": "Updated Title",
+  "description": "Updated description"
+}
+
+### Delete Upload
+DELETE {{baseUrl}}/api/patients/me/uploads/{{uploadId}}
+Authorization: {{PatientToken}}
+
+### Make Upload Public
+PATCH {{baseUrl}}/api/patients/me/uploads/{{uploadId}}/make-public
+Authorization: {{PatientToken}}
+
+### Make Upload Private
+PATCH {{baseUrl}}/api/patients/me/uploads/{{uploadId}}/make-private
+Authorization: {{PatientToken}}

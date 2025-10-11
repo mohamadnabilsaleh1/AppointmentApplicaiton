@@ -11,6 +11,9 @@ using AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptionHealth
 using AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions;
 using AppointmentApplication.Domain.HealthcareFacilities.ScheduleHealthcareFacilities;
 using AppointmentApplication.Domain.HealthcareFacilities.Schedules;
+using AppointmentApplication.Domain.MediaUploads;
+using AppointmentApplication.Domain.MediaUploads.Enums;
+using AppointmentApplication.Domain.Patients;
 using AppointmentApplication.Domain.Shared.Enums;
 using AppointmentApplication.Domain.Shared.Results;
 using AppointmentApplication.Domain.Users;
@@ -39,6 +42,8 @@ public sealed class HealthCareFacility : AuditableEntity
 
     private readonly List<Doctor> _doctors = new();
     public IReadOnlyCollection<Doctor> Doctors => _doctors.AsReadOnly();
+    private readonly List<FacilityUpload> _uploads = new();
+    public IReadOnlyCollection<FacilityUpload> Uploads => _uploads.AsReadOnly();
 
 #pragma warning disable CS8618
     private HealthCareFacility() { }
@@ -507,6 +512,86 @@ public sealed class HealthCareFacility : AuditableEntity
         _doctors.Add(doctor);
 
         return doctor;
+    }
+    public Result<FacilityUpload> AddUpload(Guid patientId, string fileType, string fileUrl,
+    string title, string description, Visibility visibility = Visibility.Public)
+    {
+        var uploadResult = FacilityUpload.Create(patientId, fileType, fileUrl, title, description, visibility);
+        if (uploadResult.IsError)
+        {
+            return uploadResult.Errors;
+        }
+
+        _uploads.Add(uploadResult.Value);
+        return uploadResult.Value;
+    }
+    public Result<Updated> UpdateUpload(Guid uploadId, string title, string description)
+    {
+        var upload = _uploads.FirstOrDefault(u => u.Id == uploadId);
+        if (upload == null)
+        {
+            return PatientErrors.UploadNotFound;
+        }
+
+        var updateResult = upload.Update(title, description);
+        if (updateResult.IsError)
+        {
+            return updateResult.Errors;
+        }
+
+        return Result.Updated;
+    }
+    public Result<Updated> ChangeUploadVisibilityToPublic(Guid uploadId)
+    {
+        var upload = _uploads.FirstOrDefault(u => u.Id == uploadId);
+        if (upload == null)
+        {
+            return PatientErrors.UploadNotFound;
+        }
+
+        var changeResult = upload.ChangeUploadVisibilityToPublic();
+        if (changeResult.IsError)
+        {
+            return changeResult.Errors;
+        }
+
+        return Result.Updated;
+    }
+    public Result<Updated> ChangeUploadVisibilityToPrivate(Guid uploadId)
+    {
+        var upload = _uploads.FirstOrDefault(u => u.Id == uploadId);
+        if (upload == null)
+        {
+            return PatientErrors.UploadNotFound;
+        }
+
+        var changeResult = upload.ChangeUploadVisibilityToPrivate();
+        if (changeResult.IsError)
+        {
+            return changeResult.Errors;
+        }
+
+        return Result.Updated;
+    }
+    public Result<FacilityUpload> GetUploadedById(Guid uploadId)
+    {
+        var upload = _uploads.FirstOrDefault(u => u.Id == uploadId);
+        if (upload == null)
+        {
+            return PatientErrors.UploadNotFound;
+        }
+        return upload;
+    }
+    public Result<Deleted> DeleteUploadedFile(Guid uploadId)
+    {
+        var uploadedFiles = _uploads.FirstOrDefault(cd => cd.Id == uploadId);
+        if (uploadedFiles == null)
+        {
+            return PatientErrors.UploadNotFound;
+        }
+
+        _uploads.Remove(uploadedFiles);
+        return Result.Deleted;
     }
 
     private static DaysOfWeek GetDayOfWeekFromDate(DateOnly date)

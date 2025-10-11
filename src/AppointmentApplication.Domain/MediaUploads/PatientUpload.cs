@@ -25,9 +25,10 @@ public class PatientUpload : AuditableEntity
 
     public Patient? Patient { get; set; }
 
-    private PatientUpload(Guid patientId, string fileType, string fileUrli,
+    private PatientUpload(Guid id,Guid patientId, string fileType, string fileUrli,
         string title, string description, Visibility visibility = Visibility.Public)
     {
+        Id = id;
         PatientId = patientId;
         FileType = fileType;
         FileURL = fileUrli;
@@ -39,7 +40,7 @@ public class PatientUpload : AuditableEntity
     public static Result<PatientUpload> Create(Guid patientId, string fileType, string fileUrli,
         string title, string description, Visibility visibility = Visibility.Public)
     {
-        return new PatientUpload(patientId, fileType, fileUrli, title, description, visibility);
+        return new PatientUpload(Guid.NewGuid(), patientId, fileType, fileUrli, title, description, visibility);
     }
 
     public Result<Updated> Update(string title, string description)

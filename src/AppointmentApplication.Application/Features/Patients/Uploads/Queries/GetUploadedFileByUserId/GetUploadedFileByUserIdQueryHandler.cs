@@ -26,7 +26,7 @@ namespace AppointmentApplication.Application.Features.Patients.Uploads.Queries.G
         }
         public async Task<Result<UploadDto>> Handle(GetUploadedFileByUserIdQuery request, CancellationToken cancellationToken)
         {
-            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.UserId == request.UserId);
+            var patient = await _context.Patients.Include(p => p.Uploads).FirstOrDefaultAsync(p => p.UserId == request.UserId);
             if (patient == null)
             {
                 return ApplicationPatientErrors.PatientNotFound(request.UserId);

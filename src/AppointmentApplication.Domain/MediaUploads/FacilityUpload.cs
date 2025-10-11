@@ -25,7 +25,7 @@ public class FacilityUpload : AuditableEntity
 
     public HealthCareFacility Facility { get; private set; }
 
-    public static FacilityUpload Create(Guid facilityId, string fileType, string fileUrli,
+    public static Result<FacilityUpload> Create(Guid facilityId, string fileType, string fileUrli,
         string title, string description, Visibility visibility = Visibility.Public)
     {
         return new FacilityUpload
@@ -39,18 +39,18 @@ public class FacilityUpload : AuditableEntity
         };
     }
 
-    public Result<Updated> Update(string title, string description, Visibility visibility)
+    public Result<Updated> Update(string title, string description)
     {
         Title = title;
         Description = description;
         return Result.Updated;
     }
-    public Result<Updated> UpdateVisibilityToPublic()
+    public Result<Updated> ChangeUploadVisibilityToPrivate()
     {
         Visibility = Visibility.Public;
         return Result.Updated;
     }
-    public Result<Updated> UpdateVisibilityToPrivate()
+    public Result<Updated> ChangeUploadVisibilityToPublic()
     {
         Visibility = Visibility.Private;
         return Result.Updated;
