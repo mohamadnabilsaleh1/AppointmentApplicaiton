@@ -49,7 +49,7 @@ namespace AppointmentApplication.Application.Features.Patients.Uploads.Commands.
             // Create the file URL (you might want to configure this base URL)
             var fileUrl = $"/api/files/patients/{patient.Id}/uploads/{fileName}";
 
-            var uploadResult = PatientUpload.Create(
+            var uploadResult = patient.AddUpload(
                 patient.Id,
                 request.File.ContentType,
                 fileUrl, // Use the actual file URL
@@ -64,7 +64,6 @@ namespace AppointmentApplication.Application.Features.Patients.Uploads.Commands.
             }
 
             // Add to context and save changes
-            _context.PatientUploads.Add(uploadResult.Value);
             await _context.SaveChangesAsync(cancellationToken);
 
             _logger.LogInformation(

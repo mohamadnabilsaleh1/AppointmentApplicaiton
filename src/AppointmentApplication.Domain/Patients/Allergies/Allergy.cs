@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.Json.Serialization;
 
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Patients.Allergies.Enums;
@@ -13,6 +14,7 @@ namespace AppointmentApplication.Domain.Patients.Allergies
         public Guid Id { get; init; }
         public AllergyType Name { get; private set; }
 
+        [JsonIgnore]
         public ICollection<Patient> Patients { get; private set; } = new List<Patient>();
 
         // ✅ EF Core يحتاج هذا
@@ -24,10 +26,15 @@ namespace AppointmentApplication.Domain.Patients.Allergies
             Id = id;
             Name = name;
         }
-        public static Result<Allergy> Create(AllergyType allergyType)
-        {
-            return new Allergy(Guid.NewGuid(), allergyType);
-        }
+public static Result<Allergy> Create(AllergyType allergyType)
+{
+    if (!Enum.IsDefined(typeof(AllergyType), allergyType))
+        return PatientErrors.InvalidAllergyType;
+
+    var allergy = new Allergy(Guid.NewGuid(), allergyType);
+    return allergy; // ✅ يرجع كائن فعلي وليس null
+}
+
 
         // ✅ Static predefined instances لكل نوع حساسية
         public static readonly Allergy None = new(Guid.Parse("00000000-0000-0000-0000-000000000001"), AllergyType.None);

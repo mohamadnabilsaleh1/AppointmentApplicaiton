@@ -25,16 +25,23 @@ public class AddChronicDiseaseCommandHandler : IRequestHandler<AddChronicDisease
     public async Task<Result<ChronicDisease>> Handle(AddChronicDiseaseCommand request, CancellationToken cancellationToken)
     {
         var patient = await _context.Patients
-            .FirstOrDefaultAsync(p => p.UserId == request.UserId, cancellationToken);
+                        .Include(p => p.ChronicDiseases)
+                        .FirstOrDefaultAsync(p => p.UserId == request.UserId, cancellationToken);
 
         if (patient is null)
         {
             return ApplicationPatientErrors.PatientNotFound(request.UserId);
         }
 
+
         var chronicDiseaseResult = patient.AddChronicDisease(request.ChronicDiseaseType);
+        if (chronicDiseaseResult.IsError)
+        {
+            return chronicDiseaseResult.Errors;
+        }
         await _context.SaveChangesAsync(cancellationToken);
 
         return chronicDiseaseResult.Value;
     }
 }
+

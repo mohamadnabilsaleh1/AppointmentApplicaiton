@@ -28,8 +28,8 @@ namespace AppointmentApplication.Application.Features.Patients.Allergies.Command
         public async Task<Result<Deleted>> Handle(DeleteAllergyCommand request, CancellationToken cancellationToken)
         {
             var patient = await _context.Patients
-                .Include(p => p.Allergies)
-                .FirstOrDefaultAsync(p => p.UserId == request.UserId, cancellationToken);
+                            .Include(p => p.Allergies)
+                            .FirstOrDefaultAsync(p => p.UserId == request.UserId, cancellationToken);
             if (patient == null)
             {
                 return ApplicationPatientErrors.PatientNotFound(request.UserId);

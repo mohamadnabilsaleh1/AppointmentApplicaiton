@@ -12,6 +12,8 @@ namespace AppointmentApplication.Domain.Patients
         // AllergyAlreadyExists
         public static readonly Error PatientNotFound =
         Error.NotFound("Patient.NotFound", "Patient not found.");
+        public static readonly Error InvalidAllergyType =
+        Error.Validation("Patient.InvalidAllergyType", "Invalid allergy type.");
         public static readonly Error UploadAlreadyExists =
         Error.NotFound("Patient.NotFound", "Patient not found.");
         public static readonly Error AllergyNotFound =

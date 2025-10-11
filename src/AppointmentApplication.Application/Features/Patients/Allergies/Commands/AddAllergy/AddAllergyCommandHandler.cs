@@ -21,7 +21,7 @@ namespace AppointmentApplication.Application.Features.Patients.Commands.AddAller
         private readonly IAppDbContext _context;
 
         // ✅ Constructor Injection
-        public AddAllergyCommandHandler( IAppDbContext context)
+        public AddAllergyCommandHandler(IAppDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -29,6 +29,7 @@ namespace AppointmentApplication.Application.Features.Patients.Commands.AddAller
         public async Task<Result<Allergy>> Handle(AddAllergyCommand request, CancellationToken cancellationToken)
         {
             var patient = await _context.Patients
+                .Include(p => p.Allergies)
                 .FirstOrDefaultAsync(p => p.UserId == request.UserId, cancellationToken);
 
             if (patient is null)
@@ -37,9 +38,16 @@ namespace AppointmentApplication.Application.Features.Patients.Commands.AddAller
             }
 
             var allergyResult = patient.AddAllergy(request.AllergyType);
+
+            // ✅ تحقق من وجود خطأ في النتيجة
+            if (allergyResult.IsError)
+            {
+                return allergyResult.Errors;
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
 
-            return allergyResult.Value;
+            return allergyResult.Value; // الآن Value ليس null
         }
 
     }

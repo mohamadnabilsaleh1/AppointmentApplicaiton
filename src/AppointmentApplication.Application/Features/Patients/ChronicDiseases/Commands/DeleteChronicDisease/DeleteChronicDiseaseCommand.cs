@@ -10,5 +10,5 @@ using MediatR;
 
 namespace AppointmentApplication.Application.Features.Patients.ChronicDiseases.Commands.DeleteChronicDisease
 {
-    public sealed record DeleteChronicDiseaseCommand(Guid ChronicDiseaseId, Guid UserId) : IRequest<Result<Deleted>>;
+    public sealed record DeleteChronicDiseaseCommand(Guid UserId, Guid ChronicDiseaseId) : IRequest<Result<Deleted>>;
 }

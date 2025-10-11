@@ -10,6 +10,6 @@ using MediatR;
 
 namespace AppointmentApplication.Application.Features.Patients.Allergies.Commands.DeleteAllergy
 {
-    public sealed record DeleteAllergyCommand(Guid
-    AllergyId, Guid UserId) : IRequest<Result<Deleted>>;
+    public sealed record DeleteAllergyCommand(Guid UserId, Guid
+    AllergyId) : IRequest<Result<Deleted>>;
 }

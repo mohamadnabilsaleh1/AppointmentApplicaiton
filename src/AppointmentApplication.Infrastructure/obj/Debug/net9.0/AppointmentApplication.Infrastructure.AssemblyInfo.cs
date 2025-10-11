@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AppointmentApplication.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+020d28c0ec70ef540350104688a09783bbd61a5f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b80bfe5d0ec77fab6c56a0aac22e911a1c55637a")]
 [assembly: System.Reflection.AssemblyProductAttribute("AppointmentApplication.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AppointmentApplication.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

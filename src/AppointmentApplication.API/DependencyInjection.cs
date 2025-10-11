@@ -163,6 +163,8 @@ public static class DependencyInjection
 
                 // تجاهل القيم null عند الكتابة في JSON
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.WriteIndented = true;
             });
 
         return services;

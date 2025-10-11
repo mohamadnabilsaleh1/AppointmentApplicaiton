@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Patients.ChronicDiseases.Enums;
 using AppointmentApplication.Domain.Shared.Results;
@@ -12,6 +14,7 @@ namespace AppointmentApplication.Domain.Patients.ChronicDiseases
 
         public ChronicDiseaseType Name { get; private set; }
 
+        [JsonIgnore]
         public ICollection<Patient> Patients { get; private set; } = new List<Patient>();
 
         // ✅ Required by EF Core
