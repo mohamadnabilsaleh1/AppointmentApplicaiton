@@ -22,13 +22,13 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilities.Uploads
 {
     [Route("api/health-care-facilities/me/uploads")]
     [Authorize(Roles = Roles.HealthCareFacility)]
-    public class HealthCareFacilityUploadController : ApiController
+    public class AdminHealthCareFacilityUploadController : ApiController
     {
         private readonly ISender _sender;
         private readonly LinkService _linkService;
         private readonly IUserContext _userContext;
 
-        public HealthCareFacilityUploadController(ISender sender, LinkService linkService, IUserContext userContext)
+        public AdminHealthCareFacilityUploadController(ISender sender, LinkService linkService, IUserContext userContext)
         {
             _sender = sender;
             _linkService = linkService;
