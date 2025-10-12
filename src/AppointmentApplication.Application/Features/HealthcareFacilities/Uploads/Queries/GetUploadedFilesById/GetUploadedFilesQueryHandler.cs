@@ -36,7 +36,5 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Uploa
             var uploads = healthCareFacility.Uploads.ToDtos();
             return uploads;
         }
-
     }
-
 }

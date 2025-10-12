@@ -44,7 +44,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Uploa
             // Save the file and get the file name/path
             var fileName = await _fileStorageService.SaveFileAsync(
                 request.File,
-                $"patients/{healthCareFacility.Id}/uploads");
+                $"healthCareFacility/{healthCareFacility.Id}/uploads");
 
             // Create the file URL (you might want to configure this base URL)
             var fileUrl = $"/api/files/healthCareFacility/{healthCareFacility.Id}/uploads/{fileName}";
