@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using AppointmentApplication.Application.Features.Patients.Errors;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Uploads.Dtos;
 
-using AppointmentApplication.Application.Features.Patients.Uploads.Dtos;
-using AppointmentApplication.Application.Features.Patients.Uploads.Mappers;
+using AppointmentApplication.Application.Features.Patients.Errors;
 using AppointmentApplication.Application.HealthcareFacilities.Patients.Uploads.Mappers;
+
 using AppointmentApplication.Application.Shared.Interfaces;
 using AppointmentApplication.Domain.Shared.Results;
 
@@ -28,10 +28,10 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Uploa
         {
             var healthCareFacility = await _context.HealthcareFacilities
                 .Include(p => p.Uploads)
-                .FirstOrDefaultAsync(p => p.Id == request.PatientId);
+                .FirstOrDefaultAsync(p => p.Id == request.HealthCareFacilityId);
             if (healthCareFacility == null)
             {
-                return ApplicationPatientErrors.PatientNotFound(request.PatientId);
+                return ApplicationPatientErrors.PatientNotFound(request.HealthCareFacilityId);
             }
             var uploadResult = healthCareFacility.GetUploadedById(request.FileId);
             if (uploadResult.IsError)

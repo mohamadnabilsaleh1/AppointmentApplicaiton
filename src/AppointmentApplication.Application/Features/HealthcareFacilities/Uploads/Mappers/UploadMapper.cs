@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using AppointmentApplication.Application.Features.Patients.Uploads.Dtos;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Uploads.Dtos;
+
 using AppointmentApplication.Domain.MediaUploads;
 
 namespace AppointmentApplication.Application.HealthcareFacilities.Patients.Uploads.Mappers

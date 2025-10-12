@@ -1,16 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
 
-using AppointmentApplication.Application.Features.Patients.Errors;
-
-using AppointmentApplication.Application.Features.Patients.Uploads.Dtos;
-using AppointmentApplication.Application.Features.Patients.Uploads.Mappers;
-
-using AppointmentApplication.Application.Features.Patients.Uploads.Queries.GetUploadedFileByUserIdQuery;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Uploads.Dtos;
 using AppointmentApplication.Application.HealthcareFacilities.Patients.Uploads.Mappers;
+
 using AppointmentApplication.Application.Shared.Interfaces;
+
 using AppointmentApplication.Domain.Shared.Results;
 
 using MediatR;
@@ -33,7 +27,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Uploa
             .FirstOrDefaultAsync(p => p.UserId == request.UserId);
             if (healthCareFacility is null)
             {
-                return ApplicationPatientErrors.PatientNotFound(request.UserId);
+                return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.UserId);
             }
             var uploads = healthCareFacility.Uploads.ToDtos();
             return uploads;

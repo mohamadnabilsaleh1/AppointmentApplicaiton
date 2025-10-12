@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
 
-using AppointmentApplication.Application.Features.Patients.Errors;
-
-using AppointmentApplication.Application.Features.Patients.Uploads.Dtos;
-using AppointmentApplication.Application.Features.Patients.Uploads.Mappers;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Uploads.Dtos;
 using AppointmentApplication.Application.HealthcareFacilities.Patients.Uploads.Mappers;
+
 using AppointmentApplication.Application.Shared.Interfaces;
 
 using AppointmentApplication.Domain.Shared.Results;
@@ -30,7 +25,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Uploa
             var healthCareFacility = await _context.HealthcareFacilities.Include(p => p.Uploads).FirstOrDefaultAsync(p => p.UserId == request.UserId);
             if (healthCareFacility == null)
             {
-                return ApplicationPatientErrors.PatientNotFound(request.UserId);
+                return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.UserId);
             }
             var uploadResult = healthCareFacility.GetUploadedById(request.UploadedId);
             if (uploadResult.IsError)
