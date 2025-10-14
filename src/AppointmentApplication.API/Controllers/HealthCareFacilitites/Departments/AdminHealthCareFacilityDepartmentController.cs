@@ -12,6 +12,9 @@ using AppointmentApplication.Application.Features.HealthcareFacilities.Departmen
 using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Queries.GetDepartmentById;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Queries.GetDepartmentByUserId;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Queries.GetDepartments;
+using AppointmentApplication.Application.Features.HealthcareFacilities.DepatmentDoctors.Commands.AddDoctorToDepartment;
+using AppointmentApplication.Application.Features.HealthcareFacilities.DepatmentDoctors.Commands.DeleteDoctorFromDepartment;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Queries.GetSchedulesByIdQuery;
 using AppointmentApplication.Contracts.Requests.Departments;
 
 using Asp.Versioning;
@@ -52,18 +55,84 @@ namespace AppointmentApplication.API.Controllers
             var result = await _sender.Send(new CreateDepartmentCommand(_userContext.UserId, request.Name, request.Description), cancellationToken);
 
             return result.Match(
-                schedule =>
+                department =>
                 {
-                    var links = CreateLinks(schedule.Id.ToString(), null);
-                    var resource = new { data = schedule, links };
+                    var links = CreateLinks(department.Id.ToString(), null);
+                    var resource = new { data = department, links };
 
                     return CreatedAtAction(
                         nameof(GetDepartmentById),
-                        new { id = schedule.Id },
+                        new { id = department.Id },
                         resource);
                 },
                 Problem);
         }
+        [HttpPost("{departmentId:guid}/doctors/{doctorId:guid}")]
+        [MapToApiVersion("0.1")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [EndpointName("AddDoctorToDepartment")]
+        [EndpointSummary("Adds a doctor to a department.")]
+        [EndpointDescription("Associates a doctor with a specific department.")]
+        public async Task<IActionResult> AddDoctorToDepartment(
+    [FromRoute] Guid departmentId,
+    [FromRoute] Guid doctorId,
+    CancellationToken cancellationToken)
+        {
+            var result = await _sender.Send(new AddDoctorToDepartmentCommand(_userContext.UserId, doctorId, departmentId), cancellationToken);
+
+            return result.Match<IActionResult>(
+                _ => CreatedAtAction(
+                    nameof(AddDoctorToDepartment),
+                    new { departmentId, doctorId },
+                    new { departmentId, doctorId }),
+                Problem);
+        }
+        [HttpDelete("{departmentId:guid}/doctors/{doctorId:guid}")]
+        [MapToApiVersion("0.1")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [EndpointName("RemoveDoctorFromDepartment")]
+        [EndpointSummary("Removes a doctor from a department.")]
+        [EndpointDescription("Disassociates a doctor from a specific department.")]
+        public async Task<IActionResult> RemoveDoctorFromDepartment(
+    [FromRoute] Guid departmentId,
+    [FromRoute] Guid doctorId,
+    CancellationToken cancellationToken)
+        {
+            var result = await _sender.Send(new DeleteDoctorFromDepartmentCommand(_userContext.UserId, doctorId, departmentId), cancellationToken);
+
+            return result.Match<IActionResult>(
+                _ => NoContent(),
+                Problem);
+        }
+        
+        [HttpGet("{departmentId:guid}/doctors")]
+        [MapToApiVersion("0.1")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [OutputCache(Duration = 60)]
+        [EndpointName("AdminGetDoctorsOfDepartments")]
+        [EndpointSummary("Get Departments.")]
+        [EndpointDescription("Retrieves departments with optional filtering and pagination.")]
+        public async Task<IActionResult> GetDoctorsOfDepartment(
+            Guid departmentId,
+            CancellationToken cancellationToken)
+        {
+            var result = await _sender.Send(new GetDoctorsByUserIdQuery(_userContext.UserId, departmentId), cancellationToken);
+            return result.Match(
+                schedules =>
+                {
+                    var resource = new { data = schedules };
+                    return Ok(resource);
+                },
+                Problem);
+        }
+
 
         [HttpGet("{id:guid}")]
         [MapToApiVersion("0.1")]

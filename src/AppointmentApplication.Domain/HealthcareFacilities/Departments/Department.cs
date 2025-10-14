@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+
 using AppointmentApplication.Domain.Abstractions;
-using AppointmentApplication.Domain.DoctorDepartments;
+using AppointmentApplication.Domain.Doctors;
 using AppointmentApplication.Domain.Shared.Results;
 
 namespace AppointmentApplication.Domain.HealthcareFacilities.Departments;
@@ -11,10 +12,10 @@ public sealed class Department : AuditableEntity
     public Guid FacilityId { get; private set; }
     public string Name { get; private set; } = string.Empty;
     public string Description { get; private set; } = string.Empty;
-    public HealthCareFacility? HealthcareFacility { get;  set; }
+    public HealthCareFacility? HealthcareFacility { get; set; }
 
-    private readonly List<DoctorDepartment> _doctorDepartments = new();
-    public IReadOnlyCollection<DoctorDepartment> DoctorDepartments => _doctorDepartments.AsReadOnly();
+    private readonly List<Doctor> _doctors = new();
+    public IReadOnlyCollection<Doctor> Doctors => _doctors.AsReadOnly();
 
 #pragma warning disable CS8618
     private Department() { }
@@ -67,28 +68,34 @@ public sealed class Department : AuditableEntity
 
         return Result.Updated;
     }
-
-    // ✅ Doctor management
-    public Result<Success> AddDoctorDepartment(DoctorDepartment doctorDepartment)
+    public Result<Success> AddDoctor(Doctor doctor)
     {
-        if (doctorDepartment is null)
+        if (_doctors.Any(d => d.Id == doctor.Id))
         {
-            return DepartmentErrors.DoctorDepartmentRequired;
+            return DoctorErrors.DoctorAlreadyExists;
         }
 
-        _doctorDepartments.Add(doctorDepartment);
+        _doctors.Add(doctor);
         return Result.Success;
     }
 
-    public Result<Success> RemoveDoctorDepartment(DoctorDepartment doctorDepartment)
+    public Result<Success> RemoveDoctor(Guid doctorId)
     {
-        if (doctorDepartment is null)
+        var doctor = _doctors.FirstOrDefault(d => d.Id == doctorId);
+        if (doctor is null)
         {
-            return DepartmentErrors.DoctorDepartmentRequired;
+            return DoctorErrors.DoctorNotFound;
         }
-
-        _doctorDepartments.Remove(doctorDepartment);
+        _doctors.Remove(doctor);
         return Result.Success;
     }
-
+    public Result<Doctor> GetDoctor(Guid doctorId)
+    {
+        var doctor = _doctors.FirstOrDefault(d => d.Id == doctorId);
+        if (doctor is null)
+        {
+            return DoctorErrors.DoctorNotFound;
+        }
+        return doctor;
+    }
 }

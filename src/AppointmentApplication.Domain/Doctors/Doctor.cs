@@ -4,7 +4,6 @@ using System.Linq;
 
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Appointments;
-using AppointmentApplication.Domain.DoctorDepartments;
 using AppointmentApplication.Domain.Doctors.DoctorScheduleExceptions;
 using AppointmentApplication.Domain.Doctors.DoctorSchedules;
 using AppointmentApplication.Domain.Doctors.DoctorsTreatmentCapabilities;
@@ -12,6 +11,7 @@ using AppointmentApplication.Domain.Doctors.Enums;
 using AppointmentApplication.Domain.Doctors.ScheduleExceptions;
 using AppointmentApplication.Domain.Doctors.Schedules;
 using AppointmentApplication.Domain.HealthcareFacilities;
+using AppointmentApplication.Domain.HealthcareFacilities.Departments;
 using AppointmentApplication.Domain.HealthcareFacilities.Enums;
 using AppointmentApplication.Domain.Shared.Enums;
 using AppointmentApplication.Domain.Shared.Results;
@@ -35,8 +35,8 @@ namespace AppointmentApplication.Domain.Doctors
         public Specialization Specialization { get; private set; }
         public DoctorTreatmentCapacity? TreatmentCapacity { get; private set; }
 
-        private readonly List<DoctorDepartment> _departments = new();
-        public IReadOnlyCollection<DoctorDepartment> Departments => _departments.AsReadOnly();
+        private readonly List<Department> _departments = new();
+        public IReadOnlyCollection<Department> Departments => _departments.AsReadOnly();
 
         private readonly List<DoctorSchedule> _schedules = new();
         public IReadOnlyCollection<DoctorSchedule> Schedules => _schedules.AsReadOnly();

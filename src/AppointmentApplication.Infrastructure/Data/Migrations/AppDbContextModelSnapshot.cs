@@ -200,47 +200,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.ToTable("BillingPayments");
                 });
 
-            modelBuilder.Entity("AppointmentApplication.Domain.DoctorDepartments.DoctorDepartment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("DepartmentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DoctorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FacilityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedAtdUtc")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("FacilityId");
-
-                    b.HasIndex("DoctorId", "DepartmentId", "FacilityId")
-                        .IsUnique();
-
-                    b.ToTable("DoctorDepartments");
-                });
-
             modelBuilder.Entity("AppointmentApplication.Domain.Doctors.Doctor", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1497,6 +1456,27 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.ToTable("users", (string)null);
                 });
 
+            modelBuilder.Entity("DoctorDepartment", b =>
+                {
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAtdUtc")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("DoctorId", "DepartmentId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("DoctorDepartment");
+                });
+
             modelBuilder.Entity("PatientAllergies", b =>
                 {
                     b.Property<Guid>("PatientId")
@@ -1613,33 +1593,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Billing");
-                });
-
-            modelBuilder.Entity("AppointmentApplication.Domain.DoctorDepartments.DoctorDepartment", b =>
-                {
-                    b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.Departments.Department", "Department")
-                        .WithMany("DoctorDepartments")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppointmentApplication.Domain.Doctors.Doctor", "Doctor")
-                        .WithMany("Departments")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "Facility")
-                        .WithMany()
-                        .HasForeignKey("FacilityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Department");
-
-                    b.Navigation("Doctor");
-
-                    b.Navigation("Facility");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.Doctors.Doctor", b =>
@@ -1942,6 +1895,21 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DoctorDepartment", b =>
+                {
+                    b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.Departments.Department", null)
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppointmentApplication.Domain.Doctors.Doctor", null)
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PatientAllergies", b =>
                 {
                     b.HasOne("AppointmentApplication.Domain.Patients.Allergies.Allergy", null)
@@ -2003,18 +1971,11 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                 {
                     b.Navigation("Appointments");
 
-                    b.Navigation("Departments");
-
                     b.Navigation("ScheduleExceptions");
 
                     b.Navigation("Schedules");
 
                     b.Navigation("TreatmentCapacity");
-                });
-
-            modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.Departments.Department", b =>
-                {
-                    b.Navigation("DoctorDepartments");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", b =>

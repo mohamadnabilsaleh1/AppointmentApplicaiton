@@ -12,6 +12,8 @@ namespace AppointmentApplication.Domain.Doctors
 
         public static readonly Error InvalidLicenseNumber =
             Error.Validation("Doctor.InvalidLicenseNumber", "License number cannot be empty.");
+        public static readonly Error DoctorAlreadyExists =
+         Error.Conflict("Doctor.AlreadyExists", "Doctor is already in this department");
 
         public static readonly Error InvalidDateOfBirth =
             Error.Validation("Doctor.InvalidDateOfBirth", "Date of birth must be in the past.");

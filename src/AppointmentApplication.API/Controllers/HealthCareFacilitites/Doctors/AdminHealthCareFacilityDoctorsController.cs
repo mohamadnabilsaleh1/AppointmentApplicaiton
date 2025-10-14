@@ -8,6 +8,7 @@ using AppointmentApplication.API.Dtos.HealthCareFacilities;
 using AppointmentApplication.API.Services;
 using AppointmentApplication.Application.Abstractions.Authentication;
 using AppointmentApplication.Application.Features.Doctors.Commands.CreateDoctor;
+using AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorByHealthCareFacilityIdAndUserId;
 using AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorByUserId;
 using AppointmentApplication.Contracts.Requests.Doctors;
 using AppointmentApplication.Domain.Users;
@@ -67,7 +68,17 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilitites.Doctors
         [EndpointDescription("Fetches a specific doctor for the currently authenticated health care facility by ID.")]
         public async Task<IActionResult> GetDoctorById(Guid id, CancellationToken cancellationToken)
         {
-            return Ok(new { Id = id, Name = "Doctor Name" }); // placeholder
+            
+            var result = await _sender.Send(new GetDoctorByHealthCareFacilityIdAndUserIdQuery(_userContext.UserId, id), cancellationToken);
+
+            return result.Match(
+                doctor =>
+                {
+                    var links = CreateLinks(id);
+                    var resource = new { data = doctor, links };
+                    return Ok(resource);
+                },
+                Problem);
         }
 
         [HttpPost]

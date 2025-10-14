@@ -7,6 +7,7 @@ using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Services;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Queries.GetDepartmentById;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Queries.GetDepartmentsById;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Queries.GetSchedulesByIdQuery;
 using AppointmentApplication.Contracts.Requests.Departments;
 
 using Asp.Versioning;
@@ -70,6 +71,28 @@ namespace AppointmentApplication.API.Controllers
                 {
                     var links = CreateLinks(facilityId, id);
                     var resource = new { data = schedule, links };
+                    return Ok(resource);
+                },
+                Problem);
+        }
+        [HttpGet("{departmentId:guid}/doctors")]
+        [MapToApiVersion("0.1")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [OutputCache(Duration = 60)]
+        [EndpointName("GetDoctorsOfDepartments")]
+        [EndpointSummary("Get Departments.")]
+        [EndpointDescription("Retrieves departments with optional filtering and pagination.")]
+        public async Task<IActionResult> GetDoctorsOfDepartment(
+            Guid departmentId,
+            Guid facilityId,
+            CancellationToken cancellationToken)
+        {
+            var result = await _sender.Send(new GetDoctorsByIdQuery(facilityId, departmentId), cancellationToken);
+            return result.Match(
+                schedules =>
+                {
+                    var resource = new { data = schedules };
                     return Ok(resource);
                 },
                 Problem);

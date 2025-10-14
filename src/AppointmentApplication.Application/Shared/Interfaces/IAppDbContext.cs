@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.Billings;
 using AppointmentApplication.Domain.Billings.BillingPayments;
-using AppointmentApplication.Domain.DoctorDepartments;
 using AppointmentApplication.Domain.Doctors;
 using AppointmentApplication.Domain.Doctors.DoctorsTreatmentCapabilities;
 using AppointmentApplication.Domain.Doctors.ScheduleExceptions;
@@ -53,7 +52,6 @@ public interface IAppDbContext
     // Doctor Entities
     DbSet<Doctor> Doctors { get; set; }
 
-    DbSet<DoctorDepartment> DoctorDepartments { get; set; }
     DbSet<DoctorSchedule> ScheduleDoctors { get; set; }
     DbSet<DoctorScheduleException> ScheduleExceptionDoctors { get; set; }
     DbSet<DoctorTreatmentCapacity> DoctorTreatmentCapacities { get; set; }

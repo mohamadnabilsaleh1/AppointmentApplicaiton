@@ -9,7 +9,6 @@ using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.Billings;
 using AppointmentApplication.Domain.Billings.BillingPayments;
-using AppointmentApplication.Domain.DoctorDepartments;
 using AppointmentApplication.Domain.Doctors;
 using AppointmentApplication.Domain.Doctors.DoctorsTreatmentCapabilities;
 using AppointmentApplication.Domain.Doctors.ScheduleExceptions;
@@ -63,7 +62,6 @@ public class AppDbContext : DbContext, IAppDbContext
 
     // Doctor Entities
     public DbSet<Doctor> Doctors { get; set; }
-    public DbSet<DoctorDepartment> DoctorDepartments { get; set; }
     public DbSet<DoctorSchedule> ScheduleDoctors { get; set; }
     public DbSet<DoctorScheduleException> ScheduleExceptionDoctors { get; set; }
     public DbSet<DoctorTreatmentCapacity> DoctorTreatmentCapacities { get; set; }

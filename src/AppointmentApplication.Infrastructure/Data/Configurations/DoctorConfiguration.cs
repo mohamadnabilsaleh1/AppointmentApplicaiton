@@ -1,5 +1,6 @@
 using AppointmentApplication.Domain.Doctors;
 using AppointmentApplication.Domain.Doctors.DoctorsTreatmentCapabilities;
+using AppointmentApplication.Domain.HealthcareFacilities.Departments;
 using AppointmentApplication.Domain.Users;
 
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,20 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
                    .HasForeignKey<DoctorTreatmentCapacity>(tc => tc.DoctorId)
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure many-to-many relationship
+            builder.HasMany(d => d.Departments)
+                   .WithMany(d => d.Doctors)
+                   .UsingEntity<Dictionary<string, object>>(
+                       "DoctorDepartment",
+                       j => j.HasOne<Department>().WithMany().HasForeignKey("DepartmentId").OnDelete(DeleteBehavior.Restrict),
+                       j => j.HasOne<Doctor>().WithMany().HasForeignKey("DoctorId").OnDelete(DeleteBehavior.Restrict),
+                       j =>
+                       {
+                           j.Property<DateTime>("CreatedAtUtc").IsRequired();
+                           j.Property<DateTime?>("UpdatedAtdUtc");
+                           j.HasKey("DoctorId", "DepartmentId");
+                       });
 
         }
     }
