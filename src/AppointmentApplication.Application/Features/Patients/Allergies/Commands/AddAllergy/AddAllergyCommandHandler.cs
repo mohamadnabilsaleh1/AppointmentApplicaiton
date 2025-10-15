@@ -37,13 +37,20 @@ namespace AppointmentApplication.Application.Features.Patients.Commands.AddAller
                 return ApplicationPatientErrors.PatientNotFound(request.UserId);
             }
 
-            var allergyResult = patient.AddAllergy(request.AllergyType);
+            var allergy = await _context.Allergies
+                    .FirstOrDefaultAsync(a => a.Name == request.AllergyType, cancellationToken);
 
-            // ✅ تحقق من وجود خطأ في النتيجة
+            if (allergy is null)
+            {
+                return ApplicationPatientErrors.InvalidAllergyType;
+            }
+            var allergyResult = patient.AddAllergy(allergy);
+
             if (allergyResult.IsError)
             {
                 return allergyResult.Errors;
             }
+
 
             await _context.SaveChangesAsync(cancellationToken);
 

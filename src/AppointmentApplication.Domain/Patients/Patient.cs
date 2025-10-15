@@ -126,23 +126,17 @@ namespace AppointmentApplication.Domain.Patients
         }
 
         // ✅ Domain logic
-        public Result<Allergy> AddAllergy(AllergyType allergyType)
+        public Result<Allergy> AddAllergy(Allergy allergy)
         {
-            var allergyExist = _allergies.FirstOrDefault(a => a.Name == allergyType);
-            if (allergyExist != null)
+            if (_allergies.Any(a => a.Id == allergy.Id))
             {
                 return PatientErrors.AllergyAlreadyExists;
             }
 
-            // Get the predefined allergy instance
-            var allergy = Allergy.GetAllergyByType(allergyType);
-            if (allergy == null)
-            {
-                return PatientErrors.InvalidAllergyType;
-            }
             _allergies.Add(allergy);
             return allergy;
         }
+
 
 
         public Result<Deleted> DeleteAllergy(Guid allergyId)
@@ -157,19 +151,11 @@ namespace AppointmentApplication.Domain.Patients
             return Result.Deleted;
         }
 
-        public Result<ChronicDisease> AddChronicDisease(ChronicDiseaseType chronicDiseaseType)
+        public Result<ChronicDisease> AddChronicDisease(ChronicDisease chronicDisease)
         {
-            var existing = _chronicDiseases.FirstOrDefault(cd => cd.Name == chronicDiseaseType);
-            if (existing != null)
+            if (_allergies.Any(a => a.Id == chronicDisease.Id))
             {
-                return PatientErrors.ChronicDiseaseAlreadyExists;
-            }
-
-            // Get the predefined chronic disease instance
-            var chronicDisease = ChronicDisease.GetChronicDiseaseByType(chronicDiseaseType);
-            if (chronicDisease == null)
-            {
-                return PatientErrors.InvalidChronicDiseaseType;
+                return PatientErrors.AllergyAlreadyExists;
             }
 
             _chronicDiseases.Add(chronicDisease);

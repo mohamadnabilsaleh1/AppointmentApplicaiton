@@ -17,5 +17,13 @@ namespace AppointmentApplication.Application.Features.Patients.Errors
             Error.NotFound(
                 "Allergy.NotFound",
                 $"Allergy with ID '{patientId}' was not found for the patient.");
+        public static Error InvalidAllergyType =>
+            Error.Validation("Patient.InvalidAllergyType", "Invalid allergy type.");
+        public static Error InvalidChronicDiseaseType =>
+            Error.Validation(
+                "Patient.InvalidChronicDiseaseType",
+                "Invalid ChronicDisease type."
+                );
+
     }
 }
