@@ -13,7 +13,7 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
         builder.Property(e => e.Name).IsRequired().HasMaxLength(255);
         builder.Property(e => e.Description);
         builder.Property(e => e.CreatedAtUtc).IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc);
+        builder.Property(e => e.UpdatedAtUtc);
 
         builder.HasOne(d => d.HealthcareFacility)
               .WithMany(f => f.Departments)

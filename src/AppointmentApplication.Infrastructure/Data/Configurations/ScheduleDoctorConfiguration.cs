@@ -18,7 +18,7 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
             builder.Property(e => e.IsAvailable).IsRequired();
             builder.Property(e => e.Note).HasMaxLength(500);
             builder.Property(e => e.CreatedAtUtc).IsRequired();
-            builder.Property(e => e.UpdatedAtdUtc);
+            builder.Property(e => e.UpdatedAtUtc);
 
             // ✅ Corrected relationship — explicitly use navigation property
             builder.HasOne(s => s.Doctor)

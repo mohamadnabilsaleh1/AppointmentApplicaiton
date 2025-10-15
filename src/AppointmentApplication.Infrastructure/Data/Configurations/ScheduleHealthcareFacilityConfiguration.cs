@@ -18,7 +18,7 @@ public class ScheduleHealthcareFacilityConfiguration : IEntityTypeConfiguration<
         builder.Property(e => e.IsAvailable).IsRequired();
         builder.Property(e => e.Note).HasMaxLength(500);
         builder.Property(e => e.CreatedAtUtc).IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc);
+        builder.Property(e => e.UpdatedAtUtc);
 
         builder.HasOne<HealthCareFacility>()
             .WithMany(f => f.Schedules)

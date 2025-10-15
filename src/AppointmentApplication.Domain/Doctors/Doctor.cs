@@ -141,7 +141,7 @@ namespace AppointmentApplication.Domain.Doctors
             LastName = lastName;
             Gender = gender;
             DateOfBirth = dateOfBirth;
-            UpdatedAtdUtc = DateTime.UtcNow;
+            UpdatedAtUtc = DateTime.UtcNow;
 
             return Result.Updated;
         }
@@ -155,7 +155,7 @@ namespace AppointmentApplication.Domain.Doctors
             }
 
             IsActive = true;
-            UpdatedAtdUtc = DateTime.UtcNow;
+            UpdatedAtUtc = DateTime.UtcNow;
             return Result.Updated;
         }
 
@@ -167,7 +167,7 @@ namespace AppointmentApplication.Domain.Doctors
             }
 
             IsActive = false;
-            UpdatedAtdUtc = DateTime.UtcNow;
+            UpdatedAtUtc = DateTime.UtcNow;
             return Result.Updated;
         }
 

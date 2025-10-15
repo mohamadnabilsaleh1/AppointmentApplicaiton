@@ -23,7 +23,7 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
             builder.Property(e => e.IsActive).IsRequired();
             builder.Property(e => e.CreatedAtUtc).IsRequired();
             builder.Property(e => e.Specialization).IsRequired();
-            builder.Property(e => e.UpdatedAtdUtc);
+            builder.Property(e => e.UpdatedAtUtc);
 
             builder.HasQueryFilter(e => e.IsActive);
 

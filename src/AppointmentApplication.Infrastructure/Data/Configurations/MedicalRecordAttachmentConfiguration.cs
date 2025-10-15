@@ -18,7 +18,7 @@ public class MedicalRecordAttachmentConfiguration : IEntityTypeConfiguration<Med
         builder.Property(e => e.IsActive).IsRequired().HasDefaultValue(true);
         builder.Property(e => e.UploadedAt).IsRequired();
         builder.Property(e => e.CreatedAtUtc).IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc);
+        builder.Property(e => e.UpdatedAtUtc);
 
         builder.HasOne(mra => mra.MedicalRecord)
             .WithMany(mr => mr.Attachments)

@@ -112,7 +112,7 @@ public class AppDbContext : DbContext, IAppDbContext
             }
             else
             {
-                auditableEntity.UpdatedAtdUtc = DateTime.UtcNow;
+                auditableEntity.UpdatedAtUtc = DateTime.UtcNow;
             }
         }
     }

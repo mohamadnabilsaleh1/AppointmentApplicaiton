@@ -19,7 +19,7 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
         builder.Property(e => e.Notes);
         builder.Property(e => e.CancelledReason);
         builder.Property(e => e.CreatedAtUtc).IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc);
+        builder.Property(e => e.UpdatedAtUtc);
 
         builder.HasOne(a => a.Patient)
             .WithMany(p => p.Appointments)

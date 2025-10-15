@@ -18,7 +18,7 @@ public class ScheduleExceptionHealthcareFacilityConfiguration : IEntityTypeConfi
         builder.Property(e => e.Status).IsRequired().HasMaxLength(50);
         builder.Property(e => e.Reason).HasMaxLength(500);
         builder.Property(e => e.CreatedAtUtc).IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc);
+        builder.Property(e => e.UpdatedAtUtc);
 
         builder.HasOne<HealthCareFacility>()
             .WithMany(f => f.ScheduleExceptions)

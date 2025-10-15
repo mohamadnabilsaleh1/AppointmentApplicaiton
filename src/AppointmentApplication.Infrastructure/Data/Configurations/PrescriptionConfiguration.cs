@@ -15,7 +15,7 @@ public class PrescriptionConfiguration : IEntityTypeConfiguration<Prescription>
         builder.Property(e => e.DosageInstructions).IsRequired();
         builder.Property(e => e.Status).IsRequired().HasMaxLength(20);
         builder.Property(e => e.CreatedAtUtc).IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc);
+        builder.Property(e => e.UpdatedAtUtc);
 
         builder.HasOne(p => p.Appointment)
             .WithMany(a => a.Prescriptions)

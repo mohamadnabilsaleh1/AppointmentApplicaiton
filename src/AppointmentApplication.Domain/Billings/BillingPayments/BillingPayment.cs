@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AppointmentApplication.Domain.Abstractions;
+using AppointmentApplication.Domain.Billings;
 
 namespace AppointmentApplication.Domain.Billings.BillingPayments;
 
@@ -17,8 +15,10 @@ public class BillingPayment : AuditableEntity
     public string TransactionReference { get; private set; }
     public string PaymentStatus { get; private set; }
 
+    // 🔗 One-to-one navigation
     public Billing Billing { get; private set; }
 
+    // 🏗 Factory Method
     public static BillingPayment Create(Guid billingId, string paymentMethod, decimal paidAmount,
         string transactionReference, string paymentStatus = "Completed")
     {
@@ -33,6 +33,7 @@ public class BillingPayment : AuditableEntity
         };
     }
 
+    // ⚙️ Behavior Method
     public void UpdateStatus(string paymentStatus)
     {
         PaymentStatus = paymentStatus;

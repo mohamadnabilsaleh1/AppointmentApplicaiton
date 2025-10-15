@@ -18,7 +18,7 @@ public class FacilityUploadConfiguration : IEntityTypeConfiguration<FacilityUplo
         builder.Property(e => e.Visibility).IsRequired();
 
         builder.Property(e => e.CreatedAtUtc).IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc);
+        builder.Property(e => e.UpdatedAtUtc);
 
         builder.HasOne(fum => fum.Facility)
             .WithMany()

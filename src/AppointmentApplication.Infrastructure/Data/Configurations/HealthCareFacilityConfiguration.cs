@@ -54,7 +54,7 @@ public class HealthCareFacilityConfiguration : IEntityTypeConfiguration<HealthCa
             .IsRequired();
         builder.Property(e => e.CreatedAtUtc)
             .IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc)
+        builder.Property(e => e.UpdatedAtUtc)
             .IsRequired(false); // Make nullable if it can be null
 
         // Collections configuration - FIXED (use proper navigation properties)

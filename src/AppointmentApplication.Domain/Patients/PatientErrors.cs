@@ -14,6 +14,8 @@ namespace AppointmentApplication.Domain.Patients
         Error.NotFound("Patient.NotFound", "Patient not found.");
         public static readonly Error InvalidAllergyType =
         Error.Validation("Patient.InvalidAllergyType", "Invalid allergy type.");
+        public static readonly Error InvalidChronicDiseaseType =
+        Error.Validation("Patient.InvalidChronicDiseaseType", "Invalid Chronic Disease Type.");
         public static readonly Error UploadAlreadyExists =
         Error.NotFound("Patient.NotFound", "Patient not found.");
         public static readonly Error AllergyNotFound =
@@ -25,7 +27,7 @@ namespace AppointmentApplication.Domain.Patients
         public static readonly Error ChronicDiseaseAlreadyExists =
         Error.NotFound("ChronicDisease.AlreadyExists", "Chronic disease already exists for the patient.");
         public static readonly Error UploadNotFound =
-        Error.NotFound("Upload.NotFound", "Upload not found for the patient."); 
+        Error.NotFound("Upload.NotFound", "Upload not found for the patient.");
         public static readonly Error InvalidName =
             Error.Validation("Patient.InvalidName", "First name and last name cannot be empty.");
 

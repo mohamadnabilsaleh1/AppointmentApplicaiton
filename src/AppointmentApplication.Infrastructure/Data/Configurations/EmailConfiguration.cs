@@ -16,7 +16,7 @@ public class EmailConfiguration : IEntityTypeConfiguration<Email>
         builder.Property(e => e.EmailAddress).IsRequired().HasMaxLength(255);
         builder.Property(e => e.Label).HasMaxLength(50);
         builder.Property(e => e.CreatedAtUtc).IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc);
+        builder.Property(e => e.UpdatedAtUtc);
 
         builder.HasIndex(e => new { e.OwnerType, e.OwnerId });
     }

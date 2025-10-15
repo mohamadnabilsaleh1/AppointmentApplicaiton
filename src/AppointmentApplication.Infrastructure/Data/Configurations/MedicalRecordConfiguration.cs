@@ -17,7 +17,7 @@ public class MedicalRecordConfiguration : IEntityTypeConfiguration<MedicalRecord
         builder.Property(e => e.Details).IsRequired();
         builder.Property(e => e.Notes);
         builder.Property(e => e.CreatedAtUtc).IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc);
+        builder.Property(e => e.UpdatedAtUtc);
 
         builder.HasOne(mr => mr.Patient)
             .WithMany(p => p.MedicalRecords)

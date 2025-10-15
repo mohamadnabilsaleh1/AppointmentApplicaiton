@@ -126,20 +126,22 @@ namespace AppointmentApplication.Domain.Patients
         }
 
         // ✅ Domain logic
-        public Result<Allergy> AddAllergy(AllergyType allergy)
+        public Result<Allergy> AddAllergy(AllergyType allergyType)
         {
-            var allergyExist = _allergies.FirstOrDefault(a => a.Name == allergy);
+            var allergyExist = _allergies.FirstOrDefault(a => a.Name == allergyType);
             if (allergyExist != null)
             {
                 return PatientErrors.AllergyAlreadyExists;
             }
-            var allergyResult = Allergy.Create(allergy);
-            if (allergyResult.IsError)
+
+            // Get the predefined allergy instance
+            var allergy = Allergy.GetAllergyByType(allergyType);
+            if (allergy == null)
             {
-                return allergyResult.Errors;
+                return PatientErrors.InvalidAllergyType;
             }
-            _allergies.Add(allergyResult.Value);
-            return allergyResult.Value;
+            _allergies.Add(allergy);
+            return allergy;
         }
 
 
@@ -155,22 +157,23 @@ namespace AppointmentApplication.Domain.Patients
             return Result.Deleted;
         }
 
-        public Result<ChronicDisease> AddChronicDisease(ChronicDiseaseType chronicDisease)
+        public Result<ChronicDisease> AddChronicDisease(ChronicDiseaseType chronicDiseaseType)
         {
-            var existing = _chronicDiseases.FirstOrDefault(cd => cd.Name == chronicDisease);
+            var existing = _chronicDiseases.FirstOrDefault(cd => cd.Name == chronicDiseaseType);
             if (existing != null)
             {
                 return PatientErrors.ChronicDiseaseAlreadyExists;
             }
 
-            var chronicResult = ChronicDisease.Create(chronicDisease);
-            if (chronicResult.IsError)
+            // Get the predefined chronic disease instance
+            var chronicDisease = ChronicDisease.GetChronicDiseaseByType(chronicDiseaseType);
+            if (chronicDisease == null)
             {
-                return chronicResult.Errors;
+                return PatientErrors.InvalidChronicDiseaseType;
             }
 
-            _chronicDiseases.Add(chronicResult.Value);
-            return chronicResult.Value;
+            _chronicDiseases.Add(chronicDisease);
+            return chronicDisease;
         }
 
         public Result<Deleted> DeleteChronicDisease(Guid chronicDiseaseId)

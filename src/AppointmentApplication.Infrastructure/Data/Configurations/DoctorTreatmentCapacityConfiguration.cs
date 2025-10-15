@@ -17,7 +17,7 @@ public class DoctorTreatmentCapacityConfiguration : IEntityTypeConfiguration<Doc
         builder.Property(e => e.SessionDurationMinutes).IsRequired().HasDefaultValue(30);
         builder.Property(e => e.IsActive).IsRequired().HasDefaultValue(true);
         builder.Property(e => e.CreatedAtUtc).IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc);
+        builder.Property(e => e.UpdatedAtUtc);
 
         // One-to-One relationship with Doctor
         builder.HasOne(dtc => dtc.Doctor)

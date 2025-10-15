@@ -14,7 +14,7 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
         builder.Property(e => e.Rating).IsRequired();
         builder.Property(e => e.Comment);
         builder.Property(e => e.CreatedAtUtc).IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc);
+        builder.Property(e => e.UpdatedAtUtc);
 
         builder.HasOne(r => r.Patient)
             .WithMany()

@@ -83,5 +83,9 @@ namespace AppointmentApplication.Domain.Patients.ChronicDiseases
             Obesity,
             Other
         };
+        public static ChronicDisease? GetChronicDiseaseByType(ChronicDiseaseType chronicDiseaseType)
+        {
+            return GetAll().FirstOrDefault(cd => cd.Name == chronicDiseaseType);
+        }
     }
 }

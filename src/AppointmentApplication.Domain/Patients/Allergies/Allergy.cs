@@ -26,14 +26,14 @@ namespace AppointmentApplication.Domain.Patients.Allergies
             Id = id;
             Name = name;
         }
-public static Result<Allergy> Create(AllergyType allergyType)
-{
-    if (!Enum.IsDefined(typeof(AllergyType), allergyType))
-        return PatientErrors.InvalidAllergyType;
+        public static Result<Allergy> Create(AllergyType allergyType)
+        {
+            if (!Enum.IsDefined(typeof(AllergyType), allergyType))
+                return PatientErrors.InvalidAllergyType;
 
-    var allergy = new Allergy(Guid.NewGuid(), allergyType);
-    return allergy; // ✅ يرجع كائن فعلي وليس null
-}
+            var allergy = new Allergy(Guid.NewGuid(), allergyType);
+            return allergy; // ✅ يرجع كائن فعلي وليس null
+        }
 
 
         // ✅ Static predefined instances لكل نوع حساسية
@@ -90,5 +90,9 @@ public static Result<Allergy> Create(AllergyType allergyType)
             InsectStings,
             Other
         };
+        public static Allergy? GetAllergyByType(AllergyType allergyType)
+        {
+            return GetAll().FirstOrDefault(a => a.Name == allergyType);
+        }
     }
 }

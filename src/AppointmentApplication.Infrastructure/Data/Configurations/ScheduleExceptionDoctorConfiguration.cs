@@ -18,7 +18,7 @@ public class ScheduleExceptionDoctorConfiguration : IEntityTypeConfiguration<Doc
         builder.Property(e => e.Status).IsRequired().HasMaxLength(50);
         builder.Property(e => e.Reason).HasMaxLength(500);
         builder.Property(e => e.CreatedAtUtc).IsRequired();
-        builder.Property(e => e.UpdatedAtdUtc);
+        builder.Property(e => e.UpdatedAtUtc);
 
         builder.HasOne<Doctor>()
             .WithMany(d => d.ScheduleExceptions)

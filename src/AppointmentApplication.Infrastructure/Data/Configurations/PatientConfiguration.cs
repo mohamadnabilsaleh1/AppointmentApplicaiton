@@ -1,5 +1,4 @@
 using AppointmentApplication.Domain.Patients;
-using AppointmentApplication.Domain.Users;
 using AppointmentApplication.Domain.Patients.Allergies;
 using AppointmentApplication.Domain.Patients.ChronicDiseases;
 using Microsoft.EntityFrameworkCore;
@@ -22,12 +21,12 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
             builder.Property(e => e.DateOfBirth).IsRequired();
             builder.Property(e => e.IsActive).IsRequired();
             builder.Property(e => e.CreatedAtUtc).IsRequired();
-            builder.Property(e => e.UpdatedAtdUtc);
+            builder.Property(e => e.UpdatedAtUtc);
 
             builder.HasIndex(e => e.NationalID).IsUnique();
             builder.HasQueryFilter(e => e.IsActive);
 
-            // ✅ Map Patient → User
+            // ✅ Relation: Patient → User
             builder.HasOne(e => e.User)
                    .WithMany(u => u.Patients)
                    .HasForeignKey(e => e.UserId)
@@ -37,39 +36,31 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
             builder.HasMany(p => p.Allergies)
                    .WithMany(a => a.Patients)
                    .UsingEntity<Dictionary<string, object>>(
-                        "PatientAllergies", // join table name
-                        j => j.HasOne<Allergy>()
-                              .WithMany()
-                              .HasForeignKey("AllergyId")
-                              .OnDelete(DeleteBehavior.Cascade),
-                        j => j.HasOne<Patient>()
-                              .WithMany()
-                              .HasForeignKey("PatientId")
-                              .OnDelete(DeleteBehavior.Cascade),
-                        j =>
-                        {
-                            j.HasKey("PatientId", "AllergyId");
-                            j.ToTable("PatientAllergies");
-                        });
+                       "PatientAllergies",
+                       j => j.HasOne<Allergy>().WithMany().HasForeignKey("AllergyId").OnDelete(DeleteBehavior.Cascade),
+                       j => j.HasOne<Patient>().WithMany().HasForeignKey("PatientId").OnDelete(DeleteBehavior.Cascade),
+                       j =>
+                       {
+                           j.HasKey("PatientId", "AllergyId");
+                           j.ToTable("PatientAllergies");
+                           j.Property<DateTime>("CreatedAtUtc").IsRequired().HasDefaultValueSql("GETUTCDATE()");
+                           j.Property<DateTime?>("UpdatedAtUtc");
+                       });
 
             // ✅ Many-to-Many: Patient ↔ ChronicDisease
             builder.HasMany(p => p.ChronicDiseases)
                    .WithMany(c => c.Patients)
                    .UsingEntity<Dictionary<string, object>>(
-                        "PatientChronicDiseases",
-                        j => j.HasOne<ChronicDisease>()
-                              .WithMany()
-                              .HasForeignKey("ChronicDiseaseId")
-                              .OnDelete(DeleteBehavior.Cascade),
-                        j => j.HasOne<Patient>()
-                              .WithMany()
-                              .HasForeignKey("PatientId")
-                              .OnDelete(DeleteBehavior.Cascade),
-                        j =>
-                        {
-                            j.HasKey("PatientId", "ChronicDiseaseId");
-                            j.ToTable("PatientChronicDiseases");
-                        });
+                       "PatientChronicDiseases",
+                       j => j.HasOne<ChronicDisease>().WithMany().HasForeignKey("ChronicDiseaseId").OnDelete(DeleteBehavior.Cascade),
+                       j => j.HasOne<Patient>().WithMany().HasForeignKey("PatientId").OnDelete(DeleteBehavior.Cascade),
+                       j =>
+                       {
+                           j.HasKey("PatientId", "ChronicDiseaseId");
+                           j.ToTable("PatientChronicDiseases");
+                           j.Property<DateTime>("CreatedAtUtc").IsRequired().HasDefaultValueSql("GETUTCDATE()");
+                           j.Property<DateTime?>("UpdatedAtUtc");
+                       });
         }
     }
 }
