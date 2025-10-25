@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AppointmentApplication.Application.Abstractions.Authentication;
 
 using AppointmentApplication.Application.Features.Users.Dtos;
+using AppointmentApplication.Application.Features.Users.Errors;
 using AppointmentApplication.Application.Features.Users.Mappers;
 using AppointmentApplication.Application.Shared.Interfaces;
 
@@ -35,8 +36,14 @@ public class GetLoggedInUserQueryHandler : IRequestHandler<GetLoggedInUserQuery,
         // جلب بيانات المستخدم من قاعدة البيانات
         var user = await _context.Users
             .AsNoTracking() // لا حاجة لتتبع التغييرات هنا
+            .Include(u => u.Roles)
             .Where(u => u.Id == userId)
             .FirstOrDefaultAsync(cancellationToken);
+        if (user is null)
+        {
+            ApplicationUserErrors.UserNotFound(userId);
+        }
+
         var dto = user.ToDto();
 
         return dto;

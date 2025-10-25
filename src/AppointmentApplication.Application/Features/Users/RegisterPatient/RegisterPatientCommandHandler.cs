@@ -36,7 +36,7 @@ namespace AppointmentApplication.Application.Features.Users.RegisterPatient
             var citizen = _countryUsersDbContext.Citizens.FirstOrDefault(c => c.NationalId == request.NationalId && c.PhoneNumber == request.PhoneNumber);
             if (citizen == null)
             {
-                return ApplicationUserErrors.CitizenNotFound();
+                return ApplicationUserErrors.CitizenNotFound;
             }
 
             Role role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Patient", cancellationToken) ?? Role.Patient;
