@@ -1,9 +1,12 @@
 using System;
+
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.Billings.BillingPayments;
+using AppointmentApplication.Domain.Billings.Enums;
 using AppointmentApplication.Domain.Doctors;
 using AppointmentApplication.Domain.Patients;
+using AppointmentApplication.Domain.Shared.Results;
 
 namespace AppointmentApplication.Domain.Billings;
 
@@ -18,7 +21,7 @@ public class Billing : AuditableEntity
 
     public DateTime DateIssued { get; private set; }
     public decimal TotalAmount { get; private set; }
-    public string Status { get; private set; }
+    public BillingStatus Status { get; private set; }
     public string Notes { get; private set; }
 
     // 🔗 Navigation Properties
@@ -28,26 +31,27 @@ public class Billing : AuditableEntity
     public Doctor Doctor { get; private set; }
 
     // 🏗 Factory Method
-    public static Billing Create(Guid patientId, Guid appointmentId, Guid doctorId,
+    public static Result<Billing> Create(Guid patientId, Guid appointmentId, Guid doctorId,
         decimal totalAmount, string notes)
     {
         return new Billing
         {
+            Id = Guid.NewGuid(),
             PatientID = patientId,
             AppointmentID = appointmentId,
             DoctorID = doctorId,
             DateIssued = DateTime.UtcNow,
             TotalAmount = totalAmount,
-            Status = "Pending",
+            Status = BillingStatus.Pending,
             Notes = notes,
         };
     }
 
     // ⚙️ Behavior Methods
-    public void UpdateStatus(string status)
-    {
-        Status = status;
-    }
+    // public void UpdateStatus(App status)
+    // {
+    //     Status = status;
+    // }
 
     public void AttachPayment(BillingPayment payment)
     {

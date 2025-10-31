@@ -72,7 +72,7 @@ namespace AppointmentApplication.Api.Controllers
                     {
                         data = appointment,
                     };
-                    return CreatedAtAction(nameof(GetAppointmentById), new { id = appointment.Id }, resource);
+                    return CreatedAtAction(nameof(GetAppointmentById), new { id = appointment }, resource);
                 },
                 Problem);
         }

@@ -27,15 +27,18 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BillingID")
+                    b.Property<Guid?>("BillingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CancelledReason")
+                    b.Property<string>("CancellationReason")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CheckInTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("CheckOutTime")
                         .HasColumnType("datetime2");
@@ -46,7 +49,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("DoctorID")
+                    b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("DurationMinutes")
@@ -54,7 +57,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(30);
 
-                    b.Property<Guid>("FacilityID")
+                    b.Property<Guid>("FacilityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastModifiedBy")
@@ -64,30 +67,29 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PatientID")
+                    b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("ScheduledDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("ScheduledDate")
+                        .HasColumnType("date");
 
                     b.Property<TimeSpan>("ScheduledTime")
                         .HasColumnType("time");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
+                    b.Property<int>("Status")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DoctorID");
+                    b.HasIndex("DoctorId");
 
-                    b.HasIndex("FacilityID");
+                    b.HasIndex("FacilityId");
 
-                    b.HasIndex("PatientID");
+                    b.HasIndex("PatientId");
 
                     b.ToTable("Appointments");
                 });
@@ -126,12 +128,9 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("PatientID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("Status")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasDefaultValue("Pending");
+                        .HasColumnType("int");
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
@@ -1544,19 +1543,19 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                 {
                     b.HasOne("AppointmentApplication.Domain.Doctors.Doctor", "Doctor")
                         .WithMany("Appointments")
-                        .HasForeignKey("DoctorID")
+                        .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "Facility")
                         .WithMany()
-                        .HasForeignKey("FacilityID")
+                        .HasForeignKey("FacilityId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AppointmentApplication.Domain.Patients.Patient", "Patient")
                         .WithMany("Appointments")
-                        .HasForeignKey("PatientID")
+                        .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

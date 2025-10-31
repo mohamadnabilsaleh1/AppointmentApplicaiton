@@ -22,8 +22,7 @@ public class BillingConfiguration : IEntityTypeConfiguration<Billing>
 
         builder.Property(e => e.Status)
             .IsRequired()
-            .HasMaxLength(20)
-            .HasDefaultValue("Pending");
+            .HasMaxLength(20);
 
         builder.Property(e => e.Notes).HasMaxLength(500);
 

@@ -1,0 +1,8 @@
+using AppointmentApplication.Application.Features.Doctors.DoctorsTreatmentCapabilities.Dtos;
+using AppointmentApplication.Domain.Shared.Results;
+using MediatR;
+
+namespace AppointmentApplication.Application.Features.Doctors.DoctorsTreatmentCapabilities.Commands.CreateDoctorsTreatmentCapability;
+
+public sealed record CreateDoctorsTreatmentCapabilityCommand(Guid UserId, int MaxPatientsPerDay,
+int SessionDurationMinutes): IRequest<Result<DoctorTreatmentCapabilityDto>>;

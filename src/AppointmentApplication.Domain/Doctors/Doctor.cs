@@ -22,7 +22,7 @@ namespace AppointmentApplication.Domain.Doctors
     public class Doctor : AuditableEntity
     {
         public Guid UserId { get; private set; }
-        public User? User { get;  set; }
+        public User? User { get; set; }
         public Guid FacilityId { get; private set; }
         public HealthCareFacility? HealthcareFacility { get; set; }
 
@@ -475,6 +475,36 @@ namespace AppointmentApplication.Domain.Doctors
         public bool HasScheduleExceptionForDate(DateOnly date)
         {
             return _scheduleExceptions.Any(se => se.Date == date);
+        }
+        public Result<DoctorTreatmentCapacity> CreateTreatmentCapacity(Guid id, int maxPatientsPerDay, int sessionDurationMinutes)
+        {
+            var treatmentCapacity = DoctorTreatmentCapacity.Create(id, maxPatientsPerDay, sessionDurationMinutes);
+            return treatmentCapacity;
+        }
+
+        public Result<Updated> UpdateTreatmentCapacity(int maxPatientsPerDay, int sessionDurationMinutes)
+        {
+            return TreatmentCapacity.Update(maxPatientsPerDay, sessionDurationMinutes);
+        }
+
+        public Result<DoctorTreatmentCapacity> GetTreatmentCapacityById(Guid DoctorId)
+        {
+            if (TreatmentCapacity == null)
+            {
+                return DoctorScheduleErrors.ScheduleNotFound;
+            }
+
+            return TreatmentCapacity;
+        }
+        // Add this method to your Doctor entity class
+        public Result<Deleted> DeleteTreatmentCapacity()
+        {
+            if (TreatmentCapacity == null)
+            {
+                return DoctorTreatmentCapacityErrors.DoctorTreatmentCapacityNotFound;
+            }
+
+            return Result.Deleted;
         }
     }
 }

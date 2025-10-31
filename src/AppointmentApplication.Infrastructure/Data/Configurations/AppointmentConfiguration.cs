@@ -17,23 +17,23 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
         builder.Property(e => e.Status).IsRequired().HasMaxLength(20);
         builder.Property(e => e.BookingDate).IsRequired();
         builder.Property(e => e.Notes);
-        builder.Property(e => e.CancelledReason);
+        builder.Property(e => e.CancellationReason);
         builder.Property(e => e.CreatedAtUtc).IsRequired();
         builder.Property(e => e.UpdatedAtUtc);
 
         builder.HasOne(a => a.Patient)
             .WithMany(p => p.Appointments)
-            .HasForeignKey(a => a.PatientID)
+            .HasForeignKey(a => a.PatientId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(a => a.Doctor)
             .WithMany(d => d.Appointments)
-            .HasForeignKey(a => a.DoctorID)
+            .HasForeignKey(a => a.DoctorId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(a => a.Facility)
             .WithMany()
-            .HasForeignKey(a => a.FacilityID)
+            .HasForeignKey(a => a.FacilityId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
