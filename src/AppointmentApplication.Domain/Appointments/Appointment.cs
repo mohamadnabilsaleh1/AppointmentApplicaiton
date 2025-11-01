@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Appointments.Enums;
 using AppointmentApplication.Domain.Appointments.Errors;
@@ -10,7 +11,6 @@ using AppointmentApplication.Domain.Doctors;
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.Patients;
 using AppointmentApplication.Domain.Prescriptions;
-using AppointmentApplication.Domain.Prescriptions.Errors;
 using AppointmentApplication.Domain.Shared.Enums;
 using AppointmentApplication.Domain.Shared.Results;
 
@@ -30,14 +30,14 @@ namespace AppointmentApplication.Domain.Appointments
         public DateTime BookingDate { get; private set; }
         public DateTime? CheckInTime { get; private set; }
         public DateTime? CheckOutTime { get; private set; }
-        public string Notes { get; private set; }
+        public string? Notes { get; private set; }
         public string CancellationReason { get; private set; }
 
         // Navigation Properties
         public virtual Patient Patient { get; private set; }
         public virtual Doctor Doctor { get; private set; }
         public virtual HealthCareFacility Facility { get; private set; }
-        public virtual Billing  Billing { get; private set; }
+        public virtual Billing Billing { get; private set; }
 
         private readonly List<Prescription> _prescriptions = new();
         public virtual IReadOnlyCollection<Prescription> Prescriptions => _prescriptions.AsReadOnly();
@@ -53,8 +53,7 @@ namespace AppointmentApplication.Domain.Appointments
             Guid facilityId,
             DateOnly scheduledDate,
             TimeSpan scheduledTime,
-            int durationMinutes,
-            string notes)
+            int durationMinutes)
             : base(id)
         {
             PatientId = patientId;
@@ -65,7 +64,7 @@ namespace AppointmentApplication.Domain.Appointments
             DurationMinutes = durationMinutes;
             Status = AppointmentStatus.Pending;
             BookingDate = DateTime.UtcNow;
-            Notes = notes;
+
             CancellationReason = string.Empty;
         }
 
@@ -76,8 +75,7 @@ namespace AppointmentApplication.Domain.Appointments
             Guid facilityId,
             DateOnly scheduledDate,
             TimeSpan scheduledTime,
-            int durationMinutes,
-            string notes)
+            int durationMinutes)
         {
             // Domain validation
             if (patientId == Guid.Empty)
@@ -121,16 +119,6 @@ namespace AppointmentApplication.Domain.Appointments
                 return AppointmentErrors.InvalidDuration;
             }
 
-            if (string.IsNullOrWhiteSpace(notes))
-            {
-                return AppointmentErrors.EmptyNotes;
-            }
-
-            if (notes.Length > 1000)
-            {
-                return AppointmentErrors.NotesTooLong;
-            }
-
             var appointment = new Appointment(
                 Guid.NewGuid(),
                 patientId,
@@ -138,8 +126,8 @@ namespace AppointmentApplication.Domain.Appointments
                 facilityId,
                 scheduledDate,
                 scheduledTime,
-                durationMinutes,
-                notes);
+                durationMinutes
+                );
 
             return appointment;
         }
@@ -152,11 +140,10 @@ namespace AppointmentApplication.Domain.Appointments
             DateOnly scheduledDate,
             TimeSpan scheduledTime,
             int durationMinutes,
-            string notes,
             decimal totalAmount)
         {
             var appointmentResult = Create(
-                patientId, doctorId, facilityId, scheduledDate, scheduledTime, durationMinutes, notes);
+                patientId, doctorId, facilityId, scheduledDate, scheduledTime, durationMinutes);
 
             if (appointmentResult.IsError)
             {
@@ -166,7 +153,7 @@ namespace AppointmentApplication.Domain.Appointments
             var appointment = appointmentResult.Value;
 
             var billingResult = Billing.Create(
-                patientId, appointment.Id, doctorId, totalAmount, notes);
+                patientId, appointment.Id, doctorId, totalAmount);
 
             if (billingResult.IsError)
             {
@@ -187,6 +174,7 @@ namespace AppointmentApplication.Domain.Appointments
                 return AppointmentErrors.InvalidStatusTransition;
             }
 
+
             Status = AppointmentStatus.Confirmed;
             CheckInTime = DateTime.UtcNow;
             UpdatedAtUtc = DateTime.UtcNow;
@@ -202,47 +190,32 @@ namespace AppointmentApplication.Domain.Appointments
                 return AppointmentErrors.CannotCompleteWithoutConfirmation;
             }
 
-            if (Billing?.Status != BillingStatus.Paid)
-            {
-                return AppointmentErrors.CannotCompleteWithoutPayment;
-            }
 
             Status = AppointmentStatus.Completed;
             CheckOutTime = DateTime.UtcNow;
             UpdatedAtUtc = DateTime.UtcNow;
-
+            Billing.MarkAsPaid(Billing.TotalAmount);
             return Result.Updated;
         }
 
         // ✅ Cancel Appointment
-        // public Result<Updated> Cancel(string reason)
-        // {
-        //     if (Status == AppointmentStatus.Completed || Status == AppointmentStatus.Cancelled)
-        //     {
-        //         return AppointmentErrors.CannotCancelCompleted;
-        //     }
+        public Result<Updated> Cancel(string reason)
+        {
+            if (Status == AppointmentStatus.Completed || Status == AppointmentStatus.Cancelled)
+            {
+                return AppointmentErrors.CannotCancelCompleted;
+            }
 
-        //     if (string.IsNullOrWhiteSpace(reason))
-        //     {
-        //         return AppointmentErrors.EmptyCancellationReason;
-        //     }
+            if (string.IsNullOrWhiteSpace(reason))
+            {
+                return AppointmentErrors.EmptyCancellationReason;
+            }
 
-        //     Status = AppointmentStatus.Cancelled;
-        //     CancellationReason = reason.Trim();
-        //     UpdatedAtUtc = DateTime.UtcNow;
-
-        //     // Cancel associated billing if exists
-        //     if (Billing != null && Billing.CanBeModified())
-        //     {
-        //         var billingCancelResult = Billing.Cancel("Appointment cancelled");
-        //         if (billingCancelResult.IsError)
-        //         {
-        //             return billingCancelResult.Errors;
-        //         }
-        //     }
-
-        //     return Result.Updated;
-        // }
+            Status = AppointmentStatus.Cancelled;
+            CancellationReason = reason.Trim();
+            UpdatedAtUtc = DateTime.UtcNow;
+            return Result.Updated;
+        }
 
         // ✅ Mark as No Show
         public Result<Updated> MarkAsNoShow()

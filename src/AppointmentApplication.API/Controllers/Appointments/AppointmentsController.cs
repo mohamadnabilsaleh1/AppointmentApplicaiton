@@ -40,7 +40,7 @@ namespace AppointmentApplication.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = Roles.Patient)]
         [MapToApiVersion("0.1")]
         [EndpointSummary("Create a new appointment.")]
         [EndpointDescription("Creates a new appointment with the provided details.")]
@@ -50,8 +50,8 @@ namespace AppointmentApplication.Api.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateAppointment(
-    [FromBody] CreateAppointmentRequest request,
-    CancellationToken cancellationToken)
+      [FromBody] CreateAppointmentRequest request,
+      CancellationToken cancellationToken)
         {
             var command = new CreateAppointmentCommand(
                 _userContext.UserId,
@@ -60,19 +60,18 @@ namespace AppointmentApplication.Api.Controllers
                 request.ScheduledDate,
                 request.ScheduledTime,
                 request.DurationMinutes,
-                request.Notes,
                 request.TotalAmount);
 
             var result = await _sender.Send(command, cancellationToken);
 
             return result.Match<IActionResult>(
-                appointment =>
+                appointmentDto => // Now receives AppointmentDto instead of Guid
                 {
                     var resource = new
                     {
-                        data = appointment,
+                        data = appointmentDto,
                     };
-                    return CreatedAtAction(nameof(GetAppointmentById), new { id = appointment }, resource);
+                    return CreatedAtAction(nameof(GetAppointmentById), new { id = appointmentDto.Id }, resource);
                 },
                 Problem);
         }
@@ -92,5 +91,7 @@ namespace AppointmentApplication.Api.Controllers
         {
             return Ok();
         }
+        //GetAppointmentsForDoctorCommand
+
     }
 }

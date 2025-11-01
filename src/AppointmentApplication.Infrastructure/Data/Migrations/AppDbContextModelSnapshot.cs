@@ -35,7 +35,10 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
                     b.Property<string>("CancellationReason")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasDefaultValue("");
 
                     b.Property<DateTime?>("CheckInTime")
                         .HasColumnType("datetime2");
@@ -64,8 +67,8 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
@@ -99,10 +102,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AppointmentID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BillingPaymentID")
+                    b.Property<Guid>("AppointmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAtUtc")
@@ -114,25 +114,29 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<DateTime>("DateIssued")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DoctorID")
+                    b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                    b.Property<decimal?>("PaidAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("PatientID")
+                    b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Status")
+                    b.Property<DateTime?>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<decimal>("TotalAmount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
@@ -140,14 +144,14 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppointmentID")
+                    b.HasIndex("AppointmentId")
                         .IsUnique();
 
-                    b.HasIndex("DoctorID");
+                    b.HasIndex("DoctorId");
 
-                    b.HasIndex("PatientID");
+                    b.HasIndex("PatientId");
 
-                    b.ToTable("billings", (string)null);
+                    b.ToTable("Billings");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.Billings.BillingPayments.BillingPayment", b =>
@@ -178,25 +182,12 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasDefaultValue("Completed");
-
-                    b.Property<string>("TransactionReference")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<DateTime?>("UpdatedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BillingID")
-                        .IsUnique();
+                    b.HasIndex("BillingID");
 
                     b.ToTable("billing_payments", (string)null);
                 });
@@ -773,7 +764,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AppointmentID")
+                    b.Property<Guid>("AppointmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAtUtc")
@@ -782,53 +773,45 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Details")
+                    b.Property<string>("Diagnosis")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("DoctorID")
+                    b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FacilityID")
+                    b.Property<Guid>("FacilityId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FollowUpInstructions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("PatientID")
+                    b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RecordType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<DateTime>("RecordDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("TreatmentNotes")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasDefaultValue("Active");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppointmentID");
+                    b.HasIndex("AppointmentId");
 
-                    b.HasIndex("DoctorID");
+                    b.HasIndex("DoctorId");
 
-                    b.HasIndex("FacilityID");
+                    b.HasIndex("FacilityId");
 
-                    b.HasIndex("PatientID");
+                    b.HasIndex("PatientId");
 
                     b.ToTable("MedicalRecords");
                 });
@@ -1160,7 +1143,7 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AppointmentID")
+                    b.Property<Guid>("AppointmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAtUtc")
@@ -1172,12 +1155,12 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<DateTime>("DateIssued")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("DosageInstructions")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("IssuedByDoctorID")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -1186,19 +1169,14 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.Property<DateTime?>("UpdatedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppointmentID");
+                    b.HasIndex("AppointmentId");
 
-                    b.HasIndex("IssuedByDoctorID");
+                    b.HasIndex("DoctorId");
 
                     b.ToTable("Prescriptions");
                 });
@@ -1570,19 +1548,19 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                 {
                     b.HasOne("AppointmentApplication.Domain.Appointments.Appointment", "Appointment")
                         .WithOne("Billing")
-                        .HasForeignKey("AppointmentApplication.Domain.Billings.Billing", "AppointmentID")
+                        .HasForeignKey("AppointmentApplication.Domain.Billings.Billing", "AppointmentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AppointmentApplication.Domain.Doctors.Doctor", "Doctor")
                         .WithMany()
-                        .HasForeignKey("DoctorID")
+                        .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AppointmentApplication.Domain.Patients.Patient", "Patient")
                         .WithMany()
-                        .HasForeignKey("PatientID")
+                        .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1596,8 +1574,8 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
             modelBuilder.Entity("AppointmentApplication.Domain.Billings.BillingPayments.BillingPayment", b =>
                 {
                     b.HasOne("AppointmentApplication.Domain.Billings.Billing", "Billing")
-                        .WithOne("BillingPayment")
-                        .HasForeignKey("AppointmentApplication.Domain.Billings.BillingPayments.BillingPayment", "BillingID")
+                        .WithMany()
+                        .HasForeignKey("BillingID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1797,24 +1775,25 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                 {
                     b.HasOne("AppointmentApplication.Domain.Appointments.Appointment", "Appointment")
                         .WithMany()
-                        .HasForeignKey("AppointmentID")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("AppointmentApplication.Domain.Doctors.Doctor", "Doctor")
                         .WithMany()
-                        .HasForeignKey("DoctorID")
+                        .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "Facility")
                         .WithMany()
-                        .HasForeignKey("FacilityID")
+                        .HasForeignKey("FacilityId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AppointmentApplication.Domain.Patients.Patient", "Patient")
                         .WithMany("MedicalRecords")
-                        .HasForeignKey("PatientID")
+                        .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1842,13 +1821,13 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                 {
                     b.HasOne("AppointmentApplication.Domain.Appointments.Appointment", "Appointment")
                         .WithMany("Prescriptions")
-                        .HasForeignKey("AppointmentID")
+                        .HasForeignKey("AppointmentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AppointmentApplication.Domain.Doctors.Doctor", "Doctor")
                         .WithMany()
-                        .HasForeignKey("IssuedByDoctorID")
+                        .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1970,11 +1949,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Prescriptions");
-                });
-
-            modelBuilder.Entity("AppointmentApplication.Domain.Billings.Billing", b =>
-                {
-                    b.Navigation("BillingPayment");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.Doctors.Doctor", b =>

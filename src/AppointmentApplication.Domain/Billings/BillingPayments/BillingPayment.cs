@@ -12,15 +12,13 @@ public class BillingPayment : AuditableEntity
     public string PaymentMethod { get; private set; }
     public decimal PaidAmount { get; private set; }
     public DateTime PaymentDate { get; private set; }
-    public string TransactionReference { get; private set; }
-    public string PaymentStatus { get; private set; }
 
     // 🔗 One-to-one navigation
     public Billing Billing { get; private set; }
 
     // 🏗 Factory Method
     public static BillingPayment Create(Guid billingId, string paymentMethod, decimal paidAmount,
-        string transactionReference, string paymentStatus = "Completed")
+        string transactionReference)
     {
         return new BillingPayment
         {
@@ -28,14 +26,7 @@ public class BillingPayment : AuditableEntity
             PaymentMethod = paymentMethod,
             PaidAmount = paidAmount,
             PaymentDate = DateTime.UtcNow,
-            TransactionReference = transactionReference,
-            PaymentStatus = paymentStatus,
         };
     }
 
-    // ⚙️ Behavior Method
-    public void UpdateStatus(string paymentStatus)
-    {
-        PaymentStatus = paymentStatus;
-    }
 }

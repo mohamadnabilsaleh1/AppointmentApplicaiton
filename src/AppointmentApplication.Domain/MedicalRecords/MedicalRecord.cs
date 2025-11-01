@@ -1,62 +1,132 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AppointmentApplication.Domain.Abstractions;
 using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.Doctors;
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.MedicalRecordAttachments;
 using AppointmentApplication.Domain.Patients;
+using AppointmentApplication.Domain.Shared.Results;
 
-namespace AppointmentApplication.Domain.MedicalRecords;
-
-public class MedicalRecord : AuditableEntity
+namespace AppointmentApplication.Domain.MedicalRecords
 {
-    private MedicalRecord() { }
-
-    public Guid PatientID { get; private set; }
-    public Guid FacilityID { get; private set; }
-    public Guid DoctorID { get; private set; }
-    public Guid? AppointmentID { get; private set; }
-    public string RecordType { get; private set; }
-    public DateTime DateCreated { get; private set; }
-    public string Status { get; private set; }
-    public string Details { get; private set; }
-    public string Notes { get; private set; } = string.Empty;
-
-    public Patient Patient { get; private set; }
-    public HealthCareFacility Facility { get; private set; }
-    public Doctor Doctor { get; private set; }
-    public Appointment Appointment { get; private set; }
-
-    private readonly List<MedicalRecordAttachment> _attachments = new();
-    public IReadOnlyCollection<MedicalRecordAttachment> Attachments => _attachments.AsReadOnly();
-
-    public static MedicalRecord Create(Guid patientId, Guid facilityId, Guid doctorId,
-        string recordType, string details, Guid appointmentId, string notes)
+    public class MedicalRecord : AuditableEntity
     {
-        return new MedicalRecord
+        private MedicalRecord() { }
+
+        public Guid PatientId { get; private set; }
+        public Guid FacilityId { get; private set; }
+        public Guid DoctorId { get; private set; }
+        public Guid AppointmentId { get; private set; }
+        public DateTime RecordDate { get; private set; }
+        public string Diagnosis { get; private set; }
+        public string TreatmentNotes { get; private set; }
+        public string FollowUpInstructions { get; private set; }
+
+        // Navigation Properties
+        public virtual Patient? Patient { get; private set; }
+        public virtual HealthCareFacility? Facility { get; private set; }
+        public virtual Doctor? Doctor { get; private set; }
+        public virtual Appointment? Appointment { get; private set; }
+
+        private readonly List<MedicalRecordAttachment> _attachments = new();
+        public virtual IReadOnlyCollection<MedicalRecordAttachment> Attachments => _attachments.AsReadOnly();
+
+        // Factory Method
+        public static Result<MedicalRecord> Create(
+            Guid patientId,
+            Guid facilityId,
+            Guid doctorId,
+            Guid appointmentId,
+            string diagnosis,
+            string treatmentNotes,
+            string followUpInstructions = "")
         {
-            PatientID = patientId,
-            FacilityID = facilityId,
-            DoctorID = doctorId,
-            AppointmentID = appointmentId,
-            RecordType = recordType,
-            DateCreated = DateTime.UtcNow,
-            Status = "Active",
-            Details = details,
-            Notes = notes,
-        };
-    }
+            // Domain validation
+            if (string.IsNullOrWhiteSpace(diagnosis))
+            {
+                return MedicalRecordErrors.EmptyDiagnosis;
+            }
 
-    public void Update(string details, string notes)
-    {
-        Details = details;
-        Notes = notes;
-    }
+            if (string.IsNullOrWhiteSpace(treatmentNotes))
+            {
+                return MedicalRecordErrors.EmptyTreatmentNotes;
+            }
 
-    public void Archive() => Status = "Archived";
-    public void Delete() => Status = "Deleted";
-    public void Activate() => Status = "Active";
+            if (diagnosis.Length > 500)
+            {
+                return MedicalRecordErrors.DiagnosisTooLong;
+            }
+
+            if (treatmentNotes.Length > 2000)
+            {
+                return MedicalRecordErrors.TreatmentNotesTooLong;
+            }
+
+            if (followUpInstructions.Length > 1000)
+            {
+                return MedicalRecordErrors.FollowUpInstructionsTooLong;
+            }
+
+            var medicalRecord = new MedicalRecord
+            {
+                Id = Guid.NewGuid(),
+                PatientId = patientId,
+                FacilityId = facilityId,
+                DoctorId = doctorId,
+                AppointmentId = appointmentId,
+                RecordDate = DateTime.UtcNow,
+                Diagnosis = diagnosis.Trim(),
+                TreatmentNotes = treatmentNotes.Trim(),
+                FollowUpInstructions = followUpInstructions?.Trim() ?? ""
+            };
+
+            return medicalRecord;
+        }
+
+        // Add Attachment
+        // public Result<MedicalRecordAttachment> AddAttachment(
+        //     Guid uploadedById,
+        //     string fileType,
+        //     string fileUrl,
+        //     string title,
+        //     string description,
+        //     string visibility = "Private")
+        // {
+        //     var attachmentResult = MedicalRecordAttachment.Create(
+        //         Id, uploadedById, fileType, fileUrl, title, description, visibility);
+
+        //     if (attachmentResult.IsError)
+        //     {
+        //         return attachmentResult.Errors;
+        //     }
+
+        //     _attachments.Add(attachmentResult.Value);
+        //     return attachmentResult.Value;
+        // }
+
+        // Update Medical Record
+        public Result<Updated> Update(
+            string diagnosis,
+            string treatmentNotes,
+            string followUpInstructions)
+        {
+            if (string.IsNullOrWhiteSpace(diagnosis))
+            {
+                return MedicalRecordErrors.EmptyDiagnosis;
+            }
+
+            if (string.IsNullOrWhiteSpace(treatmentNotes))
+            {
+                return MedicalRecordErrors.EmptyTreatmentNotes;
+            }
+
+            Diagnosis = diagnosis.Trim();
+            TreatmentNotes = treatmentNotes.Trim();
+            FollowUpInstructions = followUpInstructions?.Trim() ?? "";
+            UpdatedAtUtc = DateTime.UtcNow;
+
+            return Result.Updated;
+        }
+    }
 }

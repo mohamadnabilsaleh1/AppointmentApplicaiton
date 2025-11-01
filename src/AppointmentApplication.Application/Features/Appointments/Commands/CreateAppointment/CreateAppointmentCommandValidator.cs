@@ -41,10 +41,6 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Crea
             RuleFor(x => x.DurationMinutes)
                 .InclusiveBetween(15, 480).WithMessage("Duration must be between 15 minutes and 8 hours");
 
-            RuleFor(x => x.Notes)
-                .NotEmpty().WithMessage("Notes are required")
-                .MaximumLength(1000).WithMessage("Notes cannot exceed 1000 characters");
-
             RuleFor(x => x.TotalAmount)
                 .GreaterThan(0).When(x => x.TotalAmount.HasValue)
                 .WithMessage("Total amount must be greater than 0");

@@ -16,8 +16,17 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
         builder.Property(e => e.DurationMinutes).IsRequired().HasDefaultValue(30);
         builder.Property(e => e.Status).IsRequired().HasMaxLength(20);
         builder.Property(e => e.BookingDate).IsRequired();
-        builder.Property(e => e.Notes);
-        builder.Property(e => e.CancellationReason);
+        
+        // ✅ جعل Notes nullable (لا يقبل NULL)
+        builder.Property(e => e.Notes)
+            .IsRequired(false) // هذا يجعل الحقل nullable
+            .HasMaxLength(1000);
+            
+        builder.Property(e => e.CancellationReason)
+            .IsRequired()
+            .HasMaxLength(500)
+            .HasDefaultValue("");
+            
         builder.Property(e => e.CreatedAtUtc).IsRequired();
         builder.Property(e => e.UpdatedAtUtc);
 
