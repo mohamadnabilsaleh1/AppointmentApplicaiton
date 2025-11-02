@@ -12,6 +12,7 @@ using AppointmentApplication.API.Services;
 using AppointmentApplication.Application.Abstractions.Authentication;
 using AppointmentApplication.Application.Features.Appointments.Commands.CreateAppointment;
 using AppointmentApplication.Application.Features.Appointments.Queries.GetAppointmentByDoctorId;
+using AppointmentApplication.Application.Features.Appointments.Queries.GetAppointmentDetailsForPatientById;
 using AppointmentApplication.Domain.Shared.Results;
 using AppointmentApplication.Domain.Users;
 
@@ -88,6 +89,42 @@ namespace AppointmentApplication.Api.Controllers
                             response.TotalPages
                         },
                         links
+                    };
+
+                    return Ok(resource);
+                },
+                Problem);
+        }
+        [HttpGet("{appointmentId:guid}")]
+        [Authorize(Roles = Roles.Patient)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [MapToApiVersion("0.1")]
+        [EndpointSummary("Get appointment details by ID for current patient")]
+        [EndpointDescription("Retrieves detailed information about a specific appointment for the currently authenticated patient. Returns full details including billing and prescriptions for completed appointments.")]
+        [EndpointName("GetPatientAppointmentById")]
+        [OutputCache(Duration = 60, VaryByQueryKeys = new[] { "fields" })] // Cache for 60 seconds, vary by fields
+        public async Task<IActionResult> GetPatientAppointmentById(
+    Guid appointmentId,
+    [FromQuery] string? fields = null,
+    CancellationToken cancellationToken = default)
+        {
+            var result = await _sender.Send(
+                new GetAppointmentDetailsForPatientByIdQuery(
+                    UserId: _userContext.UserId,
+                    AppointmentId: appointmentId,
+                    Fields: fields),
+                cancellationToken);
+
+            return result.Match(
+                appointmentDetails =>
+                {
+                    var resource = new
+                    {
+                        data = appointmentDetails
                     };
 
                     return Ok(resource);

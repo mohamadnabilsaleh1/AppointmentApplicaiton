@@ -10,7 +10,7 @@ namespace AppointmentApplication.Application.Features.Appointments.Dtos
         AppointmentStatus Status,
         DateTime BookingDate,
         string Notes,
-        
+
         // Simplified nested objects - only essential info
         PatientInfoDto Patient,
         DoctorInfoDto Doctor,
@@ -36,3 +36,10 @@ public record FacilityInfoDto(
     string Name,
     string Address
 );
+
+public record AppointmentCompletionDto(
+    Guid AppointmentId,
+    string Status,
+    Guid MedicalRecordId,
+    Guid PrescriptionId,
+    bool BillingPaid);

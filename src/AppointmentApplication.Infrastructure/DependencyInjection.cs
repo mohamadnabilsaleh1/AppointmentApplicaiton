@@ -74,3 +74,19 @@ public static class DependencyInjection
         services.AddTransient<IClaimsTransformation, CustomClaimsTransformation>();
     }
 }
+
+
+/*
+Guid id
+string patientfullname
+doctor fullname
+faciltiyname 
+medicalrecord:{
+    DateTime RecordDate,
+    string Diagnosis,
+    string TreatmentNotes,
+    string FollowUpInstructions,
+    List<PrescriptionMedicalInfoDto> Prescriptions 
+}
+
+*/
