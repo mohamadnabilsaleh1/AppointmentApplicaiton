@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
+
 using AppointmentApplication.Application.Features.HealthcareFacilities.Uploads.Dtos;
 
 using AppointmentApplication.Application.Features.Patients.Errors;
@@ -31,7 +33,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Uploa
                 .FirstOrDefaultAsync(p => p.Id == request.HealthCareFacilityId);
             if (healthCareFacility == null)
             {
-                return ApplicationPatientErrors.PatientNotFound(request.HealthCareFacilityId);
+                return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.HealthCareFacilityId);
             }
             var uploadResult = healthCareFacility.GetUploadedById(request.FileId);
             if (uploadResult.IsError)
@@ -40,7 +42,6 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Uploa
             }
             return uploadResult.Value.ToDto();
         }
-
     }
 
 }

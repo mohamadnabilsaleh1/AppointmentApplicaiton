@@ -1,4 +1,5 @@
-using AppointmentApplication.Domain.Shared.Phone;
+using AppointmentApplication.Domain.Shared;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

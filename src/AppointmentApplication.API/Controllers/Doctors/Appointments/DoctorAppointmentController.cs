@@ -14,6 +14,7 @@ using AppointmentApplication.Application.Features.Appointments.Commands.CancelAp
 using AppointmentApplication.Application.Features.Appointments.Commands.CompleteAppointment;
 using AppointmentApplication.Application.Features.Appointments.Commands.ConfirmAppointment;
 using AppointmentApplication.Application.Features.Appointments.Queries.GetAppointmentByDoctorId;
+using AppointmentApplication.Application.Features.Appointments.Queries.GetAppointmentDetailsForDoctorById;
 using AppointmentApplication.Domain.Shared.Results;
 using AppointmentApplication.Domain.Users;
 
@@ -96,6 +97,43 @@ namespace AppointmentApplication.Api.Controllers
                 Problem);
         }
 
+        [HttpGet("{appointmentId:guid}")]
+        [Authorize(Roles = Roles.Doctor)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [MapToApiVersion("0.1")]
+        [EndpointSummary("Get appointment details by ID for current doctor")]
+        [EndpointDescription("Retrieves detailed information about a specific appointment for the currently authenticated doctor. Returns full details including billing and prescriptions for completed appointments.")]
+        [EndpointName("GetDoctorAppointmentById")]
+        [OutputCache(Duration = 60, VaryByQueryKeys = new[] { "fields" })] // Cache for 60 seconds, vary by fields
+        public async Task<IActionResult> GetDoctorAppointmentById(
+Guid appointmentId,
+[FromQuery] string? fields = null,
+CancellationToken cancellationToken = default)
+        {
+            var result = await _sender.Send(
+                new GetAppointmentDetailsForDoctorByIdQuery(
+                    UserId: _userContext.UserId,
+                    AppointmentId: appointmentId,
+                    Fields: fields),
+                cancellationToken);
+
+            return result.Match(
+                appointmentDetails =>
+                {
+                    var resource = new
+                    {
+                        data = appointmentDetails
+                    };
+
+                    return Ok(resource);
+                },
+                Problem);
+        }
+
         [HttpPut("{appointmentId:guid}/complete", Name = "CompleteDoctorAppointment")] // Fixed: Unique endpoint name
         [Authorize(Roles = Roles.Doctor)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -126,7 +164,8 @@ namespace AppointmentApplication.Api.Controllers
             var result = await _sender.Send(command, cancellationToken);
 
             return result.Match<IActionResult>(
-                completionResult => Ok(new {
+                completionResult => Ok(new
+                {
                     message = "Appointment completed successfully",
                     data = completionResult
                 }),

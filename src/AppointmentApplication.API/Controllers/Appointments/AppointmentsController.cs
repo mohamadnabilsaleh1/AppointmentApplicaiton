@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AppointmentApplication.Api.Models.Appointments;
+
 using AppointmentApplication.API;
 using AppointmentApplication.API.Controllers;
 using AppointmentApplication.API.Services;

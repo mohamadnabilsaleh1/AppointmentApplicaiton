@@ -23,7 +23,6 @@ using AppointmentApplication.Domain.Patients.ChronicDiseases;
 using AppointmentApplication.Domain.Prescriptions;
 using AppointmentApplication.Domain.Reviews;
 using AppointmentApplication.Domain.Shared;
-using AppointmentApplication.Domain.Shared.Phone;
 using AppointmentApplication.Domain.Users;
 
 using Microsoft.EntityFrameworkCore;
