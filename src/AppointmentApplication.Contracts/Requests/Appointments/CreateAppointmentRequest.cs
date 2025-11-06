@@ -7,9 +7,6 @@ namespace AppointmentApplication.Api.Models.Appointments;
 public class CreateAppointmentRequest
 {
     [Required]
-    public Guid PatientId { get; set; }
-
-    [Required]
     public Guid DoctorId { get; set; }
 
     [Required]

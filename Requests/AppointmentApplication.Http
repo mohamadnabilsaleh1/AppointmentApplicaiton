@@ -26,11 +26,16 @@ POST {{baseUrl}}/api/users/register-patient
 Content-Type: application/json
 
 {
-  "nationalId": 1000000001,
-  "email": "mohamad.nabil@example.com",
-  "password": "StrongPassword123!",
-  "phoneNumber": "0984306816"
+  "nationalId": 1000000006,
+  "email": "gamer2mohamad@gmail.com",
+  "password": "12er56ui90MO@",
+  "phoneNumber": "0984306821"
 }
+###
+POST {{baseUrl}}/api/users/test-email
+Content-Type: application/json
+
+
 
 ###
 GEt {{baseUrl}}/api/healthCareFacilities/b3f3a709-3762-4f5a-99a8-0d1ab4c27d5e

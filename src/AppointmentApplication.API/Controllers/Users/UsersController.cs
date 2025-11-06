@@ -10,6 +10,7 @@ using AppointmentApplication.Application.Features.Users.LogInUser;
 using AppointmentApplication.Application.Features.Users.RegisterPatient;
 
 using AppointmentApplication.Application.Features.Users.RegisterUser;
+using AppointmentApplication.Application.Shared.Interfaces;
 using AppointmentApplication.Contracts.Requests;
 using AppointmentApplication.Domain.Shared.Results;
 
@@ -22,8 +23,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace AppointmentApplication.API.Controllers;
 
 [Route("/api/users")]
-public class UsersController(ISender sender) : ApiController
+public class UsersController(ISender sender, IEmailSender emailSender) : ApiController
 {
+    private readonly IEmailSender _emailSender = emailSender;
+
     /// <summary>
     /// Registers a new user.
     /// </summary>
@@ -105,6 +108,47 @@ public class UsersController(ISender sender) : ApiController
     {
         // Just a placeholder endpoint for CreatedAtAction.
         return Ok(new { Id = id });
+    }
+    // اختبر في controller منفصل
+    [HttpPost("test-email")]
+    public async Task<IActionResult> TestEmail()
+    {
+        try
+        {
+            var to = "gamer2mohamad@gmail.com";
+            var subject = "Test Email - " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            var body = @"
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset='utf-8'>
+                <title>Test Email</title>
+            </head>
+            <body>
+                <h1>Test Email from Motorex Expo</h1>
+                <p>This is a test email sent from our ASP.NET Core application.</p>
+                <p><strong>Time:</strong> " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + @"</p>
+                <p><strong>From:</strong> info@motorexexpo.com</p>
+                <p><strong>To:</strong> " + to + @"</p>
+                <hr>
+                <p>If you can see this email, the system is working correctly!</p>
+            </body>
+            </html>";
+
+            await _emailSender.SendEmailAsync(to, subject, body);
+
+            return Ok($"Email sent successfully to {to} at {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+        }
+        catch (Exception ex)
+        {
+            // _logger.LogError(ex, "Failed to send test email");
+            return StatusCode(500, new
+            {
+                message = "Failed to send email",
+                error = ex.Message,
+                details = ex.InnerException?.Message
+            });
+        }
     }
 
     [AllowAnonymous]

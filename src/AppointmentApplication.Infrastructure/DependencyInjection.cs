@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using AppointmentApplication.Application.Abstractions.Authentication;
 using AppointmentApplication.Application.Shared.Interfaces;
+using AppointmentApplication.Application.Shared.Services;
 using AppointmentApplication.Domain.Users;
 using AppointmentApplication.Infrastructure.Authentication;
 using AppointmentApplication.Infrastructure.Authorization;
@@ -64,6 +65,10 @@ public static class DependencyInjection
         });
         AddAuthorization(services);
         services.AddTransient<IUserContext, UserContext>();
+
+        services.AddScoped<IEmailSender, EmailSender>();
+        services.AddScoped<IAppointmentEmailService, AppointmentEmailService>();
+
 
         return services;
     }

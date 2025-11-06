@@ -11,6 +11,9 @@ namespace AppointmentApplication.Application.Features.Appointments.Errors
         public static readonly Error InvalidPatientId =
             Error.Validation("Appointment.InvalidPatientId", "Patient ID cannot be empty.");
 
+
+        public static Error CreateAppointmentFailed(string error) =>
+Error.NotFound("Appointment.Failed", $" {error}");
         public static readonly Error InvalidDoctorId =
             Error.Validation("Appointment.InvalidDoctorId", "Doctor ID cannot be empty.");
 
@@ -157,7 +160,7 @@ namespace AppointmentApplication.Application.Features.Appointments.Errors
                 "Appointment.Cancel.ReasonTooLong",
                 "Cancellation reason cannot exceed 500 characters.");
 
-                        
+
         public static Error UnauthorizedToCompleteAppointment(Guid appointmentId) =>
             Error.Unauthorized(
                 "Appointment.Complete.Unauthorized",

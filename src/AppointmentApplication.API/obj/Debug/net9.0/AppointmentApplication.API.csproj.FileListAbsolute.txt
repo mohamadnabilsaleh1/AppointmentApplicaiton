@@ -281,3 +281,6 @@
 /home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.API/bin/Debug/net9.0/System.Linq.Dynamic.Core.dll
 /home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.API/bin/Debug/net9.0/Scrutor.dll
 /home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.API/bin/Debug/net9.0/NetTopologySuite.dll
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.API/bin/Debug/net9.0/BouncyCastle.Cryptography.dll
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.API/bin/Debug/net9.0/MailKit.dll
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.API/bin/Debug/net9.0/MimeKit.dll

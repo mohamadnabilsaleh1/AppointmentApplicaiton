@@ -1,15 +1,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-
 using AppointmentApplication.Application.Features.Appointments.Errors;
 using AppointmentApplication.Application.Shared.Interfaces;
 using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.Appointments.Enums;
 using AppointmentApplication.Domain.Shared.Results;
-
 using MediatR;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -19,20 +16,26 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Conf
     {
         private readonly ILogger<ConfirmAppointmentCommandHandler> _logger;
         private readonly IAppDbContext _context;
+        private readonly IAppointmentEmailService _emailService;
 
         public ConfirmAppointmentCommandHandler(
             ILogger<ConfirmAppointmentCommandHandler> logger,
-            IAppDbContext context)
+            IAppDbContext context,
+            IAppointmentEmailService emailService)
         {
             _logger = logger;
             _context = context;
+            _emailService = emailService;
         }
 
         public async Task<Result<Updated>> Handle(ConfirmAppointmentCommand request, CancellationToken cancellationToken)
         {
-            // 1. Find the appointment with related doctor
+            // 1. Find the appointment with related doctor and patient
             var appointment = await _context.Appointments
                 .Include(a => a.Doctor)
+                .Include(a => a.Patient)
+                    .ThenInclude(p => p.User)
+                .Include(a => a.Facility)
                 .FirstOrDefaultAsync(a => a.Id == request.AppointmentId, cancellationToken);
 
             if (appointment == null)
@@ -42,7 +45,6 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Conf
             }
 
             // 2. Verify the user has permission to confirm this appointment
-            // Only the assigned doctor or admin can confirm appointments
             if (appointment.Doctor.UserId != request.UserId)
             {
                 _logger.LogWarning(
@@ -87,8 +89,20 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Conf
                 "Appointment confirmed successfully. AppointmentId: {AppointmentId}, DoctorId: {DoctorId}, ScheduledDate: {ScheduledDate}",
                 appointment.Id, appointment.Doctor.Id, appointment.ScheduledDate);
 
-            return Result.Updated;
+            // 7. Send confirmation email ASYNCHRONOUSLY
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _emailService.SendAppointmentConfirmedEmailAsync(appointment);
+                }
+                catch (Exception emailEx)
+                {
+                    _logger.LogError(emailEx, "❌ Background email sending failed for appointment confirmation");
+                }
+            });
 
+            return Result.Updated;
         }
     }
 }

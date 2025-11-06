@@ -1,16 +1,13 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-
 using AppointmentApplication.Application.Features.Appointments.Errors;
 using AppointmentApplication.Application.Shared.Interfaces;
 using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.Appointments.Enums;
 using AppointmentApplication.Domain.Billings.Enums;
 using AppointmentApplication.Domain.Shared.Results;
-
 using MediatR;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -20,13 +17,16 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Canc
     {
         private readonly ILogger<CancelAppointmentCommandHandler> _logger;
         private readonly IAppDbContext _context;
+        private readonly IAppointmentEmailService _emailService;
 
         public CancelAppointmentCommandHandler(
             ILogger<CancelAppointmentCommandHandler> logger,
-            IAppDbContext context)
+            IAppDbContext context,
+            IAppointmentEmailService emailService)
         {
             _logger = logger;
             _context = context;
+            _emailService = emailService;
         }
 
         public async Task<Result<Updated>> Handle(CancelAppointmentCommand request, CancellationToken cancellationToken)
@@ -35,8 +35,10 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Canc
             var appointment = await _context.Appointments
                 .Include(a => a.Doctor)
                 .Include(a => a.Patient)
+                    .ThenInclude(p => p.User)
+                .Include(a => a.Facility)
                 .Include(a => a.Billing)
-                .FirstOrDefaultAsync(a => a.Id == request.AppointmentId && a.Doctor.UserId == request.UserId, cancellationToken);
+                .FirstOrDefaultAsync(a => a.Id == request.AppointmentId, cancellationToken);
 
             if (appointment == null)
             {
@@ -44,21 +46,25 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Canc
                 return ApplicationAppointmentErrors.AppointmentNotFound(request.AppointmentId);
             }
 
-            // 2. Validate appointment can be cancelled
+            // 2. Verify authorization - either the assigned doctor or the patient can cancel
+            var isDoctor = appointment.Doctor.UserId == request.UserId;
+            var isPatient = appointment.Patient.UserId == request.UserId;
+
+            if (!isDoctor && !isPatient)
+            {
+                _logger.LogWarning(
+                    "User {UserId} is not authorized to cancel appointment {AppointmentId}",
+                    request.UserId, request.AppointmentId);
+                return ApplicationAppointmentErrors.UnauthorizedToCancelAppointment(request.AppointmentId);
+            }
+
+            // 3. Validate appointment can be cancelled
             if (appointment.Status == AppointmentStatus.Cancelled)
             {
                 _logger.LogWarning(
                     "Appointment {AppointmentId} is already cancelled.",
                     request.AppointmentId);
                 return ApplicationAppointmentErrors.AppointmentAlreadyCancelled(request.AppointmentId);
-            }
-                        // 2. Validate appointment can be cancelled
-            if (appointment.Status == AppointmentStatus.Confirmed)
-            {
-                _logger.LogWarning(
-                    "Appointment {AppointmentId} is already cancelled.",
-                    request.AppointmentId);
-                return ApplicationAppointmentErrors.AppointmentAlreadyConfirmed(request.AppointmentId);
             }
 
             if (appointment.Status == AppointmentStatus.Completed)
@@ -69,29 +75,34 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Canc
                 return ApplicationAppointmentErrors.CannotCancelCompletedAppointment(request.AppointmentId);
             }
 
-            // 3. Check if appointment is too close to scheduled time (within 24 hours)
-            var scheduledTime = TimeOnly.FromTimeSpan(appointment.ScheduledTime);
-            var appointmentDateTime = appointment.ScheduledDate.ToDateTime(scheduledTime);
-            var timeUntilAppointment = appointmentDateTime - DateTime.UtcNow;
-
-            if (timeUntilAppointment <= TimeSpan.FromHours(24) && timeUntilAppointment > TimeSpan.Zero)
+            // 4. Check cancellation time restrictions (only for patient cancellations)
+            if (isPatient)
             {
-                _logger.LogWarning(
-                    "Appointment {AppointmentId} cannot be cancelled within 24 hours of scheduled time.",
-                    request.AppointmentId);
-                return ApplicationAppointmentErrors.CannotCancelWithin24Hours(request.AppointmentId);
+                var scheduledTime = TimeOnly.FromTimeSpan(appointment.ScheduledTime);
+                var appointmentDateTime = appointment.ScheduledDate.ToDateTime(scheduledTime);
+                var timeUntilAppointment = appointmentDateTime - DateTime.UtcNow;
+
+                if (timeUntilAppointment <= TimeSpan.FromHours(24) && timeUntilAppointment > TimeSpan.Zero)
+                {
+                    _logger.LogWarning(
+                        "Appointment {AppointmentId} cannot be cancelled within 24 hours of scheduled time.",
+                        request.AppointmentId);
+                    return ApplicationAppointmentErrors.CannotCancelWithin24Hours(request.AppointmentId);
+                }
             }
 
-            // 4. Check if appointment is in the past
-            if (appointmentDateTime < DateTime.UtcNow)
+            // 5. Check if appointment is in the past
+            var scheduledTimeCheck = TimeOnly.FromTimeSpan(appointment.ScheduledTime);
+            var appointmentDateTimeCheck = appointment.ScheduledDate.ToDateTime(scheduledTimeCheck);
+            if (appointmentDateTimeCheck < DateTime.UtcNow)
             {
                 _logger.LogWarning(
                     "Cannot cancel past appointment. AppointmentId: {AppointmentId}, Scheduled: {ScheduledDateTime}",
-                    request.AppointmentId, appointmentDateTime);
+                    request.AppointmentId, appointmentDateTimeCheck);
                 return ApplicationAppointmentErrors.CannotCancelPastAppointment(appointment.ScheduledDate);
             }
 
-            // 5. Cancel the appointment and billing
+            // 6. Cancel the appointment and billing
             var cancelResult = CancelAppointmentAndBilling(appointment, request.CancellationReason);
             if (cancelResult.IsError)
             {
@@ -101,7 +112,7 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Canc
                 return cancelResult.Errors;
             }
 
-            // 6. Save changes
+            // 7. Save changes
             await _context.SaveChangesAsync(cancellationToken);
 
             _logger.LogInformation(
@@ -109,29 +120,53 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Canc
                 "CancelledBy: {UserId}, Reason: {CancellationReason}",
                 appointment.Id, request.UserId, request.CancellationReason);
 
+            // 8. Send cancellation email ASYNCHRONOUSLY
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _emailService.SendAppointmentCancelledEmailAsync(appointment, request.CancellationReason);
+                }
+                catch (Exception emailEx)
+                {
+                    _logger.LogError(emailEx, "❌ Background email sending failed for appointment cancellation");
+                }
+            });
+
             return Result.Updated;
         }
 
         private Result<Updated> CancelAppointmentAndBilling(Appointment appointment, string cancellationReason)
         {
-            // Update appointment status using reflection
-            var statusProperty = appointment.GetType().GetProperty("Status");
-            var cancellationReasonProperty = appointment.GetType().GetProperty("CancellationReason");
-            var updatedAtProperty = appointment.GetType().GetProperty("UpdatedAtUtc");
-
-            if (statusProperty != null && statusProperty.CanWrite)
+            // Cancel appointment using domain method if available, otherwise use reflection
+            var cancelMethod = appointment.GetType().GetMethod("Cancel");
+            if (cancelMethod != null)
             {
-                statusProperty.SetValue(appointment, AppointmentStatus.Cancelled);
+                var result = cancelMethod.Invoke(appointment, new object[] { cancellationReason }) as Result<Updated>;
+                if (result != null && result.IsError)
+                    return result;
             }
-
-            if (cancellationReasonProperty != null && cancellationReasonProperty.CanWrite)
+            else
             {
-                cancellationReasonProperty.SetValue(appointment, cancellationReason.Trim());
-            }
+                // Fallback to reflection
+                var statusProperty = appointment.GetType().GetProperty("Status");
+                var cancellationReasonProperty = appointment.GetType().GetProperty("CancellationReason");
+                var updatedAtProperty = appointment.GetType().GetProperty("UpdatedAtUtc");
 
-            if (updatedAtProperty != null && updatedAtProperty.CanWrite)
-            {
-                updatedAtProperty.SetValue(appointment, DateTime.UtcNow);
+                if (statusProperty != null && statusProperty.CanWrite)
+                {
+                    statusProperty.SetValue(appointment, AppointmentStatus.Cancelled);
+                }
+
+                if (cancellationReasonProperty != null && cancellationReasonProperty.CanWrite)
+                {
+                    cancellationReasonProperty.SetValue(appointment, cancellationReason.Trim());
+                }
+
+                if (updatedAtProperty != null && updatedAtProperty.CanWrite)
+                {
+                    updatedAtProperty.SetValue(appointment, DateTime.UtcNow);
+                }
             }
 
             // Cancel associated billing if exists
@@ -145,13 +180,11 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Canc
 
         private void CancelBilling(Domain.Billings.Billing billing)
         {
-            // Get billing properties using reflection
             var statusProperty = billing.GetType().GetProperty("Status");
             var updatedAtProperty = billing.GetType().GetProperty("UpdatedAtUtc");
 
             if (statusProperty != null && statusProperty.CanWrite)
             {
-                // Only cancel billing if it's in a cancellable state
                 var currentStatus = (BillingStatus?)statusProperty.GetValue(billing);
 
                 if (currentStatus.HasValue &&
@@ -164,7 +197,6 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Canc
                         "Billing cancelled. BillingId: {BillingId}, PreviousStatus: {PreviousStatus}",
                         billing.Id, currentStatus.Value);
 
-                    // Update billing timestamp
                     if (updatedAtProperty != null && updatedAtProperty.CanWrite)
                     {
                         updatedAtProperty.SetValue(billing, DateTime.UtcNow);

@@ -105,6 +105,7 @@
             "FluentValidation.AspNetCore": "11.3.1",
             "FluentValidation.DependencyInjectionExtensions": "12.0.0",
             "Humanizer": "2.14.1",
+            "MailKit": "4.14.1",
             "MediatR": "12.5.0",
             "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.6",
             "Microsoft.AspNetCore.Authorization": "9.0.6",
@@ -231,6 +232,7 @@
             "FluentValidation.AspNetCore": "11.3.1",
             "FluentValidation.DependencyInjectionExtensions": "12.0.0",
             "Humanizer": "2.14.1",
+            "MailKit": "4.14.1",
             "MediatR": "12.5.0",
             "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.6",
             "Microsoft.AspNetCore.Authorization": "9.0.6",
@@ -343,6 +345,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "MailKit": {
+              "target": "Package",
+              "version": "[4.14.1, )",
+              "versionCentrallyManaged": true
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[9.0.6, )",
@@ -413,6 +420,7 @@
             "FluentValidation.AspNetCore": "11.3.1",
             "FluentValidation.DependencyInjectionExtensions": "12.0.0",
             "Humanizer": "2.14.1",
+            "MailKit": "4.14.1",
             "MediatR": "12.5.0",
             "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.6",
             "Microsoft.AspNetCore.Authorization": "9.0.6",

@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
 using AppointmentApplication.Application.Features.Appointments.Commands.CompleteAppointment;
 using AppointmentApplication.Application.Features.Appointments.Dtos;
 using AppointmentApplication.Application.Features.Appointments.Errors;
@@ -15,9 +12,7 @@ using AppointmentApplication.Domain.Billings.Enums;
 using AppointmentApplication.Domain.MedicalRecords;
 using AppointmentApplication.Domain.Prescriptions;
 using AppointmentApplication.Domain.Shared.Results;
-
 using MediatR;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -27,13 +22,16 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Comp
     {
         private readonly ILogger<CompleteAppointmentCommandHandler> _logger;
         private readonly IAppDbContext _context;
+        private readonly IAppointmentEmailService _emailService;
 
         public CompleteAppointmentCommandHandler(
             ILogger<CompleteAppointmentCommandHandler> logger,
-            IAppDbContext context)
+            IAppDbContext context,
+            IAppointmentEmailService emailService)
         {
             _logger = logger;
             _context = context;
+            _emailService = emailService;
         }
 
         public async Task<Result<AppointmentCompletionDto>> Handle(
@@ -48,9 +46,10 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Comp
             var appointment = await _context.Appointments
                 .Include(a => a.Doctor)
                 .Include(a => a.Patient)
+                    .ThenInclude(p => p.User)
                 .Include(a => a.Facility)
                 .Include(a => a.Billing)
-                .FirstOrDefaultAsync(a => a.Id == request.AppointmentId && a.Doctor.UserId == request.UserId, cancellationToken);
+                .FirstOrDefaultAsync(a => a.Id == request.AppointmentId, cancellationToken);
 
             if (appointment == null)
             {
@@ -76,14 +75,6 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Comp
                 return ApplicationAppointmentErrors.CannotCompleteAppointment(appointment.Status);
             }
 
-            // 4. Check if billing is paid
-            if (appointment.Billing?.Status != BillingStatus.Pending)
-            {
-                _logger.LogWarning(
-                    "Cannot complete appointment {AppointmentId} without paid billing",
-                    request.AppointmentId);
-                return ApplicationAppointmentErrors.CannotCompleteWithoutPayment;
-            }
 
             // 5. Complete appointment using domain method
             var completeResult = appointment.Complete();
@@ -116,32 +107,7 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Comp
             var medicalRecord = medicalRecordResult.Value;
             _context.MedicalRecords.Add(medicalRecord);
 
-            // 7. Add attachments if provided
-            // if (request.Attachments?.Any() == true)
-            // {
-            //     foreach (var attachmentRequest in request.Attachments)
-            //     {
-            //         var attachmentResult = medicalRecord.AddAttachment(
-            //             request.UserId, // Doctor who uploaded
-            //             attachmentRequest.FileType,
-            //             attachmentRequest.FileUrl,
-            //             attachmentRequest.Title,
-            //             attachmentRequest.Description,
-            //             attachmentRequest.Visibility);
-
-            // if (attachmentResult.IsError)
-            //         {
-            //             _logger.LogWarning("Failed to add attachment: {Errors}",
-            //                 string.Join(", ", attachmentResult.Errors));
-            //             // Continue with other attachments
-            //             continue;
-            //         }
-
-            // _context.MedicalRecordAttachments.Add(attachmentResult.Value);
-            //     }
-            // }
-
-            // 8. Create prescription
+            // 7. Create prescription
             var prescriptionResult = Prescription.Create(
                 appointment.Id,
                 appointment.DoctorId,
@@ -159,13 +125,26 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Comp
             var prescription = prescriptionResult.Value;
             _context.Prescriptions.Add(prescription);
 
-            // 9. Save all changes
+            // 8. Save all changes
             await _context.SaveChangesAsync(cancellationToken);
 
             _logger.LogInformation(
                 "Appointment completed successfully. AppointmentId: {AppointmentId}, " +
                 "MedicalRecordId: {MedicalRecordId}, PrescriptionId: {PrescriptionId}",
                 appointment.Id, medicalRecord.Id, prescription.Id);
+
+            // 9. Send completion email ASYNCHRONOUSLY
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _emailService.SendAppointmentCompletedEmailAsync(appointment);
+                }
+                catch (Exception emailEx)
+                {
+                    _logger.LogError(emailEx, "❌ Background email sending failed for appointment completion");
+                }
+            });
 
             // 10. Return completion result
             var result = new AppointmentCompletionDto(
