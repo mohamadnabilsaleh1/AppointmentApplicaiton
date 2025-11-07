@@ -37,8 +37,6 @@ if (app.Environment.IsDevelopment())
 
     app.MapScalarApiReference();
 
-    // await app.InitialiseDatabaseAsync();
-
     app.UseWebAssemblyDebugging();
 }
 else
@@ -47,17 +45,10 @@ else
 }
 
 app.UseCoreMiddlewares(builder.Configuration);
-
-app.MapControllers();
+app.UseAppEndpoints();
 
 app.UseAntiforgery();
 
 app.MapStaticAssets();
-
-// app.MapRazorComponents<App>().AllowAnonymous()
-//     .AddInteractiveWebAssemblyRenderMode()
-//     .AddAdditionalAssemblies(typeof(MechanicShop.Client._Imports).Assembly);
-
-// app.MapHub<WorkOrderHub>("/hubs/workorders");
 
 app.Run();

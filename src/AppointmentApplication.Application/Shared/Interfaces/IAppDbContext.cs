@@ -17,6 +17,7 @@ using AppointmentApplication.Domain.HealthcareFacilities.Schedules;
 using AppointmentApplication.Domain.MediaUploads;
 using AppointmentApplication.Domain.MedicalRecordAttachments;
 using AppointmentApplication.Domain.MedicalRecords;
+using AppointmentApplication.Domain.Notifications;
 using AppointmentApplication.Domain.Patients;
 using AppointmentApplication.Domain.Patients.Allergies;
 using AppointmentApplication.Domain.Patients.ChronicDiseases;
@@ -74,6 +75,7 @@ public interface IAppDbContext
     DbSet<Review> Reviews { get; set; }
     DbSet<PatientUpload> PatientUploads { get; set; }
     DbSet<FacilityUpload> FacilityUploads { get; set; }
+    DbSet<Notification> Notifications { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     int SaveChanges();

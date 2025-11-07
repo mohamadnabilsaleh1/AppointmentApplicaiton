@@ -41,6 +41,7 @@ public static class DependencyInjection
         services.AddTransient<DataShapingService>();
         services.AddSingleton<ISortMappingDefinition, HealthCareFacilitySortMapping>();
         services.AddTransient<DynamicQueryService>();
+        services.AddScoped<NotificationHub>();
         return services;
     }
 }

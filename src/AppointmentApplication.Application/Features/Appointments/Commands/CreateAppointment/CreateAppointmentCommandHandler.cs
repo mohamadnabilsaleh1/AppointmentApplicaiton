@@ -25,17 +25,19 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Crea
         private readonly ILogger<CreateAppointmentCommandHandler> _logger;
         private readonly IAppDbContext _context;
         private readonly IAppointmentEmailService _emailService;
+        private readonly INotificationService _notificationService;
 
         public CreateAppointmentCommandHandler(
             ILogger<CreateAppointmentCommandHandler> logger,
             IAppDbContext context,
-            IAppointmentEmailService emailService)
+            IAppointmentEmailService emailService,
+            INotificationService notificationService)
         {
             _logger = logger;
             _context = context;
             _emailService = emailService;
+            _notificationService = notificationService;
         }
-
         public async Task<Result<AppointmentDto>> Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
         {
             try
@@ -137,13 +139,13 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Crea
 
                 // 6️⃣ Create Appointment domain entity
                 Result<Appointment> createAppointmentResult = Appointment.CreateWithBilling(
-                    patient.Id,
-                    request.DoctorId,
-                    request.FacilityId,
-                    request.ScheduledDate,
-                    request.ScheduledTime,
-                    request.DurationMinutes,
-                    200);
+                   patient.Id,
+                   request.DoctorId,
+                   request.FacilityId,
+                   request.ScheduledDate,
+                   request.ScheduledTime,
+                   request.DurationMinutes,
+                   200);
 
                 if (createAppointmentResult.IsError)
                 {
@@ -155,7 +157,6 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Crea
 
                 // 7️⃣ Save to database
                 _context.Appointments.Add(appointment);
-
                 if (appointment.Billing != null)
                 {
                     _context.Billings.Add(appointment.Billing);
@@ -169,6 +170,7 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Crea
                    .Include(a => a.Patient)
                        .ThenInclude(p => p.User)
                    .Include(a => a.Doctor)
+                       .ThenInclude(d => d.User)
                    .Include(a => a.Facility)
                    .Include(a => a.Billing)
                    .FirstOrDefaultAsync(a => a.Id == appointment.Id, cancellationToken);
@@ -179,18 +181,31 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Crea
                     return ApplicationAppointmentErrors.CreateAppointmentFailed("Failed to reload created appointment.");
                 }
 
-                // 9️⃣ Send email notification ASYNCHRONOUSLY (Fire and Forget)
-                _ = Task.Run(async () =>
+
+                try
                 {
-                    try
-                    {
-                        await _emailService.SendAppointmentCreatedEmailAsync(createdAppointment);
-                    }
-                    catch (Exception emailEx)
-                    {
-                        _logger.LogError(emailEx, "❌ Background email sending failed");
-                    }
-                });
+                    // Send email to patient
+                    await _emailService.SendAppointmentCreatedEmailAsync(createdAppointment);
+
+                    // Send real-time notification to doctor
+                    var doctorUserId = createdAppointment.Doctor.UserId;
+                    var patientName = $"{createdAppointment.Patient.FirstName} {createdAppointment.Patient.LastName}";
+                    var scheduledDateTime = createdAppointment.ScheduledDate.ToDateTime(TimeOnly.FromTimeSpan(createdAppointment.ScheduledTime));
+
+                    await _notificationService.NotifyAppointmentCreatedAsync(
+                        doctorUserId,
+                        createdAppointment.Id,
+                        patientName,
+                        scheduledDateTime,
+                        createdAppointment.ScheduledTime);
+
+                    _logger.LogInformation("Notifications sent successfully for appointment {AppointmentId}", createdAppointment.Id);
+                }
+                catch (Exception notificationEx)
+                {
+                    _logger.LogError(notificationEx, "Notification sending failed for appointment {AppointmentId}", createdAppointment.Id);
+                    // Don't fail the entire appointment creation if notifications fail
+                }
 
                 // 🔟 Convert to DTO
                 var appointmentDto = createdAppointment.ToDto();

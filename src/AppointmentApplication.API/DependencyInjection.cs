@@ -15,6 +15,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Serilog;
+using AppointmentApplication.Infrastructure.Services;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -39,7 +40,7 @@ public static class DependencyInjection
                 .AddAppOpenTelememrty()
                 .AddSignalR();
         services.AddScoped<LinkService>();
-        // .AddIdentityInfrastructure()
+
         return services;
     }
 
@@ -61,18 +62,16 @@ public static class DependencyInjection
         .ConfigureResource(res => res.AddService("orderservice"))
         .WithTracing(tracing =>
         {
-            tracing.AddAspNetCoreInstrumentation().
-            AddHttpClientInstrumentation();
-
+            tracing.AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation();
             tracing.AddOtlpExporter();
-        }).
-        WithMetrics(metrics =>
+        })
+        .WithMetrics(metrics =>
         {
-            metrics.AddAspNetCoreInstrumentation().
-            AddHttpClientInstrumentation();
-
-            metrics.AddOtlpExporter().
-            AddPrometheusExporter(); // /metrics
+            metrics.AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation();
+            metrics.AddOtlpExporter()
+            .AddPrometheusExporter(); // /metrics
         });
 
         return services;
@@ -177,7 +176,6 @@ public static class DependencyInjection
 
     public static IServiceCollection AddIdentityInfrastructure(this IServiceCollection services)
     {
-        // services.AddScoped<IUser, CurrentUser>();
         services.AddHttpContextAccessor();
         return services;
     }
@@ -199,7 +197,10 @@ public static class DependencyInjection
 
     public static IApplicationBuilder UseCoreMiddlewares(this IApplicationBuilder app, IConfiguration configuration)
     {
-        // 1. Exception handling should be FIRST to catch all errors
+        // 0. Routing must come FIRST before endpoints
+        app.UseRouting();
+
+        // 1. Exception handling should be SECOND to catch all errors
         app.UseExceptionHandler();
 
         // 2. Status code pages for handling HTTP status codes
@@ -226,6 +227,18 @@ public static class DependencyInjection
         // 9. Output caching (after auth to cache based on user context)
         app.UseOutputCache();
 
+        return app;
+    }
+
+    public static WebApplication UseAppEndpoints(this WebApplication app)
+    {
+        // Map SignalR Hub
+        app.MapHub<NotificationHub>("/notificationHub");
+
+        // Map controllers
+        app.MapControllers();
+
+        // Map other endpoints if needed
         return app;
     }
 }

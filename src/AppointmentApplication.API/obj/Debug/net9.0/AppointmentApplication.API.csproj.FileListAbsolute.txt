@@ -284,3 +284,4 @@
 /home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.API/bin/Debug/net9.0/BouncyCastle.Cryptography.dll
 /home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.API/bin/Debug/net9.0/MailKit.dll
 /home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.API/bin/Debug/net9.0/MimeKit.dll
+/home/kali/Desktop/AppointmentApplication/src/AppointmentApplication.API/bin/Debug/net9.0/Newtonsoft.Json.dll

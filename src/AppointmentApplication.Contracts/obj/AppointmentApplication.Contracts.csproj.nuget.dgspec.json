@@ -64,6 +64,11 @@
               "version": "[2.3.0, )",
               "versionCentrallyManaged": true
             },
+            "Microsoft.AspNetCore.SignalR.Core": {
+              "target": "Package",
+              "version": "[1.2.0, )",
+              "versionCentrallyManaged": true
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.6, )",
@@ -120,6 +125,7 @@
             "Microsoft.AspNetCore.OpenApi": "9.0.6",
             "Microsoft.AspNetCore.Routing": "2.3.0",
             "Microsoft.AspNetCore.SignalR.Client": "9.0.6",
+            "Microsoft.AspNetCore.SignalR.Core": "1.2.0",
             "Microsoft.EntityFrameworkCore": "9.0.6",
             "Microsoft.EntityFrameworkCore.Design": "9.0.6",
             "Microsoft.EntityFrameworkCore.Sqlite": "9.0.6",
@@ -254,6 +260,7 @@
             "Microsoft.AspNetCore.OpenApi": "9.0.6",
             "Microsoft.AspNetCore.Routing": "2.3.0",
             "Microsoft.AspNetCore.SignalR.Client": "9.0.6",
+            "Microsoft.AspNetCore.SignalR.Core": "1.2.0",
             "Microsoft.EntityFrameworkCore": "9.0.6",
             "Microsoft.EntityFrameworkCore.Design": "9.0.6",
             "Microsoft.EntityFrameworkCore.Sqlite": "9.0.6",
@@ -381,6 +388,7 @@
             "Microsoft.AspNetCore.OpenApi": "9.0.6",
             "Microsoft.AspNetCore.Routing": "2.3.0",
             "Microsoft.AspNetCore.SignalR.Client": "9.0.6",
+            "Microsoft.AspNetCore.SignalR.Core": "1.2.0",
             "Microsoft.EntityFrameworkCore": "9.0.6",
             "Microsoft.EntityFrameworkCore.Design": "9.0.6",
             "Microsoft.EntityFrameworkCore.Sqlite": "9.0.6",

@@ -65,9 +65,11 @@ public static class DependencyInjection
         });
         AddAuthorization(services);
         services.AddTransient<IUserContext, UserContext>();
+        services.AddSignalR();
 
         services.AddScoped<IEmailSender, EmailSender>();
         services.AddScoped<IAppointmentEmailService, AppointmentEmailService>();
+        services.AddScoped<INotificationService, NotificationService>();
 
 
         return services;

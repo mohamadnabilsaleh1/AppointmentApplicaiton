@@ -20,6 +20,7 @@ using AppointmentApplication.Domain.HealthcareFacilities.Schedules;
 using AppointmentApplication.Domain.MediaUploads;
 using AppointmentApplication.Domain.MedicalRecordAttachments;
 using AppointmentApplication.Domain.MedicalRecords;
+using AppointmentApplication.Domain.Notifications;
 using AppointmentApplication.Domain.Patients;
 using AppointmentApplication.Domain.Patients.Allergies;
 using AppointmentApplication.Domain.Patients.ChronicDiseases;
@@ -82,6 +83,8 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<Review> Reviews { get; set; }
     public DbSet<PatientUpload> PatientUploads { get; set; }
     public DbSet<FacilityUpload> FacilityUploads { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
