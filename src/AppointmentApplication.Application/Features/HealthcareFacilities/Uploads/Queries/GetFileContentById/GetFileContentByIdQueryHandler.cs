@@ -65,9 +65,13 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Uploa
             // Convert from: "/api/files/healthCareFacility/08ab65af-cdb4-4f2f-910f-cd45a1ba5eaf/uploads/bb6538a4-4bf1-4d94-b612-36a9c8738afa.png"
             // To: "healthCareFacility/08ab65af-cdb4-4f2f-910f-cd45a1ba5eaf/uploads/bb6538a4-4bf1-4d94-b612-36a9c8738afa.png"
             if (string.IsNullOrEmpty(fileUrl))
+            {
+
                 return string.Empty;
+            }
 
             // Remove the API route prefix
+
             var prefix = "/api/files/";
             if (fileUrl.StartsWith(prefix))
             {

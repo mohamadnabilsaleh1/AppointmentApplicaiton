@@ -29,12 +29,14 @@ namespace AppointmentApplication.Domain.Patients.Allergies
         public static Result<Allergy> Create(AllergyType allergyType)
         {
             if (!Enum.IsDefined(typeof(AllergyType), allergyType))
+            {
+
                 return PatientErrors.InvalidAllergyType;
+            }
 
             var allergy = new Allergy(Guid.NewGuid(), allergyType);
             return allergy; // ✅ يرجع كائن فعلي وليس null
         }
-
 
         // ✅ Static predefined instances لكل نوع حساسية
         public static readonly Allergy None = new(Guid.Parse("00000000-0000-0000-0000-000000000001"), AllergyType.None);

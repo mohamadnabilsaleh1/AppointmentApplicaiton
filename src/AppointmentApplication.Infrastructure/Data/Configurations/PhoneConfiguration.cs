@@ -10,14 +10,16 @@ public class PhoneConfiguration : IEntityTypeConfiguration<Phone>
     public void Configure(EntityTypeBuilder<Phone> builder)
     {
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).ValueGeneratedNever();
-        builder.Property(e => e.OwnerType).IsRequired().HasMaxLength(50);
-        builder.Property(e => e.OwnerId).IsRequired();
+        builder.Property(e => e.Id);
+
         builder.Property(e => e.PhoneNumber).IsRequired().HasMaxLength(20);
         builder.Property(e => e.Label).HasMaxLength(50);
         builder.Property(e => e.CreatedAtUtc).IsRequired();
         builder.Property(e => e.UpdatedAtUtc);
+        builder.Property(e => e.UserId).IsRequired();
+        builder.HasIndex(p => new { p.UserId, p.IsPrimary })
+             .HasFilter("[IsPrimary] = 1")
+             .IsUnique();
 
-        builder.HasIndex(e => new { e.OwnerType, e.OwnerId });
     }
 }

@@ -33,7 +33,6 @@ namespace AppointmentApplication.Application.Features.Appointments.Mappers
                 return null;
             }
 
-
             return new PatientInfoDto(
                 Id: patient.Id,
                 FullName: $"{patient.FirstName} {patient.LastName}".Trim(),
@@ -48,7 +47,6 @@ namespace AppointmentApplication.Application.Features.Appointments.Mappers
                 return null;
             }
 
-
             return new DoctorInfoDto(
                 Id: doctor.Id,
                 FullName: $"{doctor.FirstName} {doctor.LastName}".Trim(),
@@ -62,7 +60,6 @@ namespace AppointmentApplication.Application.Features.Appointments.Mappers
             {
                 return null;
             }
-
 
             string fullAddress = $"{facility.Address.Street}, {facility.Address.City}, {facility.Address.Country} {facility.Address.ZipCode}";
             return new FacilityInfoDto(

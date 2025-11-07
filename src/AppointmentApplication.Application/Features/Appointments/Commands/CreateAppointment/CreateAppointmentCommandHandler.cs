@@ -181,7 +181,6 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Crea
                     return ApplicationAppointmentErrors.CreateAppointmentFailed("Failed to reload created appointment.");
                 }
 
-
                 try
                 {
                     // Send email to patient

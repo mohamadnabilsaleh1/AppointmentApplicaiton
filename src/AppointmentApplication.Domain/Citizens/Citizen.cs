@@ -23,7 +23,7 @@ namespace AppointmentApplication.Domain.Citizens
         // Constructor for seeding
         public Citizen(Guid id, long nationalId, string firstName, string middleName, string lastName, string phoneNumber, DateOnly birthDate,Gender gender)
         {
-            Id = id; 
+            Id = id;
             NationalId = nationalId;
             FirstName = firstName;
             MiddleName = middleName;

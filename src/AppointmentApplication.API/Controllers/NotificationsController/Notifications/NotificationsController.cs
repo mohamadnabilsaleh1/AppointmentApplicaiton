@@ -32,7 +32,6 @@ namespace AppointmentApplication.API.Controllers
             _userContext = userContext;
         }
 
-
         [HttpGet]
         [MapToApiVersion("1.0")]
         [EndpointSummary("Get user notifications")]

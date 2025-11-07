@@ -7,7 +7,6 @@ using AppointmentApplication.Application.Features.HealthcareFacilities.Uploads.D
 
 using AppointmentApplication.Domain.Shared.Results;
 
-
 using MediatR;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Uploads.Commands.ChangeFileToPrivate

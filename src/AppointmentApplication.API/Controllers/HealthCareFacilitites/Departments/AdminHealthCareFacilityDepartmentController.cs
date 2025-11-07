@@ -133,7 +133,6 @@ namespace AppointmentApplication.API.Controllers
                 Problem);
         }
 
-
         [HttpGet("{id:guid}")]
         [MapToApiVersion("0.1")]
         [ProducesResponseType(StatusCodes.Status200OK)]

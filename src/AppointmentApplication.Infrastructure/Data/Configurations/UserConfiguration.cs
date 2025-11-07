@@ -33,6 +33,17 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
                 .WithOne(p => p.User) // This tells EF about the navigation property
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(u => u.Emails)
+    .WithOne(e => e.User)
+    .HasForeignKey(e => e.UserId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+            // Configure one-to-many relationship with Phone
+            builder.HasMany(u => u.Phones)
+                .WithOne(p => p.User)
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

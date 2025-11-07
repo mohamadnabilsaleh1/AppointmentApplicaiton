@@ -174,7 +174,6 @@ namespace AppointmentApplication.Domain.Appointments
                 return AppointmentErrors.InvalidStatusTransition;
             }
 
-
             Status = AppointmentStatus.Confirmed;
             CheckInTime = DateTime.UtcNow;
             UpdatedAtUtc = DateTime.UtcNow;
@@ -189,7 +188,6 @@ namespace AppointmentApplication.Domain.Appointments
             {
                 return AppointmentErrors.CannotCompleteWithoutConfirmation;
             }
-
 
             Status = AppointmentStatus.Completed;
             CheckOutTime = DateTime.UtcNow;
@@ -410,7 +408,10 @@ namespace AppointmentApplication.Domain.Appointments
         public bool HasTimeConflict(Appointment other)
         {
             if (ScheduledDate != other.ScheduledDate)
+            {
+
                 return false;
+            }
 
             var thisEndTime = GetEndTime();
             var otherEndTime = other.GetEndTime();

@@ -144,7 +144,11 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Canc
             {
                 var result = cancelMethod.Invoke(appointment, new object[] { cancellationReason }) as Result<Updated>;
                 if (result != null && result.IsError)
+                {
+
                     return result;
+                }
+
             }
             else
             {

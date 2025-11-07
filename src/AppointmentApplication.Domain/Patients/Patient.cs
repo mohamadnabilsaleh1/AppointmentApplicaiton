@@ -137,8 +137,6 @@ namespace AppointmentApplication.Domain.Patients
             return allergy;
         }
 
-
-
         public Result<Deleted> DeleteAllergy(Guid allergyId)
         {
             var allergy = _allergies.FirstOrDefault(a => a.Id == allergyId);

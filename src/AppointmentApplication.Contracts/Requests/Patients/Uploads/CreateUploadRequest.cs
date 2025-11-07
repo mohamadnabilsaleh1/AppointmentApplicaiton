@@ -2,7 +2,6 @@ using AppointmentApplication.Domain.MediaUploads.Enums;
 
 using Microsoft.AspNetCore.Http;
 
-
 namespace AppointmentApplication.Contracts.Requests.Patients.Uploads
 {
     public class CreateUploadRequest

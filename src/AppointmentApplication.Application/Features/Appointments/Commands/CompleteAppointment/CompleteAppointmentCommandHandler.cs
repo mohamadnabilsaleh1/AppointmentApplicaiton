@@ -75,7 +75,6 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Comp
                 return ApplicationAppointmentErrors.CannotCompleteAppointment(appointment.Status);
             }
 
-
             // 5. Complete appointment using domain method
             var completeResult = appointment.Complete();
             if (completeResult.IsError)

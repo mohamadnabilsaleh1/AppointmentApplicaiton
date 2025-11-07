@@ -51,7 +51,6 @@ namespace AppointmentApplication.Application.Features.Patients.Commands.AddAller
                 return allergyResult.Errors;
             }
 
-
             await _context.SaveChangesAsync(cancellationToken);
 
             return allergyResult.Value; // الآن Value ليس null

@@ -85,7 +85,6 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<FacilityUpload> FacilityUploads { get; set; }
     public DbSet<Notification> Notifications { get; set; }
 
-
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         UpdateAuditableEntities();

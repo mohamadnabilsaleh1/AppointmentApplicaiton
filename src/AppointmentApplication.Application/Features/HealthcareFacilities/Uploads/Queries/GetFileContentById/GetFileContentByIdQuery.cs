@@ -14,5 +14,4 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Uploa
     public sealed record GetFileContentByIdQuery(Guid HealthCareFacilityId, Guid FileId) : IRequest<Result<FileContentResult>>;
 }
 
-
 public record FileContentResult(byte[] Content, string ContentType, string FileDownloadName = "");

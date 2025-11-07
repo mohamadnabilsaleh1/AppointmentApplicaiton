@@ -71,7 +71,6 @@ public static class DependencyInjection
         services.AddScoped<IAppointmentEmailService, AppointmentEmailService>();
         services.AddScoped<INotificationService, NotificationService>();
 
-
         return services;
     }
 

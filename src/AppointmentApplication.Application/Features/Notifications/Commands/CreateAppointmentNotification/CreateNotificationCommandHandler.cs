@@ -36,7 +36,10 @@ namespace AppointmentApplication.Application.Features.Notifications.Commands.Cre
                 request.RelatedEntityType);
 
             if (notificationResult.IsError)
+            {
+
                 return notificationResult.Errors;
+            }
 
             _context.Notifications.Add(notificationResult.Value);
             await _context.SaveChangesAsync(cancellationToken);
