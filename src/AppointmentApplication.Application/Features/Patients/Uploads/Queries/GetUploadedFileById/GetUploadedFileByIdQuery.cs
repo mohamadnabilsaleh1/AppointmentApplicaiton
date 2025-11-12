@@ -10,5 +10,5 @@ using MediatR;
 
 namespace AppointmentApplication.Application.Features.Patients.Uploads.Queries.GetUploadedFileByPatientId
 {
-    public sealed record GetUploadedFileByIdQuery(Guid PatientId, Guid FileId): IRequest<Result<UploadDto>>;   
+    public sealed record GetUploadedFileByIdQuery(Guid PatientId, Guid FileId): IRequest<Result<UploadDto>>;
 }

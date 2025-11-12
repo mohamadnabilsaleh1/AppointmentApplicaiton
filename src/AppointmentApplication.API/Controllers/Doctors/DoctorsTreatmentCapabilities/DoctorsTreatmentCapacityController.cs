@@ -20,7 +20,6 @@ using Microsoft.AspNetCore.OutputCaching;
 namespace AppointmentApplication.API.Controllers.Doctors.DoctorsTreatmentCapabilities
 {
     [Route("api/doctors/{doctorId:guid}/treatment-capacity")]
-    [Authorize(Roles = $"{Roles.Doctor}")]
     public class DoctorsTreatmentCapacityController : ApiController
     {
         private readonly ISender _sender;

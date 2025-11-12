@@ -7,7 +7,7 @@ using FluentValidation;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Uploads.Commands.ChangeFileToPrivate
 {
-    public class ChangeFileToPrivateCommandValidator : AbstractValidator<ChangeFileToPrivateCommand>  
+    public class ChangeFileToPrivateCommandValidator : AbstractValidator<ChangeFileToPrivateCommand>
     {
         public ChangeFileToPrivateCommandValidator()
         {

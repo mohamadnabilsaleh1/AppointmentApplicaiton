@@ -34,7 +34,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
             var userId = _userContext.UserId;
             var patient = await _context.Patients.ToListAsync(cancellationToken);
             Console.WriteLine("Patinet countes ======++>>" + patient.Count);
-            
+
             var healthCareFacility = await _context.HealthcareFacilities
                 .AsNoTracking() // لا حاجة لتتبع التغييرات هنا
                 .Where(u => u.UserId == userId)

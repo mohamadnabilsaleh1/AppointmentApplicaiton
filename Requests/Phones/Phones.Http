@@ -1,0 +1,65 @@
+@baseUrl = http://localhost:5001
+@doctorId = 74350655-f0a7-486a-b9f9-65c0bac318b2
+
+@DoctorToken = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NjI2MjY4OTIsImlhdCI6MTc2MjU5MDg5MiwianRpIjoib25ydHJvOjM3ZWUwYmI3LWNjMDEtNzYyYi1kNzBlLTcyMDYyMWYxNDk2ZiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIwOWI2ZTQyNy04MDZiLTQ3MjAtOWQwYy1kYWRiM2IxMTc2N2QiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6IjI2YjkwZTJhLTdjYzEtNGEwZC1hNzVlLWIwMjRlYzgzOTgwMiIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IkpvaG4gRG9lIiwicHJlZmVycmVkX3VzZXJuYW1lIjoibW9oYW1hZC5kb2VAZXhhbXBsZS5jb20iLCJnaXZlbl9uYW1lIjoiSm9obiIsImZhbWlseV9uYW1lIjoiRG9lIiwiZW1haWwiOiJtb2hhbWFkLmRvZUBleGFtcGxlLmNvbSJ9.TnsLYD_fj7t5BnC9Lc4B0unDZ8zQaeWy9Z_BzzTFTxyUmDgmT8U6Dtu8QgF_r8BxJBIgM2wGAkzGij5McE_ZHRdzgHJZ48LDRZFdCBcJvQE7kfi0spp4zXVTGiFQPbiZyHIS__gUsdWuZH5nDmQumzwvGs6iVGepGJMElacrfEoVdZTWJvGX92NfNKJdeZpgZvtLrdQ3tVp063lpk9nR5LaESUL_zvT8zT2w5aVFJBnsOrUJER3eoHrhI4t9fnh6vDFmn5_FDj8ZvM1oPEnPw6BIz21I6Nz2dGhuwwbBcbU14Swv0BLQo6rGKXq2V55S-7Ux_sbpQ9XKZZt_GHAwzA
+
+
+
+ 
+### doctor login 
+POST http://localhost:5001/api/users/login
+Content-Type: application/json
+
+{
+    "email": "mohamad.doe@example.com",
+    "Password": "12er56ui90MO@"
+}
+
+
+
+### get all
+GEt {{baseUrl}}/api/doctors
+
+
+
+### get me 
+GEt {{baseUrl}}/api/doctors/me
+Authorization: {{DoctorToken}}
+
+### create email
+POST http://localhost:5001/api/users/me/phones
+Authorization: {{DoctorToken}}
+Content-Type: application/json
+
+{
+  "PhoneNumber": "0985306315",
+  "Label": "WhatsApp",
+  "isPrimary": true
+}
+
+### get all emails
+GEt http://localhost:5001/api/users/me/phones
+Authorization: {{DoctorToken}}
+
+
+### update email
+PUT http://localhost:5001/api/users/me/phones/afa1834d-7e88-4439-a4d4-a0afd2d57aa2
+Authorization: {{DoctorToken}}
+Content-Type: application/json
+
+{
+  "emailAddress": "0985646262",
+  "label": "updated",
+  "isPrimary": true
+}
+
+
+### make email primary
+PUT http://localhost:5001/api/users/me/phones/9ec536b7-3c55-4b15-89b9-5bcdb89a6e55/primary
+Authorization: {{DoctorToken}}
+Content-Type: application/json
+
+### delete email
+DELETE http://localhost:5001/api/users/me/phones/a9a9d8ee-e955-4714-9a40-ada60b196079
+Authorization: {{DoctorToken}}
+Content-Type: application/json

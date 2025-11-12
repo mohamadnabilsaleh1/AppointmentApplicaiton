@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 namespace AppointmentApplication.Application.Features.Doctors.DoctorsTreatmentCapabilities.Dtos
 {
     public record DoctorTreatmentCapabilityDto(Guid DoctorId, int MaxPatientsPerDay,
-    int SessionDurationMinutes, bool IsActive);   
+    int SessionDurationMinutes, bool IsActive);
 }

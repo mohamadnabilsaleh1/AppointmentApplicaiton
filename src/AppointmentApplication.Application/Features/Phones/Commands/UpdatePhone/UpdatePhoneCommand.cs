@@ -1,0 +1,19 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using AppointmentApplication.Domain.Shared.Results;
+
+using MediatR;
+
+namespace AppointmentApplication.Application.Features.Phones.Commands.UpdatePhone
+{
+    public record UpdatePhoneCommand(
+        Guid UserId,
+        Guid PhoneId,
+        string? PhoneNumber = null,
+        string? Label = null,
+        bool? IsPrimary = null
+    ) : IRequest<Result<Updated>>;
+}

@@ -19,13 +19,13 @@ namespace AppointmentApplication.Application.Features.Appointments.Dtos
 
         // Patient details
         PatientDetailsDto Patient,
-        
-        // Doctor details  
+
+        // Doctor details
         DoctorDetailsDto Doctor,
-        
+
         // Facility details
         FacilityDetailsDto Facility,
-        
+
         // Conditional details - only for completed appointments
         BillingDetailsDto? Billing,
         List<PrescriptionDetailsDto>? Prescriptions

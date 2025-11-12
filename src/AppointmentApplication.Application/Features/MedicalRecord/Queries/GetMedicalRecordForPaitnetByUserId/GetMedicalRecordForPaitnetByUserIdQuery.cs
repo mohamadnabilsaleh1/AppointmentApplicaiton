@@ -5,6 +5,6 @@ using MediatR;
 
 namespace AppointmentApplication.Application.Features.MedicalRecords.Queries.GetAllMedicalRecords
 {
-    public sealed record GetMedicalRecordForPaitnetByUserIdQuery(Guid UserId) 
+    public sealed record GetMedicalRecordForPaitnetByUserIdQuery(Guid UserId)
         : IRequest<Result<List<MedicalRecordDto>>>;
 }

@@ -23,6 +23,6 @@ namespace AppointmentApplication.Application.Features.Doctors.DoctorsTreatmentCa
         {
             return entities?.Select(e => e.ToDto()).ToList() ?? new List<DoctorTreatmentCapabilityDto>();
         }
-   
+
     }
 }

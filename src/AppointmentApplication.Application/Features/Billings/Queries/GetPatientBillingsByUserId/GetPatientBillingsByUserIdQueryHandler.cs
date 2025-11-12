@@ -111,7 +111,7 @@ namespace AppointmentApplication.Application.Features.Billings.Queries.GetPatien
                     page: request.Page,
                     pageSize: request.PageSize,
                     fields: request.Fields,
-                    toDtoFunc: list => 
+                    toDtoFunc: list =>
                     {
                         _logger.LogInformation("Mapping {Count} billings to DTOs", list.Count);
                         return list.ToDtos();

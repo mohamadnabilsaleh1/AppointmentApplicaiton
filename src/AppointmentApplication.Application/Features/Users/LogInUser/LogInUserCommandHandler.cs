@@ -63,10 +63,10 @@ public sealed class LogInUserCommandHandler : IRequestHandler<LogInUserCommand, 
             var response = new AccessTokenResponse(tokenResult.Value, userDto);
 
             _logger.LogInformation(
-                "Login successful for email {Email}. User: {UserId}, Role: {UserRole}", 
+                "Login successful for email {Email}. User: {UserId}, Role: {UserRole}",
                 request.Email, user.Id, user.Roles);
 
             return response;
-        
+
     }
 }

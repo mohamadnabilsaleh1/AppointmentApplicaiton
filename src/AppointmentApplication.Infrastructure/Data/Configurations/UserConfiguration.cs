@@ -35,9 +35,11 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(u => u.Emails)
-    .WithOne(e => e.User)
-    .HasForeignKey(e => e.UserId)
-    .OnDelete(DeleteBehavior.Restrict);
+                .WithOne(e => e.User)
+                .HasForeignKey(e => e.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
 
             // Configure one-to-many relationship with Phone
             builder.HasMany(u => u.Phones)

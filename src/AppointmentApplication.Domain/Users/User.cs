@@ -85,7 +85,7 @@ public sealed class User : AuditableEntity
         IdentityId = identityId;
     }
 
-    public Result<Emails.Email> AddEmail(string emailAddress, string label, bool isPrimary = false, string createdBy = "system")
+    public Result<Emails.Email> AddEmail(string emailAddress, string label, bool isPrimary = false)
     {
         if (string.IsNullOrWhiteSpace(emailAddress))
         {
@@ -99,41 +99,47 @@ public sealed class User : AuditableEntity
 
         var email = Domain.Emails.Email.Create(Id, emailAddress, label, isPrimary);
 
-        if (isPrimary)
-        {
-            // Remove primary status from other emails
-            _emails.ForEach(e => e.SetPrimary(false));
-        }
-
         if (email.IsError)
         {
             return email.Errors;
         }
 
+        if (isPrimary)
+        {
+            // 🔹 الحل: تحديث الإيميلات الأساسية الحالية فقط
+            var primaryEmails = _emails.Where(e => e.IsPrimary).ToList();
+            foreach (var primaryEmail in primaryEmails)
+            {
+                primaryEmail.SetPrimary(false);
+            }
+        }
+
         _emails.Add(email.Value);
         return email.Value;
     }
-
-    public void RemoveEmail(string emailAddress)
+    public void RemoveEmail(Guid EmailId)
     {
-        var email = _emails.FirstOrDefault(e => e.EmailAddress == emailAddress);
+        var email = _emails.FirstOrDefault(e => e.Id == EmailId);
         if (email != null)
         {
             _emails.Remove(email);
         }
     }
 
-    public void SetPrimaryEmail(string emailAddress)
+    public void SetPrimaryEmail(Guid emailId)
     {
-        var email = _emails.FirstOrDefault(e => e.EmailAddress == emailAddress);
+        var email = _emails.FirstOrDefault(e => e.Id == emailId);
         if (email == null)
         {
             throw new InvalidOperationException("Email not found");
         }
+        var primaryEmails = _emails.Where(e => e.IsPrimary).ToList();
 
         // Remove primary status from all emails
-        _emails.ForEach(e => e.SetPrimary(false));
-
+        foreach (var primaryEmail in primaryEmails)
+        {
+            primaryEmail.SetPrimary(false);
+        }
         // Set the specified email as primary
         email.SetPrimary(true);
     }
@@ -168,18 +174,18 @@ public sealed class User : AuditableEntity
         return phone.Value;
     }
 
-    public void RemovePhone(string phoneNumber)
+    public void RemovePhone(Guid PhoneId)
     {
-        var phone = _phones.FirstOrDefault(p => p.PhoneNumber == phoneNumber);
+        var phone = _phones.FirstOrDefault(p => p.Id == PhoneId);
         if (phone != null)
         {
             _phones.Remove(phone);
         }
     }
 
-    public void SetPrimaryPhone(string phoneNumber)
+    public void SetPrimaryPhone(Guid PhoneId)
     {
-        var phone = _phones.FirstOrDefault(p => p.PhoneNumber == phoneNumber);
+        var phone = _phones.FirstOrDefault(p => p.Id == PhoneId);
         if (phone == null)
         {
             throw new InvalidOperationException("Phone not found");

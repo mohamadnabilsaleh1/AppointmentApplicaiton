@@ -31,8 +31,10 @@ namespace AppointmentApplication.Application.Features.MedicalRecords.Queries.Get
             GetMedicalRecordForPaitnetByUserIdQuery request,
             CancellationToken cancellationToken)
         {
-            // Find patient by user ID
+            // Find patient by user ID with allergies and chronic diseases
             var patient = await _context.Patients
+                .Include(p => p.Allergies)
+                .Include(p => p.ChronicDiseases)
                 .FirstOrDefaultAsync(p => p.UserId == request.UserId, cancellationToken);
 
             if (patient is null)
@@ -46,10 +48,26 @@ namespace AppointmentApplication.Application.Features.MedicalRecords.Queries.Get
                 .Include(mr => mr.Doctor)
                 .Include(mr => mr.Facility)
                 .Include(mr => mr.Appointment)
-                .ThenInclude(a => a.Prescriptions)
+                    .ThenInclude(a => a.Prescriptions)
                 .Where(mr => mr.PatientId == patient.Id)
                 .OrderByDescending(mr => mr.RecordDate)
                 .ToListAsync(cancellationToken);
+
+            // Map allergies to DTO - using your enum-based structure
+            var allergyDtos = patient.Allergies?
+                .Select(a => new AllergyDto(
+                    Id: a.Id,
+                    Name: a.Name.ToString(), // Convert enum to string
+                    AllergyType: a.Name
+                )).ToList() ?? new List<AllergyDto>();
+
+            // Map chronic diseases to DTO - using your enum-based structure
+            var chronicDiseaseDtos = patient.ChronicDiseases?
+                .Select(cd => new ChronicDiseaseDto(
+                    Id: cd.Id,
+                    Name: cd.Name.ToString(), // Convert enum to string
+                    ChronicDiseaseType: cd.Name
+                )).ToList() ?? new List<ChronicDiseaseDto>();
 
             // Group by patient and map to DTO
             var result = medicalRecords
@@ -57,6 +75,8 @@ namespace AppointmentApplication.Application.Features.MedicalRecords.Queries.Get
                 .Select(group => new MedicalRecordDto(
                     Id: group.Key,
                     PatientFullName: $"{group.First().Patient.FirstName} {group.First().Patient.LastName}",
+                    Allergies: allergyDtos,
+                    ChronicDiseases: chronicDiseaseDtos,
                     MedicalRecord: group.Select(mr => new MedicalRecordItemDto(
                         DoctorFullName: $"{mr.Doctor.FirstName} {mr.Doctor.LastName}",
                         FacilityName: mr.Facility.Name,

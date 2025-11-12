@@ -7,6 +7,6 @@ namespace AppointmentApplication.Application.Features.Appointments.Queries.GetAp
 {
     public class GetAppointmentForDoctorByIdQuery
     {
-        
+
     }
 }

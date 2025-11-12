@@ -39,7 +39,7 @@ namespace AppointmentApplication.Application.Features.MedicalRecords.Queries.Get
                 return ApplicationDoctorErrors.DoctorNotFound(request.UserId);
             }
 
-            // Verify patient exists
+            // Verify patient exists with allergies and chronic diseases
             var patient = await _context.Patients
                 .Include(p => p.Allergies)
                 .Include(p => p.ChronicDiseases)
@@ -53,6 +53,9 @@ namespace AppointmentApplication.Application.Features.MedicalRecords.Queries.Get
             // Get medical records for this patient that were created by this doctor
             var medicalRecords = await _context.MedicalRecords
                 .Include(mr => mr.Patient)
+                    .ThenInclude(p => p.Allergies)
+                .Include(mr => mr.Patient)
+                    .ThenInclude(p => p.ChronicDiseases)
                 .Include(mr => mr.Doctor)
                 .Include(mr => mr.Facility)
                     .ThenInclude(f => f.Address)
@@ -62,6 +65,22 @@ namespace AppointmentApplication.Application.Features.MedicalRecords.Queries.Get
                 .OrderByDescending(mr => mr.RecordDate)
                 .ToListAsync(cancellationToken);
 
+            // Map allergies to DTO - using your enum-based structure
+            var allergyDtos = patient.Allergies?
+                .Select(a => new AllergyDto(
+                    Id: a.Id,
+                    Name: a.Name.ToString(), // Convert enum to string
+                    AllergyType: a.Name
+                )).ToList() ?? new List<AllergyDto>();
+
+            // Map chronic diseases to DTO - using your enum-based structure
+            var chronicDiseaseDtos = patient.ChronicDiseases?
+                .Select(cd => new ChronicDiseaseDto(
+                    Id: cd.Id,
+                    Name: cd.Name.ToString(), // Convert enum to string
+                    ChronicDiseaseType: cd.Name
+                )).ToList() ?? new List<ChronicDiseaseDto>();
+
             // Map to DTO
             var result = new MedicalRecordForDoctorDto(
                 Id: patient.Id,
@@ -69,6 +88,8 @@ namespace AppointmentApplication.Application.Features.MedicalRecords.Queries.Get
                 PatientNationalId: patient.NationalID,
                 PatientGender: patient.Gender.ToString(),
                 PatientAge: AgeCalculator.CalculateAge(patient.DateOfBirth),
+                Allergies: allergyDtos,
+                ChronicDiseases: chronicDiseaseDtos,
                 MedicalRecords: medicalRecords.Select(mr => new MedicalRecordItemForDoctorDto(
                     RecordDate: mr.RecordDate,
                     Diagnosis: mr.Diagnosis,
@@ -88,7 +109,7 @@ namespace AppointmentApplication.Application.Features.MedicalRecords.Queries.Get
                         Status: mr.Appointment.Status.ToString(),
                         Notes: mr.Appointment.Notes ?? string.Empty
                     ),
-                    Facility: new FacilityInfoDto(
+                    Facility: new Dtos.FacilityInfoDto(
                         Id: mr.Facility.Id,
                         Name: mr.Facility.Name,
                         Address: $"{mr.Facility.Address.Street}, {mr.Facility.Address.City}, {mr.Facility.Address.State}, {mr.Facility.Address.Country}"

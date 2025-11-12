@@ -11,5 +11,5 @@ using MediatR;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Uploads.Commands.ChangeFileToPrivate
 {
-    public sealed record GetUploadedFileByIdQuery(Guid HealthCareFacilityId, Guid FileId): IRequest<Result<UploadDto>>;   
+    public sealed record GetUploadedFileByIdQuery(Guid HealthCareFacilityId, Guid FileId): IRequest<Result<UploadDto>>;
 }

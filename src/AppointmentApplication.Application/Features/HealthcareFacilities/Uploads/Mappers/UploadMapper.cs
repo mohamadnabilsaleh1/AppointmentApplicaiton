@@ -18,8 +18,8 @@ namespace AppointmentApplication.Application.HealthcareFacilities.Patients.Uploa
             var fileId = uploadedFile[uploadedFile.Length - 1];
             var filePath = Path.Combine(uploadFolder, $"{fileId}");
             //api/files/healthCareFacility/08ab65af-cdb4-4f2f-910f-cd45a1ba5eaf/uploads/bb6538a4-4bf1-4d94-b612-36a9c8738afa.png
-            // 
-            
+            //
+
             return new UploadDto(
                 entity.Id,
                 entity.FacilityId,

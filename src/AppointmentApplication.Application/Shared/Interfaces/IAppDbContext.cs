@@ -10,6 +10,7 @@ using AppointmentApplication.Domain.Doctors;
 using AppointmentApplication.Domain.Doctors.DoctorsTreatmentCapabilities;
 using AppointmentApplication.Domain.Doctors.ScheduleExceptions;
 using AppointmentApplication.Domain.Doctors.Schedules;
+using AppointmentApplication.Domain.Emails;
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.HealthcareFacilities.Departments;
 using AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions;
@@ -21,9 +22,9 @@ using AppointmentApplication.Domain.Notifications;
 using AppointmentApplication.Domain.Patients;
 using AppointmentApplication.Domain.Patients.Allergies;
 using AppointmentApplication.Domain.Patients.ChronicDiseases;
+using AppointmentApplication.Domain.Phones;
 using AppointmentApplication.Domain.Prescriptions;
 using AppointmentApplication.Domain.Reviews;
-using AppointmentApplication.Domain.Shared;
 using AppointmentApplication.Domain.Users;
 
 using Microsoft.EntityFrameworkCore;

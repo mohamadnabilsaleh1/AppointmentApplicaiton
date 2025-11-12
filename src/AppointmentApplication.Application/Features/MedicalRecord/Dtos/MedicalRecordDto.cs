@@ -1,8 +1,8 @@
 // AppointmentApplication.Application/Features/MedicalRecords/Dtos/MedicalRecordDtos.cs
 using System;
 using System.Collections.Generic;
-
-using AppointmentApplication.Application.Features.MedicalRecords.Dtos;
+using AppointmentApplication.Domain.Patients.Allergies.Enums;
+using AppointmentApplication.Domain.Patients.ChronicDiseases.Enums;
 
 namespace AppointmentApplication.Application.Features.MedicalRecords.Dtos
 {
@@ -10,6 +10,8 @@ namespace AppointmentApplication.Application.Features.MedicalRecords.Dtos
     public record MedicalRecordDto(
         Guid Id,
         string PatientFullName,
+        List<AllergyDto> Allergies,
+        List<ChronicDiseaseDto> ChronicDiseases,
         List<MedicalRecordItemDto> MedicalRecord
     );
 
@@ -22,6 +24,27 @@ namespace AppointmentApplication.Application.Features.MedicalRecords.Dtos
         string FollowUpInstructions,
         List<PrescriptionMedicalInfoDto> Prescriptions,
         AppointmentInfoDto Appointment
+    );
+
+    public record MedicalRecordForDoctorDto(
+        Guid Id,
+        string PatientFullName,
+        string PatientNationalId,
+        string PatientGender,
+        int PatientAge,
+        List<AllergyDto> Allergies,
+        List<ChronicDiseaseDto> ChronicDiseases,
+        List<MedicalRecordItemForDoctorDto> MedicalRecords
+    );
+
+    public record MedicalRecordItemForDoctorDto(
+        DateTime RecordDate,
+        string Diagnosis,
+        string TreatmentNotes,
+        string FollowUpInstructions,
+        List<PrescriptionMedicalInfoDto> Prescriptions,
+        AppointmentInfoDto Appointment,
+        FacilityInfoDto Facility
     );
 
     public record AppointmentInfoDto(
@@ -38,25 +61,23 @@ namespace AppointmentApplication.Application.Features.MedicalRecords.Dtos
         string MedicationList,
         string DosageInstructions
     );
+
+    public record FacilityInfoDto(
+        Guid Id,
+        string Name,
+        string Address
+    );
+
+    // Updated DTOs for allergies and chronic diseases based on your domain
+    public record AllergyDto(
+        Guid Id,
+        string Name, // This will be the enum value as string
+        AllergyType AllergyType // Optional: include the enum value if needed
+    );
+
+    public record ChronicDiseaseDto(
+        Guid Id,
+        string Name, // This will be the enum value as string
+        ChronicDiseaseType ChronicDiseaseType // Optional: include the enum value if needed
+    );
 }
-
-// AppointmentApplication.Application/Features/MedicalRecords/Dtos/MedicalRecordDtos.cs (إضافة)
-public record MedicalRecordForDoctorDto(
-    Guid Id,
-    string PatientFullName,
-    string PatientNationalId,
-    string PatientGender,
-    int PatientAge,
-    List<MedicalRecordItemForDoctorDto> MedicalRecords
-);
-
-public record MedicalRecordItemForDoctorDto(
-    DateTime RecordDate,
-    string Diagnosis,
-    string TreatmentNotes,
-    string FollowUpInstructions,
-    List<PrescriptionMedicalInfoDto> Prescriptions,
-    AppointmentInfoDto Appointment,
-    FacilityInfoDto Facility
-);
-

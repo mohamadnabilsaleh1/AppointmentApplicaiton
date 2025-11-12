@@ -396,6 +396,52 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.ToTable("ScheduleDoctors");
                 });
 
+            modelBuilder.Entity("AppointmentApplication.Domain.Emails.Email", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmailAddress");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId", "IsPrimary")
+                        .IsUnique()
+                        .HasFilter("[IsPrimary] = 1");
+
+                    b.ToTable("emails", (string)null);
+                });
+
             modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.Departments.Department", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1189,6 +1235,52 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.ToTable("Patients");
                 });
 
+            modelBuilder.Entity("AppointmentApplication.Domain.Phones.Phone", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhoneNumber");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId", "IsPrimary")
+                        .IsUnique()
+                        .HasFilter("[IsPrimary] = 1");
+
+                    b.ToTable("phones", (string)null);
+                });
+
             modelBuilder.Entity("AppointmentApplication.Domain.Prescriptions.Prescription", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1274,94 +1366,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.HasIndex("PatientID");
 
                     b.ToTable("Reviews");
-                });
-
-            modelBuilder.Entity("AppointmentApplication.Domain.Shared.Email", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<bool>("IsPrimary")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Label")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId", "IsPrimary")
-                        .IsUnique()
-                        .HasFilter("[IsPrimary] = 1");
-
-                    b.ToTable("Emails");
-                });
-
-            modelBuilder.Entity("AppointmentApplication.Domain.Shared.Phone", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsPrimary")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Label")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId", "IsPrimary")
-                        .IsUnique()
-                        .HasFilter("[IsPrimary] = 1");
-
-                    b.ToTable("Phones");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.Users.Permission", b =>
@@ -1692,6 +1696,17 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Navigation("Doctor");
                 });
 
+            modelBuilder.Entity("AppointmentApplication.Domain.Emails.Email", b =>
+                {
+                    b.HasOne("AppointmentApplication.Domain.Users.User", "User")
+                        .WithMany("Emails")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AppointmentApplication.Domain.HealthcareFacilities.Departments.Department", b =>
                 {
                     b.HasOne("AppointmentApplication.Domain.HealthcareFacilities.HealthCareFacility", "HealthcareFacility")
@@ -1872,6 +1887,17 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("AppointmentApplication.Domain.Phones.Phone", b =>
+                {
+                    b.HasOne("AppointmentApplication.Domain.Users.User", "User")
+                        .WithMany("Phones")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AppointmentApplication.Domain.Prescriptions.Prescription", b =>
                 {
                     b.HasOne("AppointmentApplication.Domain.Appointments.Appointment", "Appointment")
@@ -1914,28 +1940,6 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Navigation("Facility");
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("AppointmentApplication.Domain.Shared.Email", b =>
-                {
-                    b.HasOne("AppointmentApplication.Domain.Users.User", "User")
-                        .WithMany("Emails")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("AppointmentApplication.Domain.Shared.Phone", b =>
-                {
-                    b.HasOne("AppointmentApplication.Domain.Users.User", "User")
-                        .WithMany("Phones")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AppointmentApplication.Domain.Users.Permission", b =>

@@ -13,8 +13,11 @@ using AppointmentApplication.Application.Abstractions.Authentication;
 using AppointmentApplication.Application.Features.Appointments.Commands.CancelAppointment;
 using AppointmentApplication.Application.Features.Appointments.Commands.CompleteAppointment;
 using AppointmentApplication.Application.Features.Appointments.Commands.ConfirmAppointment;
+using AppointmentApplication.Application.Features.Appointments.Commands.CreateAppointment;
 using AppointmentApplication.Application.Features.Appointments.Queries.GetAppointmentByDoctorId;
 using AppointmentApplication.Application.Features.Appointments.Queries.GetAppointmentDetailsForDoctorById;
+using AppointmentApplication.Application.Features.Appointments.Queries.GetAppointmentForDoctorById;
+using AppointmentApplication.Contracts.Requests.Appointments;
 using AppointmentApplication.Domain.Shared.Results;
 using AppointmentApplication.Domain.Users;
 
@@ -97,6 +100,50 @@ namespace AppointmentApplication.Api.Controllers
                 Problem);
         }
 
+        [HttpPost]
+        [Authorize(Roles = Roles.Doctor)]
+        [MapToApiVersion("0.1")]
+        [EndpointSummary("Create a new appointment.")]
+        [EndpointDescription("Creates a new appointment with the provided details.")]
+        [EndpointName("CreateAppointmentByDoctor")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateAppointmentByDoctor(
+            [FromBody] CreateAppointmentRequestByDoctor request,
+            CancellationToken cancellationToken)
+        {
+            var command = new CreateAppointmentByDoctorCommand(
+                _userContext.UserId,
+                request.PatientId,
+                request.ScheduledDate,
+                request.ScheduledTime,
+                request.DurationMinutes,
+                request.TotalAmount);
+
+            var result = await _sender.Send(command, cancellationToken);
+
+            return result.Match<IActionResult>(
+                appointmentDto =>
+                {
+                    var resource = new
+                    {
+                        data = appointmentDto,
+                    };
+                    
+                    // FIXED: Correct route values for CreatedAtAction
+                    return CreatedAtAction(
+                        nameof(GetDoctorAppointmentById), 
+                        new { 
+                            appointmentId = appointmentDto.Id,  // Changed from 'id' to 'appointmentId'
+                            fields = (string?)null              // Added default value for fields parameter
+                        }, 
+                        resource);
+                },
+                Problem);
+        }
+
         [HttpGet("{appointmentId:guid}")]
         [Authorize(Roles = Roles.Doctor)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -110,9 +157,9 @@ namespace AppointmentApplication.Api.Controllers
         [EndpointName("GetDoctorAppointmentById")]
         [OutputCache(Duration = 60, VaryByQueryKeys = new[] { "fields" })] // Cache for 60 seconds, vary by fields
         public async Task<IActionResult> GetDoctorAppointmentById(
-Guid appointmentId,
-[FromQuery] string? fields = null,
-CancellationToken cancellationToken = default)
+            Guid appointmentId,
+            [FromQuery] string? fields = null,
+            CancellationToken cancellationToken = default)
         {
             var result = await _sender.Send(
                 new GetAppointmentDetailsForDoctorByIdQuery(
@@ -134,7 +181,7 @@ CancellationToken cancellationToken = default)
                 Problem);
         }
 
-        [HttpPut("{appointmentId:guid}/complete", Name = "CompleteDoctorAppointment")] // Fixed: Unique endpoint name
+        [HttpPut("{appointmentId:guid}/complete", Name = "CompleteDoctorAppointment")]
         [Authorize(Roles = Roles.Doctor)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -146,10 +193,10 @@ CancellationToken cancellationToken = default)
         [MapToApiVersion("0.1")]
         [EndpointSummary("Complete an appointment.")]
         [EndpointDescription("Completes an appointment, creates medical record, prescription, and marks billing as paid.")]
-        [EndpointName("CompleteDoctorAppointment")] // Fixed: Unique endpoint name
+        [EndpointName("CompleteDoctorAppointment")]
         public async Task<IActionResult> CompleteAppointment(
             Guid appointmentId,
-            [FromBody] CompleteAppointmentRequest completeRequest, // Fixed: Renamed parameter
+            [FromBody] CompleteAppointmentRequest completeRequest,
             CancellationToken cancellationToken)
         {
             var command = new CompleteAppointmentCommand(
@@ -172,7 +219,7 @@ CancellationToken cancellationToken = default)
                 Problem);
         }
 
-        [HttpPut("{appointmentId:guid}/confirm", Name = "ConfirmDoctorAppointment")] // Fixed: Unique endpoint name
+        [HttpPut("{appointmentId:guid}/confirm", Name = "ConfirmDoctorAppointment")]
         [Authorize(Roles = Roles.Doctor)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -184,7 +231,7 @@ CancellationToken cancellationToken = default)
         [MapToApiVersion("0.1")]
         [EndpointSummary("Confirm an appointment.")]
         [EndpointDescription("Confirms a pending appointment. Only the assigned doctor can confirm their own appointments.")]
-        [EndpointName("ConfirmDoctorAppointment")] // Fixed: Unique endpoint name
+        [EndpointName("ConfirmDoctorAppointment")]
         public async Task<IActionResult> ConfirmAppointment(
             Guid appointmentId,
             CancellationToken cancellationToken)
@@ -198,7 +245,7 @@ CancellationToken cancellationToken = default)
                 Problem);
         }
 
-        [HttpPut("{appointmentId:guid}/cancel", Name = "CancelDoctorAppointment")] // Fixed: Unique endpoint name
+        [HttpPut("{appointmentId:guid}/cancel", Name = "CancelDoctorAppointment")]
         [Authorize(Roles = $"{Roles.Doctor}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -210,7 +257,7 @@ CancellationToken cancellationToken = default)
         [MapToApiVersion("0.1")]
         [EndpointSummary("Cancel an appointment.")]
         [EndpointDescription("Cancels an appointment. Only the assigned doctor or admin can cancel appointments.")]
-        [EndpointName("CancelDoctorAppointment")] // Fixed: Unique endpoint name
+        [EndpointName("CancelDoctorAppointment")]
         public async Task<IActionResult> CancelAppointment(
             Guid appointmentId,
             [FromBody] CancelAppointmentRequest request,
@@ -225,7 +272,7 @@ CancellationToken cancellationToken = default)
                 Problem);
         }
 
-        [HttpPut("{appointmentId:guid}/reschedule", Name = "RescheduleDoctorAppointment")] // Fixed: Unique endpoint name
+        [HttpPut("{appointmentId:guid}/reschedule", Name = "RescheduleDoctorAppointment")]
         [Authorize(Roles = $"{Roles.Doctor},{Roles.Admin}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -237,7 +284,7 @@ CancellationToken cancellationToken = default)
         [MapToApiVersion("0.1")]
         [EndpointSummary("Reschedule an appointment.")]
         [EndpointDescription("Reschedules an appointment to a new date and time.")]
-        [EndpointName("RescheduleDoctorAppointment")] // Fixed: Unique endpoint name
+        [EndpointName("RescheduleDoctorAppointment")]
         public async Task<IActionResult> RescheduleAppointment(
             Guid appointmentId,
             [FromBody] RescheduleAppointmentRequest request,

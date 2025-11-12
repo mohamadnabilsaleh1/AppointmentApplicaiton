@@ -78,7 +78,7 @@ namespace AppointmentApplication.Application.Features.Appointments.Queries.GetAp
 
             // Prepare filters dictionary (for dynamic query service if needed)
             var filters = new Dictionary<string, object?>();
-            
+
             // Note: We already applied status filter above, but we can keep it for dynamic service if needed
             if (request.Status.HasValue)
             {
@@ -106,7 +106,7 @@ namespace AppointmentApplication.Application.Features.Appointments.Queries.GetAp
                 page: request.Page,
                 pageSize: request.PageSize,
                 fields: request.Fields,
-                toDtoFunc: list => 
+                toDtoFunc: list =>
                 {
                     _logger.LogInformation("Mapped {Count} appointments with status filter", list.Count);
                     return list.ToDtos();

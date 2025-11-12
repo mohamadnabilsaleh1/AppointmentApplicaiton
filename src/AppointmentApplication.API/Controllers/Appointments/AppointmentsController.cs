@@ -24,7 +24,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AppointmentApplication.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/appointments")]
     [ApiController]
     [Authorize(Roles = $"{Roles.Patient}")]
     public class AppointmentsController : ApiController
@@ -76,6 +76,7 @@ namespace AppointmentApplication.Api.Controllers
                 },
                 Problem);
         }
+    
         [HttpGet("{id:guid}", Name = "GetAppointmentById")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]

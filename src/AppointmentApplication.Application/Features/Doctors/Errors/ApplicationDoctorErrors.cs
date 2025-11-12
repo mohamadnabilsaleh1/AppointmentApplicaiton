@@ -35,7 +35,7 @@ namespace AppointmentApplication.Application.Features.Doctors.Errors
         public static readonly Error InvalidDoctorData =
             Error.Validation("ApplicationDoctor.InvalidDoctorData", "Doctor data is invalid or incomplete.");
 
-            public static Error DoctorTreatmentCapacityNotFound(Guid doctorId) =>
+        public static Error DoctorTreatmentCapacityNotFound(Guid doctorId) =>
             Error.NotFound(
                 "Doctor.TreatmentCapacity.NotFound",
                 $"Doctor Treatment Capacity with ID '{doctorId}' was not found.");

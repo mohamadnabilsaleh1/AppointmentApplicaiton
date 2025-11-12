@@ -1,0 +1,67 @@
+@baseUrl = http://localhost:5001
+@doctorId = 74350655-f0a7-486a-b9f9-65c0bac318b2
+
+@DoctorToken = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NjI2MjAzODQsImlhdCI6MTc2MjU4NDM4NCwianRpIjoib25ydHJvOjEyZmIyOTA3LWU5YTYtMjllOS1jNzFiLTY0ZjA5ZDAyNDVjNSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIwOWI2ZTQyNy04MDZiLTQ3MjAtOWQwYy1kYWRiM2IxMTc2N2QiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6ImQ0YWZmZWQ2LWJhMjQtNGFjNi1hNjU1LTc2ZDNmNTg4Zjc3NSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IkpvaG4gRG9lIiwicHJlZmVycmVkX3VzZXJuYW1lIjoibW9oYW1hZC5kb2VAZXhhbXBsZS5jb20iLCJnaXZlbl9uYW1lIjoiSm9obiIsImZhbWlseV9uYW1lIjoiRG9lIiwiZW1haWwiOiJtb2hhbWFkLmRvZUBleGFtcGxlLmNvbSJ9.ApOHdBgdxShWyHC3H9N9p2LgODDuR32f-4Uh72PWyG58RcsYymuYfsmga7vPqwkkLtRD-IKE-pmx6yTudJNmzyq7DQdF3xRYVgvdERIr9mKyhkSptz6VNmwySqXNPBE0HI1obsgQfTzaRFNaSwlgKVFq2rRblszo_DN5ZduYRUyuDpDqNa11XGQyn1J0BlJnWXcXL0bHJ4URgHjF2tN9SC2a_YU_pD4Ei2m0tqFO2vbUHU1Ipk6ZJos9Ywibge2alxeCcMkAvfyPoYpK8OIWQ34hXGbRC4H4KIsGwOYCaI6ZqXOIfcvDZ2DBJwBbLJibQoUU0gaS0OK_C1HhMPORPQ
+
+
+
+
+
+ 
+### doctor login 
+POST http://localhost:5001/api/users/login
+Content-Type: application/json
+
+{
+    "email": "mohamad.doe@example.com",
+    "Password": "12er56ui90MO@"
+}
+
+
+
+### get all
+GEt {{baseUrl}}/api/doctors
+
+
+
+### get me 
+GEt {{baseUrl}}/api/doctors/me
+Authorization: {{DoctorToken}}
+
+### create email
+POST http://localhost:5001/api/users/me/emails
+Authorization: {{DoctorToken}}
+Content-Type: application/json
+
+{
+  "emailAddress": "whatsapp@gmail.com",
+  "label": "WhatsApp",
+  "isPrimary": true
+}
+
+### get all emails
+GEt http://localhost:5001/api/users/me/emails
+Authorization: {{DoctorToken}}
+
+
+### update email
+PUT http://localhost:5001/api/users/me/emails/a5c4b457-05e0-4e42-8738-85bdf40570d8
+Authorization: {{DoctorToken}}
+Content-Type: application/json
+
+{
+  "emailAddress": "updated@gmail.com",
+  "label": "Work",
+  "isPrimary": true
+}
+
+
+### make email primary
+PUT http://localhost:5001/api/users/me/emails/9ec536b7-3c55-4b15-89b9-5bcdb89a6e55/primary
+Authorization: {{DoctorToken}}
+Content-Type: application/json
+
+### delete email
+DELETE http://localhost:5001/api/users/me/emails/a5c4b457-05e0-4e42-8738-85bdf40570d8
+Authorization: {{DoctorToken}}
+Content-Type: application/json

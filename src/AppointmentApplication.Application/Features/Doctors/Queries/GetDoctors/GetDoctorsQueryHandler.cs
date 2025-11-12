@@ -40,20 +40,25 @@ namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctors
             GetDoctorsQuery request,
             CancellationToken cancellationToken)
         {
-            IQueryable<Doctor> query = _context.Doctors.AsQueryable();
+            IQueryable<Doctor> query = _context.Doctors
+                .Include(d => d.User) // Include User data
+                    .ThenInclude(u => u.Emails) // Include Emails
+                .Include(d => d.User)
+                    .ThenInclude(u => u.Phones) // Include Phones
+                .AsQueryable();
 
             // Apply filters
             var filters = new Dictionary<string, object?>
-            {
-                { "Specialization", request.Specialization }
-            };
+    {
+        { "Specialization", request.Specialization }
+    };
 
             // Remove null filters
             filters = filters.Where(f => f.Value != null)
                            .ToDictionary(f => f.Key, f => f.Value);
 
             // Execute dynamic query service to get filtered IQueryable
-            var dynamicQueryResult = await _dynamicQueryService.ExecuteAsync<Doctor, DoctorDto>(
+            var dynamicQueryResult = await _dynamicQueryService.ExecuteAsync<Doctor, DoctorWithContactDto>(
                 query: query,
                 searchTerm: request.Search,
                 searchProperties: new[] { "FirstName", "LastName" },
@@ -61,7 +66,7 @@ namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctors
                 page: request.Page,
                 pageSize: request.PageSize,
                 fields: request.Fields,
-                toDtoFunc: list => list.ToDtos(),
+                toDtoFunc: list => list.ToDtosWithContact(), // Use new mapping method
                 filters: filters);
 
             return dynamicQueryResult;
