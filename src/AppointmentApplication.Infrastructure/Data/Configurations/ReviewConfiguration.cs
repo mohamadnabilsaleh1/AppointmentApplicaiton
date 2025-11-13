@@ -1,4 +1,5 @@
 using AppointmentApplication.Domain.Reviews;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -29,6 +30,11 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
         builder.HasOne(r => r.Doctor)
             .WithMany()
             .HasForeignKey(r => r.DoctorID)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(r => r.Appointment)
+            .WithMany()
+            .HasForeignKey(r => r.AppointmentId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
