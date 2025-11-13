@@ -1,140 +1,140 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+// using System;
+// using System.Collections.Generic;
+// using System.Threading;
+// using System.Threading.Tasks;
 
-using AppointmentApplication.API.Dtos;
-using AppointmentApplication.API.Services;
-using AppointmentApplication.Application.Abstractions.Authentication;
-using AppointmentApplication.Application.Features.Patients.Uploads.Commands.ChangeFileToPrivate;
-using AppointmentApplication.Application.Features.Patients.Uploads.Commands.ChangeFileToPublic;
-using AppointmentApplication.Application.Features.Patients.Uploads.Commands.CreateUploadFile;
-using AppointmentApplication.Application.Features.Patients.Uploads.Commands.DeleteUploadedFile;
-using AppointmentApplication.Application.Features.Patients.Uploads.Commands.UpdateUploadFile;
-using AppointmentApplication.Application.Features.Patients.Uploads.Queries.GetUploadedFileByUserId;
-using AppointmentApplication.Application.Features.Patients.Uploads.Queries.GetUploadedFileByUserIdQuery;
-using AppointmentApplication.Application.Shared.Services;
-using AppointmentApplication.Contracts.Requests.Patients.Uploads;
-using Asp.Versioning;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OutputCaching;
+// using AppointmentApplication.API.Dtos;
+// using AppointmentApplication.API.Services;
+// using AppointmentApplication.Application.Abstractions.Authentication;
+// using AppointmentApplication.Application.Features.Patients.Uploads.Commands.ChangeFileToPrivate;
+// using AppointmentApplication.Application.Features.Patients.Uploads.Commands.ChangeFileToPublic;
+// using AppointmentApplication.Application.Features.Patients.Uploads.Commands.CreateUploadFile;
+// using AppointmentApplication.Application.Features.Patients.Uploads.Commands.DeleteUploadedFile;
+// using AppointmentApplication.Application.Features.Patients.Uploads.Commands.UpdateUploadFile;
+// using AppointmentApplication.Application.Features.Patients.Uploads.Queries.GetUploadedFileByUserId;
+// using AppointmentApplication.Application.Features.Patients.Uploads.Queries.GetUploadedFileByUserIdQuery;
+// using AppointmentApplication.Application.Shared.Services;
+// using AppointmentApplication.Contracts.Requests.Patients.Uploads;
+// using Asp.Versioning;
+// using MediatR;
+// using Microsoft.AspNetCore.Authorization;
+// using Microsoft.AspNetCore.Mvc;
+// using Microsoft.AspNetCore.OutputCaching;
 
-namespace AppointmentApplication.API.Controllers.Patients.Uploads
-{
-    [Route("api/patients/me/uploads")]
-    [Authorize(Roles = Roles.Patient)]
-    public class AdminPatientUploadController : ApiController
-    {
-        private readonly ISender _sender;
-        private readonly LinkService _linkService;
-        private readonly IUserContext _userContext;
+// namespace AppointmentApplication.API.Controllers.Patients.Uploads
+// {
+//     [Route("api/patients/me/uploads")]
+//     [Authorize(Roles = Roles.Patient)]
+//     public class AdminPatientUploadController : ApiController
+//     {
+//         private readonly ISender _sender;
+//         private readonly LinkService _linkService;
+//         private readonly IUserContext _userContext;
 
-        public AdminPatientUploadController(ISender sender, LinkService linkService, IUserContext userContext)
-        {
-            _sender = sender;
-            _linkService = linkService;
-            _userContext = userContext;
-        }
+//         public AdminPatientUploadController(ISender sender, LinkService linkService, IUserContext userContext)
+//         {
+//             _sender = sender;
+//             _linkService = linkService;
+//             _userContext = userContext;
+//         }
 
-        // ✅ Create Upload
-        [HttpPost]
-        public async Task<IActionResult> CreateUpload([FromForm] CreateUploadRequest request, CancellationToken cancellationToken)
-        {
-            var result = await _sender.Send(
-                new CreateUploadFileCommand(_userContext.UserId, request.File, request.Title, request.Description, request.Visibility),
-                cancellationToken);
+//         // ✅ Create Upload
+//         [HttpPost]
+//         public async Task<IActionResult> CreateUpload([FromForm] CreateUploadRequest request, CancellationToken cancellationToken)
+//         {
+//             var result = await _sender.Send(
+//                 new CreateUploadFileCommand(_userContext.UserId, request.File, request.Title, request.Description, request.Visibility),
+//                 cancellationToken);
 
-            return result.Match(
-                upload =>
-                {
-                    var links = CreateLinks(upload.Id.ToString(), null);
-                    var resource = new { data = upload, links };
-                    return CreatedAtAction(nameof(GetUploadById), new { id = upload.Id }, resource);
-                },
-                Problem);
-        }
+//             return result.Match(
+//                 upload =>
+//                 {
+//                     var links = CreateLinks(upload.Id.ToString(), null);
+//                     var resource = new { data = upload, links };
+//                     return CreatedAtAction(nameof(GetUploadById), new { id = upload.Id }, resource);
+//                 },
+//                 Problem);
+//         }
 
-        // ✅ Get Upload by ID
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetUploadById(Guid id, CancellationToken cancellationToken)
-        {
-            var result = await _sender.Send(new GetUploadedFileByUserIdQuery(_userContext.UserId, id), cancellationToken);
-            return result.Match(
-                upload =>
-                {
-                    var links = CreateLinks(id.ToString(), null);
-                    var resource = new { data = upload, links };
-                    return Ok(resource);
-                },
-                Problem);
-        }
+//         // ✅ Get Upload by ID
+//         [HttpGet("{id:guid}")]
+//         public async Task<IActionResult> GetUploadById(Guid id, CancellationToken cancellationToken)
+//         {
+//             var result = await _sender.Send(new GetUploadedFileByUserIdQuery(_userContext.UserId, id), cancellationToken);
+//             return result.Match(
+//                 upload =>
+//                 {
+//                     var links = CreateLinks(id.ToString(), null);
+//                     var resource = new { data = upload, links };
+//                     return Ok(resource);
+//                 },
+//                 Problem);
+//         }
 
-        // ✅ Get All Uploads
-        [HttpGet]
-        [OutputCache(Duration = 60)]
-        public async Task<IActionResult> GetUploads(CancellationToken cancellationToken)
-        {
-            var result = await _sender.Send(new GetUploadedFilesByUserIdQuery(_userContext.UserId), cancellationToken);
-            return result.Match(
-                uploads =>
-                {
-                    var resource = new { data = uploads };
-                    return Ok(resource);
-                },
-                Problem);
-        }
+//         // ✅ Get All Uploads
+//         [HttpGet]
+//         [OutputCache(Duration = 60)]
+//         public async Task<IActionResult> GetUploads(CancellationToken cancellationToken)
+//         {
+//             var result = await _sender.Send(new GetUploadedFilesByUserIdQuery(_userContext.UserId), cancellationToken);
+//             return result.Match(
+//                 uploads =>
+//                 {
+//                     var resource = new { data = uploads };
+//                     return Ok(resource);
+//                 },
+//                 Problem);
+//         }
 
-        // ✅ Update Upload
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateUpload(Guid id, [FromBody] UpdateUploadRequest request, CancellationToken cancellationToken)
-        {
-            var result = await _sender.Send(new UpdateUploadFileCommand(_userContext.UserId, id, request.Title, request.Description), cancellationToken);
-            return result.Match<IActionResult>(_ => NoContent(), Problem);
-        }
+//         // ✅ Update Upload
+//         [HttpPut("{id:guid}")]
+//         public async Task<IActionResult> UpdateUpload(Guid id, [FromBody] UpdateUploadRequest request, CancellationToken cancellationToken)
+//         {
+//             var result = await _sender.Send(new UpdateUploadFileCommand(_userContext.UserId, id, request.Title, request.Description), cancellationToken);
+//             return result.Match<IActionResult>(_ => NoContent(), Problem);
+//         }
 
-        // ✅ Delete Upload
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteUpload(Guid id, CancellationToken cancellationToken)
-        {
-            var result = await _sender.Send(new DeleteUploadedFileCommand(_userContext.UserId, id), cancellationToken);
-            return result.Match<IActionResult>(_ => NoContent(), Problem);
-        }
+//         // ✅ Delete Upload
+//         [HttpDelete("{id:guid}")]
+//         public async Task<IActionResult> DeleteUpload(Guid id, CancellationToken cancellationToken)
+//         {
+//             var result = await _sender.Send(new DeleteUploadedFileCommand(_userContext.UserId, id), cancellationToken);
+//             return result.Match<IActionResult>(_ => NoContent(), Problem);
+//         }
 
-        // ✅ Change file visibility to PUBLIC
-        [HttpPatch("{id:guid}/make-public")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> MakeUploadPublic(Guid id, CancellationToken cancellationToken)
-        {
-            var result = await _sender.Send(new ChangeFileToPublicCommand(_userContext.UserId, id), cancellationToken);
-            return result.Match<IActionResult>(_ => NoContent(), Problem);
-        }
+//         // ✅ Change file visibility to PUBLIC
+//         [HttpPatch("{id:guid}/make-public")]
+//         [ProducesResponseType(StatusCodes.Status204NoContent)]
+//         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+//         public async Task<IActionResult> MakeUploadPublic(Guid id, CancellationToken cancellationToken)
+//         {
+//             var result = await _sender.Send(new ChangeFileToPublicCommand(_userContext.UserId, id), cancellationToken);
+//             return result.Match<IActionResult>(_ => NoContent(), Problem);
+//         }
 
-        // ✅ Change file visibility to PRIVATE
-        [HttpPatch("{id:guid}/make-private")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> MakeUploadPrivate(Guid id, CancellationToken cancellationToken)
-        {
-            var result = await _sender.Send(new ChangeFileToPrivateCommand(_userContext.UserId, id), cancellationToken);
-            return result.Match<IActionResult>(_ => NoContent(), Problem);
-        }
+//         // ✅ Change file visibility to PRIVATE
+//         [HttpPatch("{id:guid}/make-private")]
+//         [ProducesResponseType(StatusCodes.Status204NoContent)]
+//         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+//         public async Task<IActionResult> MakeUploadPrivate(Guid id, CancellationToken cancellationToken)
+//         {
+//             var result = await _sender.Send(new ChangeFileToPrivateCommand(_userContext.UserId, id), cancellationToken);
+//             return result.Match<IActionResult>(_ => NoContent(), Problem);
+//         }
 
-        // 🔗 Links
-        private List<LinkDto> CreateLinks(string id, string? fields)
-        {
-            return new List<LinkDto>
-            {
-                _linkService.Create(nameof(GetUploadById), "self", HttpMethods.Get, new { id, fields }),
-                _linkService.Create(nameof(CreateUpload), "create", HttpMethods.Post),
-                _linkService.Create(nameof(UpdateUpload), "update", HttpMethods.Put, new { id }),
-                _linkService.Create(nameof(DeleteUpload), "delete", HttpMethods.Delete, new { id }),
-                _linkService.Create(nameof(GetUploads), "all", HttpMethods.Get),
-                _linkService.Create(nameof(MakeUploadPublic), "make-public", HttpMethods.Patch, new { id }),
-                _linkService.Create(nameof(MakeUploadPrivate), "make-private", HttpMethods.Patch, new { id })
-            };
-        }
-    }
-}
+//         // 🔗 Links
+//         private List<LinkDto> CreateLinks(string id, string? fields)
+//         {
+//             return new List<LinkDto>
+//             {
+//                 _linkService.Create(nameof(GetUploadById), "self", HttpMethods.Get, new { id, fields }),
+//                 _linkService.Create(nameof(CreateUpload), "create", HttpMethods.Post),
+//                 _linkService.Create(nameof(UpdateUpload), "update", HttpMethods.Put, new { id }),
+//                 _linkService.Create(nameof(DeleteUpload), "delete", HttpMethods.Delete, new { id }),
+//                 _linkService.Create(nameof(GetUploads), "all", HttpMethods.Get),
+//                 _linkService.Create(nameof(MakeUploadPublic), "make-public", HttpMethods.Patch, new { id }),
+//                 _linkService.Create(nameof(MakeUploadPrivate), "make-private", HttpMethods.Patch, new { id })
+//             };
+//         }
+//     }
+// }

@@ -105,6 +105,25 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilities.Uploads
                 },
                 Problem);
         }
+        // In your AdminHealthCareFacilityUploadController
+        [HttpGet("{id:guid}/file")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [MapToApiVersion("0.1")]
+        [EndpointSummary("Get uploaded file content")]
+        [EndpointDescription("Retrieves the actual file content for a specific upload")]
+        public async Task<IActionResult> GetUploadFile(Guid id, CancellationToken cancellationToken)
+        {
+            var result = await _sender.Send(new GetUploadedFileByUserIdQuery(_userContext.UserId, id), cancellationToken);
+
+            return result.Match(
+                fileResponse =>
+                {
+                    return File(fileResponse.FileBytes, fileResponse.ContentType, fileResponse.FileName);
+                },
+                Problem);
+        }
 
         // ✅ Update Upload
         [HttpPut("{id:guid}")]
