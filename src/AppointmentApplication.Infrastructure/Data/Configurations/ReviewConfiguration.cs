@@ -33,8 +33,8 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(r => r.Appointment)
-            .WithMany()
-            .HasForeignKey(r => r.AppointmentId)
+            .WithOne() // or .WithOne(a => a.Review) if navigation property exists
+            .HasForeignKey<Review>(r => r.AppointmentId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

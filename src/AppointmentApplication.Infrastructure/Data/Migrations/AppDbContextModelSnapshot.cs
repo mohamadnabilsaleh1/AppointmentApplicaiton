@@ -1362,7 +1362,8 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppointmentId");
+                    b.HasIndex("AppointmentId")
+                        .IsUnique();
 
                     b.HasIndex("DoctorID");
 
@@ -1925,8 +1926,8 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
             modelBuilder.Entity("AppointmentApplication.Domain.Reviews.Review", b =>
                 {
                     b.HasOne("AppointmentApplication.Domain.Appointments.Appointment", "Appointment")
-                        .WithMany()
-                        .HasForeignKey("AppointmentId")
+                        .WithOne()
+                        .HasForeignKey("AppointmentApplication.Domain.Reviews.Review", "AppointmentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
