@@ -75,30 +75,6 @@ namespace AppointmentApplication.API.Controllers.HealthCareFacilities.Uploads
                 },
                 Problem);
         }
-        /*
-        [HttpGet("{id:guid}")]
-        [ProducesResponseType(typeof(UploadDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        [MapToApiVersion("0.1")]
-        [EndpointSummary("Get an uploaded file by ID.")]
-        [EndpointDescription("Retrieves a specific uploaded file belonging to the logged-in Health Care Facility.")]
-        [EndpointName("AdminGetHealthCareFacilityUploadById")]
-        public async Task<IActionResult> GetUploadById(Guid id, CancellationToken cancellationToken)
-        {
-            var result = await _sender.Send(new GetUploadedFileByUserIdQuery(_userContext.UserId, id), cancellationToken);
-            return result.Match(
-                upload =>
-                {
-                    var links = CreateLinks(id.ToString(), null);
-                    var resource = new { data = upload, links };
-                    return Ok(resource);
-                },
-                Problem);
-        }
-        */
-
-        // 🔹 Helper: HATEOAS links
         private List<LinkDto> CreateLinks(Guid facilityId, Guid? uploadId = null)
         {
             var links = new List<LinkDto>

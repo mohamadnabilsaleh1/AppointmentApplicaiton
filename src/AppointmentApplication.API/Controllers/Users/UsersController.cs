@@ -2,7 +2,12 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
+using AppointmentApplication.Application.Abstractions.Authentication;
+
+using AppointmentApplication.Application.Features.Users.AddAvatar;
+
 using AppointmentApplication.Application.Features.Users.Dtos;
+using AppointmentApplication.Application.Features.Users.GetAvatar;
 
 using AppointmentApplication.Application.Features.Users.GetLoggedInUser;
 
@@ -23,9 +28,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace AppointmentApplication.API.Controllers;
 
 [Route("/api/users")]
-public class UsersController(ISender sender, IEmailSender emailSender) : ApiController
+public class UsersController(ISender sender, IEmailSender emailSender, IUserContext userContext) : ApiController
 {
     private readonly IEmailSender _emailSender = emailSender;
+    private readonly IUserContext _userContext = userContext;
 
     /// <summary>
     /// Registers a new user.
@@ -191,4 +197,86 @@ public class UsersController(ISender sender, IEmailSender emailSender) : ApiCont
             user => Ok(user),    // إذا تم العثور على المستخدم نرجع 200 OK مع بياناته
             Problem);              // إذا لم يتم العثور أو حدث خطأ نرجع ProblemDetails
     }
+    /// <summary>
+    /// Uploads or updates current user avatar.
+    /// </summary>
+    /// <param name="file">The avatar image file</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Success or error response</returns>
+    [HttpPut("me/avatar")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [EndpointSummary("Uploads or updates current user avatar.")]
+    [EndpointDescription("Uploads an avatar image for the currently authenticated user.")]
+    [EndpointName("AddMyAvatar")]
+    public async Task<IActionResult> AddMyAvatar(
+        AddAvatarRequest request,
+        CancellationToken cancellationToken)
+    {
+
+        var result = await sender.Send(new AddAvatarCommand(_userContext.UserId, request.File), cancellationToken);
+
+        return result.Match(
+            _ => NoContent(),
+            Problem);
+    }
+    /// <summary>
+    /// Gets user avatar.
+    /// </summary>
+    /// <param name="userId">The user ID</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Avatar file or error response</returns>
+
+    /// <summary>
+    /// Gets current user avatar.
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Avatar file or error response</returns>
+    // [HttpGet("me/avatar")]
+    // [ProducesResponseType(StatusCodes.Status200OK)]
+    // [ProducesResponseType(StatusCodes.Status404NotFound)]
+    // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    // [EndpointSummary("Gets current user avatar.")]
+    // [EndpointDescription("Retrieves the avatar image for the currently authenticated user.")]
+    // [EndpointName("GetMyAvatar")]
+    // public async Task<IActionResult> GetMyAvatar(CancellationToken cancellationToken)
+    // {
+    //     // Implement based on your auth system
+
+    //     var result = await sender.Send(new GetAvatarQuery(_userContext.UserId), cancellationToken);
+
+    //     return result.Match<IActionResult>(
+    //         fileResponse =>
+    //         {
+    //             return File(fileResponse.FileBytes, fileResponse.ContentType);
+    //         },
+    //         Problem);
+    // }
+    [HttpGet("{id:guid}/avatar")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [EndpointSummary("Gets current user avatar.")]
+    [EndpointDescription("Retrieves the avatar image for the currently authenticated user.")]
+    [EndpointName("GetMyAvatarPublic")]
+    public async Task<IActionResult> GetMyAvatarPublic(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await sender.Send(new GetAvatarQuery(id), cancellationToken);
+
+        return result.Match(
+            fileResponse =>
+            {
+                var fileResult = File(fileResponse.FileBytes, fileResponse.ContentType);
+                fileResult.FileDownloadName = null; // Remove download name to display inline
+
+                // Alternative: Set content disposition header directly
+                Response.Headers.Append("Content-Disposition", $"inline; filename=\"{fileResponse.FileName ?? "avatar"}\"");
+
+                return fileResult;
+            },
+            Problem);
+    }
+
 }

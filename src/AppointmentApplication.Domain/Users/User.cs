@@ -25,6 +25,7 @@ public sealed class User : AuditableEntity
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
     public string Email { get; private set; }
+    public string Avatar { get; private set; } = string.Empty;
     public string IdentityId { get; private set; } = string.Empty;
 
     private readonly List<HealthCareFacility> _healthCareFacilities = new();
@@ -83,6 +84,11 @@ public sealed class User : AuditableEntity
     public void SetIdentityId(string identityId)
     {
         IdentityId = identityId;
+    }
+    public Result<Updated> SetAvatar(string avatar)
+    {
+        Avatar = avatar;
+        return Result.Updated;
     }
 
     public Result<Emails.Email> AddEmail(string emailAddress, string label, bool isPrimary = false)

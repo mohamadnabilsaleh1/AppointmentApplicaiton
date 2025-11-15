@@ -22,6 +22,7 @@ namespace AppointmentApplication.Application.Features.Doctors.Mappers
                 entity.LastName, 
                 entity.Gender, 
                 entity.Specialization, 
+                entity.Description,
                 age
             );
         }

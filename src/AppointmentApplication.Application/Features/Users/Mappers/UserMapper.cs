@@ -18,6 +18,7 @@ public static class UserMapper
             entity.Email,
             entity.FirstName,
             entity.LastName,
+            entity.Avatar,
             role!);
     }
 }

@@ -31,6 +31,7 @@ namespace AppointmentApplication.Domain.Doctors
         public Gender Gender { get; private set; }
         public DateOnly DateOfBirth { get; private set; }
         public string LicenseNumber { get; private set; } = null!;
+        public string Description { get; private set; } = string.Empty;
         public bool IsActive { get; private set; } = true;
         public Specialization Specialization { get; private set; }
         public DoctorTreatmentCapacity? TreatmentCapacity { get; private set; }
@@ -505,6 +506,11 @@ namespace AppointmentApplication.Domain.Doctors
             }
 
             return Result.Deleted;
+        }
+        public Result<Updated> SetDescription(string description)
+        {
+            Description = description;
+            return Result.Updated;
         }
     }
 }

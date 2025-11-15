@@ -6,4 +6,5 @@ public sealed record UserDto(
     string Email,
     string FirstName,
     string LastName,
+    string Avatar,
     string Role);

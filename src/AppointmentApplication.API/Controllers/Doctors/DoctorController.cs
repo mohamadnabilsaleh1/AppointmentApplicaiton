@@ -7,6 +7,7 @@ using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Dtos.HealthCareFacilities;
 using AppointmentApplication.API.Services;
 using AppointmentApplication.Application.Abstractions.Authentication;
+using AppointmentApplication.Application.Features.Doctors.Commands.AddDescription;
 using AppointmentApplication.Application.Features.Doctors.Commands.UpdateDoctor;
 using AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorByUserId;
 using AppointmentApplication.Application.Features.Doctors.Queries.GetDoctors;
@@ -143,6 +144,29 @@ public sealed class DoctorController : ApiController
             },
             Problem);
     }
+    [HttpPut("me/description")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [EndpointName("UpdateDoctorDescription")]
+    [EndpointSummary("Update doctor description.")]
+    [EndpointDescription("Updates the description for a specific doctor.")]
+    public async Task<IActionResult> UpdateDescription(
+    Guid doctorId,
+    [FromBody] UpdateDescriptionRequest request,
+    CancellationToken cancellationToken)
+    {
+        var command = new AddDescriptionCommand(_userContext.UserId, request.Description);
+        var result = await _sender.Send(command, cancellationToken);
+
+        return result.Match(
+            _ => NoContent(),
+            Problem);
+    }
+
+    // Request DTO
+    public record UpdateDescriptionRequest(string Description);
 
     [HttpPut("me", Name = "UpdateMyDoctorProfile")]
     [Authorize(Roles = Roles.Doctor)]

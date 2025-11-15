@@ -48,4 +48,8 @@ public static class ApplicationUserErrors
         Error.Conflict(
             "ApplicationUser.UserAlreadyExists",
             $"A user with the email '{email}' already exists.");
+    // Add this method to your existing ApplicationUserErrors class
+    public static Error AvatarNotFound(Guid userId) => Error.NotFound(
+        "Users.AvatarNotFound",
+        $"Avatar not found for user with ID: {userId}");
 }

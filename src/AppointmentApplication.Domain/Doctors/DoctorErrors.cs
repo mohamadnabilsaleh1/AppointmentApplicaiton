@@ -23,5 +23,8 @@ namespace AppointmentApplication.Domain.Doctors
 
         public static readonly Error InvalidGender =
             Error.Validation("Doctor.InvalidGender", "Gender is required.");
+        public static readonly Error InvalidDescription = Error.Validation(
+       "Doctor.InvalidDescription",
+       "Description cannot be empty or whitespace.");
     }
 }

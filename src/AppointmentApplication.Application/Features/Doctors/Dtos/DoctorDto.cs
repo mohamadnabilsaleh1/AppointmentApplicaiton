@@ -16,6 +16,7 @@ namespace AppointmentApplication.Application.Features.Doctors.Dtos
         string LastName,
         Gender Gender,
         Specialization Specialization,
+        string Description,
         int Age
     );
 }
