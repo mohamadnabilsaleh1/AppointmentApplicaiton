@@ -1,4 +1,5 @@
 using AppointmentApplication.Domain.Shared.Results;
+
 using MechanicShop.Domain.Common.Results;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility
@@ -54,5 +55,8 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Comma
             Error.Validation(
                 "HealthCareFacility.Update.NotAllowed",
                 $"Update not allowed: {reason}");
+        public static readonly Error InvalidDescription = Error.Validation(
+"Doctor.InvalidDescription",
+"Description cannot be empty or whitespace.");
     }
 }

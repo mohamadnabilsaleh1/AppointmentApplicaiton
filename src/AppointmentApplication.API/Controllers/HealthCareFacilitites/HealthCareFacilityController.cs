@@ -3,6 +3,7 @@ using AppointmentApplication.API.Dtos.HealthCareFacilities;
 using AppointmentApplication.API.Services;
 using AppointmentApplication.Application.Abstractions.Authentication;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.ActivateHealthcareFacilityById;
+using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.AddDescription;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.CreateHealthcareFacility;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.DeactivateHealthcareFacilityById;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Commands.UpdateHealthcareFacility;
@@ -14,6 +15,7 @@ using AppointmentApplication.Application.Features.HealthcareFacilities.Queries.G
 using AppointmentApplication.Application.Features.HealthcareFacilities.Queries.GetHealthCareFacilityByUserId;
 using AppointmentApplication.Application.Shared.Services;
 using AppointmentApplication.Contracts.Requests;
+using AppointmentApplication.Contracts.Requests.Doctors;
 using AppointmentApplication.Contracts.Requests.HealthCareFacilities;
 
 using Asp.Versioning;
@@ -25,7 +27,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 
 namespace AppointmentApplication.API.Controllers;
-
+//AddDescriptionCommand
 [Route("api/health-care-facilities")]
 public sealed class HealthCareFacilityController : ApiController
 {
@@ -295,6 +297,26 @@ public sealed class HealthCareFacilityController : ApiController
     public async Task<IActionResult> DeactivateHealthCareFacility(Guid id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new DeactivateHealthcareFacilityByIdCommand(id), cancellationToken);
+
+        return result.Match(
+            _ => NoContent(),
+            Problem);
+    }
+    [HttpPut("me/description")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [EndpointName("UpdateHealthCareFacilityDescription")]
+    [EndpointSummary("Update Health Care Facility description.")]
+    [EndpointDescription("Updates the description for a specific doctor.")]
+    public async Task<IActionResult> UpdateDescription(
+Guid doctorId,
+[FromBody] UpdateDescriptionRequest request,
+CancellationToken cancellationToken)
+    {
+        var command = new AddDescriptionHealthCareFacilityCommand(_userContext.UserId, request.Description);
+        var result = await _sender.Send(command, cancellationToken);
 
         return result.Match(
             _ => NoContent(),

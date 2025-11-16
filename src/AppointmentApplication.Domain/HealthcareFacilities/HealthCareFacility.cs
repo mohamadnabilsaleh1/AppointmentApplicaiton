@@ -29,6 +29,9 @@ public sealed class HealthCareFacility : AuditableEntity
     public Address Address { get; private set; }
     public double GPSLatitude { get; private set; }
     public double GPSLongitude { get; private set; }
+    public string Description { get; private set; } = string.Empty;
+
+
     public bool IsActive { get; private set; } = true;
 
     private readonly List<Department> _departments = new();
@@ -624,5 +627,10 @@ public sealed class HealthCareFacility : AuditableEntity
     {
         return latitude >= -90 && latitude <= 90 &&
                longitude >= -180 && longitude <= 180;
+    }
+    public Result<Updated> SetDescription(string description)
+    {
+        Description = description;
+        return Result.Updated;
     }
 }

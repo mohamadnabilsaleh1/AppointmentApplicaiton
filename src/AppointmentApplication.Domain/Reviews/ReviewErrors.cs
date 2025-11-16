@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using AppointmentApplication.Domain.Shared.Results;
 
 namespace AppointmentApplication.Domain.Reviews
@@ -40,5 +41,9 @@ namespace AppointmentApplication.Domain.Reviews
 
         public static readonly Error CannotModifyReview =
             Error.Validation("Review.CannotModifyReview", "Cannot modify review after 24 hours of creation");
+
+        public static readonly Error InvalidDoctor = Error.Validation(
+        "Review.InvalidDoctor",
+        "Review does not belong to the specified doctor.");
     }
 }

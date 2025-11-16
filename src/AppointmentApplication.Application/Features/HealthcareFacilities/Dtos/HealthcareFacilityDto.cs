@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 using AppointmentApplication.Application.Features.HealthcareFacilities.Departments.Dtos;
 using AppointmentApplication.Application.Features.HealthcareFacilities.ScheduleExceptions.Dtos;
 using AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Dtos;
@@ -17,6 +18,7 @@ public record HealthcareFacilityDto(
     AddressDto Address,
     double GPSLatitude,
     double GPSLongitude,
+    string Description,
     IReadOnlyCollection<DepartmentDto> Departments,
     IReadOnlyCollection<ScheduleDto> Schedules,
     IReadOnlyCollection<ScheduleExceptionDto> ScheduleExceptions
@@ -36,6 +38,7 @@ public record HealthcareFacilityDto(
         AddressDto addressDto,
         double gpsLatitude,
         double gpsLongitude,
+        string description,
         List<DepartmentDto> departmentDtos,
         List<ScheduleDto> scheduleDtos,
         List<ScheduleExceptionDto> scheduleExceptionDtos)
@@ -46,6 +49,7 @@ public record HealthcareFacilityDto(
             addressDto,
             gpsLatitude,
             gpsLongitude,
+            description,
             departmentDtos.AsReadOnly(),
             scheduleDtos.AsReadOnly(),
             scheduleExceptionDtos.AsReadOnly()
@@ -68,6 +72,7 @@ public record HealthcareFacilityWithUserDto(
     double GPSLatitude,
     double GPSLongitude,
     string Email,
+    string description,
     IReadOnlyCollection<DepartmentDto> Departments,
     IReadOnlyCollection<ScheduleDto> Schedules,
     IReadOnlyCollection<ScheduleExceptionDto> ScheduleExceptions

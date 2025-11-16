@@ -493,6 +493,10 @@ namespace AppointmentApplication.Infrastructure.Data.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("GPSLatitude")
                         .HasColumnType("decimal(9,6)");
 
