@@ -38,6 +38,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
             IQueryable<HealthCareFacility> query = _context.HealthcareFacilities
                 .Include(f => f.Departments)
                 .Include(f => f.Schedules)
+                .Include(f => f.User)
                 .Include(f => f.ScheduleExceptions)
                 .Where(f => f.IsActive) // ✅ filter active facilities
                 .AsQueryable();

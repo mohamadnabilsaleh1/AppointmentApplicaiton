@@ -19,7 +19,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorByHealthCareFacilityIdAndUserId
 {
-    public class GetDoctorByHealthCareFacilityIdAndDoctorIdQueryHandler : IRequestHandler<GetDoctorByHealthCareFacilityIdAndDoctorIdQuery, Result<DoctorDto>>
+    public class GetDoctorByHealthCareFacilityIdAndDoctorIdQueryHandler : IRequestHandler<GetDoctorByHealthCareFacilityIdAndDoctorIdQuery, Result<DoctorWithContactDto>>
     {
         private readonly IAppDbContext _context;
         private readonly DynamicQueryService _dynamicQueryService;
@@ -35,25 +35,25 @@ namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorB
             _dynamicQueryService = dynamicQueryService;
         }
 
-        public async Task<Result<DoctorDto>> Handle(GetDoctorByHealthCareFacilityIdAndDoctorIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<DoctorWithContactDto>> Handle(GetDoctorByHealthCareFacilityIdAndDoctorIdQuery request, CancellationToken cancellationToken)
         {
-            var healthCareFacility = await _context.HealthcareFacilities
-            .Include(h => h.Doctors)
-            .FirstOrDefaultAsync(h => h.Id == request.HealthCareFacilityId);
+            // ✅ Include all necessary data including Reviews
+            var doctor = await _context.Doctors
+                .Include(d => d.User)
+                    .ThenInclude(u => u.Emails)
+                .Include(d => d.User)
+                    .ThenInclude(u => u.Phones)
+                .Include(d => d.Reviews) // ✅ Include reviews for statistics
+                .Include(d => d.HealthcareFacility)
+                .FirstOrDefaultAsync(d => d.Id == request.DoctorId && d.FacilityId == request.HealthCareFacilityId, cancellationToken);
 
-            if (healthCareFacility is null)
-            {
-                return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.HealthCareFacilityId);
-            }
-
-            var doctor = healthCareFacility.GetDoctorById(request.DoctorId);
             if (doctor is null)
             {
                 return ApplicationDoctorErrors.DoctorNotFound(request.DoctorId);
             }
 
-            return doctor.Value.ToDto();
+            // ✅ Return DoctorWithContactDto which includes review statistics
+            return doctor.ToDtoWithContact();
         }
-
     }
 }

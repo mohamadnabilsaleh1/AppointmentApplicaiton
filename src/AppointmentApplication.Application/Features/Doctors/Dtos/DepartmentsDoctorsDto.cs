@@ -9,15 +9,16 @@ using AppointmentApplication.Domain.Shared.Enums;
 
 namespace AppointmentApplication.Application.Features.Doctors.Dtos
 {
-    public record DoctorDto(
-        Guid Id,
-        Guid HealthCareFacilityId,
-        string FirstName,
-        string LastName,
-        Gender Gender,
-        Specialization Specialization,
-        string Description,
-        int Age,
-        string Avatar
-    );
+
+    public record DepartmentDoctorsDto(
+Guid Id,
+Guid HealthCareFacilityId,
+string FirstName,
+string LastName,
+Gender Gender,
+Specialization Specialization,
+int age,
+string Description
+);
+
 }

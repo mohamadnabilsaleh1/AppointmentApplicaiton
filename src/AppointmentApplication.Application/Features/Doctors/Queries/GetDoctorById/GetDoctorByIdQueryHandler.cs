@@ -18,7 +18,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorsById
 {
-    public class GetDoctorByIdQueryHandler : IRequestHandler<GetDoctorByIdQuery, Result<DoctorDto>>
+    public class GetDoctorByIdQueryHandler : IRequestHandler<GetDoctorByIdQuery, Result<DoctorWithContactDto>>
     {
         private readonly IAppDbContext _context;
         private readonly DynamicQueryService _dynamicQueryService;
@@ -34,15 +34,25 @@ namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctors
             _dynamicQueryService = dynamicQueryService;
         }
 
-        public async Task<Result<DoctorDto>> Handle(GetDoctorByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<DoctorWithContactDto>> Handle(GetDoctorByIdQuery request, CancellationToken cancellationToken)
         {
-            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == request.DoctorId);
+            // ✅ Include all necessary data including Reviews
+            var doctor = await _context.Doctors
+                .Include(d => d.User)
+                    .ThenInclude(u => u.Emails)
+                .Include(d => d.User)
+                    .ThenInclude(u => u.Phones)
+                .Include(d => d.Reviews) // ✅ Include reviews for statistics
+                .Include(d => d.HealthcareFacility)
+                .FirstOrDefaultAsync(d => d.Id == request.DoctorId, cancellationToken);
+
             if (doctor is null)
             {
                 return ApplicationDoctorErrors.DoctorNotFound(request.DoctorId);
             }
 
-            return doctor.ToDto();
+            // ✅ Return DoctorWithContactDto which includes review statistics
+            return doctor.ToDtoWithContact();
         }
     }
 }

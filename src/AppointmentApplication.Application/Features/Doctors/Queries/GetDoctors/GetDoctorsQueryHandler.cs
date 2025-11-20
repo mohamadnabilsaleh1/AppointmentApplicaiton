@@ -40,24 +40,26 @@ namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctors
             GetDoctorsQuery request,
             CancellationToken cancellationToken)
         {
+            // ✅ Include Reviews in the query to get review statistics
             IQueryable<Doctor> query = _context.Doctors
-                .Include(d => d.User) // Include User data
-                    .ThenInclude(u => u.Emails) // Include Emails
                 .Include(d => d.User)
-                    .ThenInclude(u => u.Phones) // Include Phones
+                    .ThenInclude(u => u.Emails)
+                .Include(d => d.User)
+                    .ThenInclude(u => u.Phones)
+                .Include(d => d.Reviews) // ✅ This is crucial for review statistics
                 .AsQueryable();
 
             // Apply filters
             var filters = new Dictionary<string, object?>
-    {
-        { "Specialization", request.Specialization }
-    };
+            {
+                { "Specialization", request.Specialization }
+            };
 
             // Remove null filters
             filters = filters.Where(f => f.Value != null)
                            .ToDictionary(f => f.Key, f => f.Value);
 
-            // Execute dynamic query service to get filtered IQueryable
+            // ✅ The ToDtosWithContact method will now include review statistics
             var dynamicQueryResult = await _dynamicQueryService.ExecuteAsync<Doctor, DoctorWithContactDto>(
                 query: query,
                 searchTerm: request.Search,
@@ -66,7 +68,7 @@ namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctors
                 page: request.Page,
                 pageSize: request.PageSize,
                 fields: request.Fields,
-                toDtoFunc: list => list.ToDtosWithContact(), // Use new mapping method
+                toDtoFunc: list => list.ToDtosWithContact(), // This now includes review stats
                 filters: filters);
 
             return dynamicQueryResult;

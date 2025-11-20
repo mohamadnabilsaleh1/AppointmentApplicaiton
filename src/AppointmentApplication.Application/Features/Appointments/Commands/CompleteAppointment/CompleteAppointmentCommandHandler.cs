@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+
 using AppointmentApplication.Application.Features.Appointments.Commands.CompleteAppointment;
 using AppointmentApplication.Application.Features.Appointments.Dtos;
 using AppointmentApplication.Application.Features.Appointments.Errors;
@@ -12,7 +13,9 @@ using AppointmentApplication.Domain.Billings.Enums;
 using AppointmentApplication.Domain.MedicalRecords;
 using AppointmentApplication.Domain.Prescriptions;
 using AppointmentApplication.Domain.Shared.Results;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -23,15 +26,18 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Comp
         private readonly ILogger<CompleteAppointmentCommandHandler> _logger;
         private readonly IAppDbContext _context;
         private readonly IAppointmentEmailService _emailService;
+        private readonly INotificationService _notificationService;
 
         public CompleteAppointmentCommandHandler(
             ILogger<CompleteAppointmentCommandHandler> logger,
             IAppDbContext context,
-            IAppointmentEmailService emailService)
+            IAppointmentEmailService emailService,
+            INotificationService notificationService)
         {
             _logger = logger;
             _context = context;
             _emailService = emailService;
+            _notificationService = notificationService;
         }
 
         public async Task<Result<AppointmentCompletionDto>> Handle(
@@ -152,6 +158,17 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Comp
                 MedicalRecordId: medicalRecord.Id,
                 PrescriptionId: prescription.Id,
                 BillingPaid: true);
+
+            var patientUserId = appointment.Patient.UserId;
+            var doctorName = $"{appointment.Doctor.FirstName} {appointment.Doctor.LastName}";
+            var scheduledDateTime = appointment.ScheduledDate.ToDateTime(TimeOnly.FromTimeSpan(appointment.ScheduledTime));
+
+            await _notificationService.NotifyAppointmentCompletedAsync(
+                patientUserId,
+                appointment.Id,
+                doctorName);
+
+            _logger.LogInformation("Notifications sent successfully for appointment {AppointmentId}", appointment.Id);
 
             return result;
         }

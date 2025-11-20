@@ -20,7 +20,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorsByHealthCareFacilityId
 {
-    public class GetDoctorsByHealthCareFacilityIdQueryHandler : IRequestHandler<GetDoctorsByHealthCareFacilityIdQuery, Result<List<DoctorDto>>>
+    public class GetDoctorsByHealthCareFacilityIdQueryHandler : IRequestHandler<GetDoctorsByHealthCareFacilityIdQuery, Result<List<DoctorWithContactDto>>>
     {
         private readonly IAppDbContext _context;
         private readonly DynamicQueryService _dynamicQueryService;
@@ -36,20 +36,36 @@ namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctors
             _dynamicQueryService = dynamicQueryService;
         }
 
-        public async Task<Result<List<DoctorDto>>> Handle(GetDoctorsByHealthCareFacilityIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<DoctorWithContactDto>>> Handle(GetDoctorsByHealthCareFacilityIdQuery request, CancellationToken cancellationToken)
         {
-            var healthcareFacility = await _context.HealthcareFacilities
-                .Include(h => h.Doctors)
-                .FirstOrDefaultAsync(h => h.Id == request.HealthCareFacilityId, cancellationToken);
+            // ✅ Direct query with all necessary includes for better performance
+            var doctors = await _context.Doctors
+                .Where(d => d.FacilityId == request.HealthCareFacilityId)
+                .Include(d => d.User)
+                    .ThenInclude(u => u.Emails)
+                .Include(d => d.User)
+                    .ThenInclude(u => u.Phones)
+                .Include(d => d.Reviews) // ✅ Include reviews for statistics
+                .Include(d => d.HealthcareFacility)
+                .ToListAsync(cancellationToken);
 
-            if (healthcareFacility is null)
+            if (!doctors.Any())
             {
-                return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.HealthCareFacilityId);
+                // ✅ Check if facility exists even if no doctors
+                var facilityExists = await _context.HealthcareFacilities
+                    .AnyAsync(h => h.Id == request.HealthCareFacilityId, cancellationToken);
+                
+                if (!facilityExists)
+                {
+                    return ApplicationHealthCareFacilityErrors.FacilityNotFound(request.HealthCareFacilityId);
+                }
+                
+                // Return empty list if facility exists but has no doctors
+                return new List<DoctorWithContactDto>();
             }
 
-            var doctors = healthcareFacility.Doctors;
-
-            return doctors.ToDtos();
+            // ✅ Return DoctorWithContactDto which includes review statistics
+            return doctors.ToDtosWithContact();
         }
     }
 }

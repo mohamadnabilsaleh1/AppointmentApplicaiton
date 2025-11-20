@@ -1,13 +1,16 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+
 using AppointmentApplication.Application.Features.Appointments.Errors;
 using AppointmentApplication.Application.Shared.Interfaces;
 using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.Appointments.Enums;
 using AppointmentApplication.Domain.Billings.Enums;
 using AppointmentApplication.Domain.Shared.Results;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -18,15 +21,18 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Canc
         private readonly ILogger<CancelAppointmentCommandHandler> _logger;
         private readonly IAppDbContext _context;
         private readonly IAppointmentEmailService _emailService;
+        private readonly INotificationService _notificationService;
 
         public CancelAppointmentCommandHandler(
             ILogger<CancelAppointmentCommandHandler> logger,
             IAppDbContext context,
-            IAppointmentEmailService emailService)
+            IAppointmentEmailService emailService,
+            INotificationService notificationService)
         {
             _logger = logger;
             _context = context;
             _emailService = emailService;
+            _notificationService = notificationService;
         }
 
         public async Task<Result<Updated>> Handle(CancelAppointmentCommand request, CancellationToken cancellationToken)
@@ -132,6 +138,20 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Canc
                     _logger.LogError(emailEx, "❌ Background email sending failed for appointment cancellation");
                 }
             });
+            var patientUserId = appointment.Patient.UserId;
+            var doctorName = $"{appointment.Doctor.FirstName} {appointment.Doctor.LastName}";
+            var scheduledDateTime = appointment.ScheduledDate.ToDateTime(TimeOnly.FromTimeSpan(appointment.ScheduledTime));
+
+            await _notificationService.NotifyAppointmentCreatedAsync(
+                patientUserId,
+                appointment.Id,
+                doctorName,
+                scheduledDateTime,
+                appointment.ScheduledTime);
+
+            _logger.LogInformation("Notifications sent successfully for appointment {AppointmentId}", appointment.Id);
+
+            
 
             return Result.Updated;
         }
@@ -178,6 +198,8 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Canc
             {
                 CancelBilling(appointment.Billing);
             }
+            
+            
 
             return Result.Updated;
         }

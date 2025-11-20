@@ -13,5 +13,5 @@ using MediatR;
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Queries.GetSchedulesByIdQuery
 {
     public sealed record GetDoctorsByIdQuery(
-    Guid HealthCareFacilityId, Guid DepartmentId ) : IRequest<Result<List<DoctorDto>>>;
+    Guid HealthCareFacilityId, Guid DepartmentId ) : IRequest<Result<List<DepartmentDoctorsDto>>>;
 }

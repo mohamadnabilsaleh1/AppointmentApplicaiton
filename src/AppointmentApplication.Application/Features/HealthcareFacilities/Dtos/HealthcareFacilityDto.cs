@@ -19,6 +19,7 @@ public record HealthcareFacilityDto(
     double GPSLatitude,
     double GPSLongitude,
     string Description,
+    string Avatar,
     IReadOnlyCollection<DepartmentDto> Departments,
     IReadOnlyCollection<ScheduleDto> Schedules,
     IReadOnlyCollection<ScheduleExceptionDto> ScheduleExceptions
@@ -39,6 +40,7 @@ public record HealthcareFacilityDto(
         double gpsLatitude,
         double gpsLongitude,
         string description,
+        string avatar,
         List<DepartmentDto> departmentDtos,
         List<ScheduleDto> scheduleDtos,
         List<ScheduleExceptionDto> scheduleExceptionDtos)
@@ -50,6 +52,7 @@ public record HealthcareFacilityDto(
             gpsLatitude,
             gpsLongitude,
             description,
+            avatar,
             departmentDtos.AsReadOnly(),
             scheduleDtos.AsReadOnly(),
             scheduleExceptionDtos.AsReadOnly()
@@ -73,6 +76,7 @@ public record HealthcareFacilityWithUserDto(
     double GPSLongitude,
     string Email,
     string description,
+    string Avatar,
     IReadOnlyCollection<DepartmentDto> Departments,
     IReadOnlyCollection<ScheduleDto> Schedules,
     IReadOnlyCollection<ScheduleExceptionDto> ScheduleExceptions

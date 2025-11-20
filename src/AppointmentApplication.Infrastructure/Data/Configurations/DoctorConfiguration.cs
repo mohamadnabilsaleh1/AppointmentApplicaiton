@@ -1,6 +1,7 @@
 using AppointmentApplication.Domain.Doctors;
 using AppointmentApplication.Domain.Doctors.DoctorsTreatmentCapabilities;
 using AppointmentApplication.Domain.HealthcareFacilities.Departments;
+using AppointmentApplication.Domain.Reviews;
 using AppointmentApplication.Domain.Users;
 
 using Microsoft.EntityFrameworkCore;
@@ -27,24 +28,32 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
 
             builder.HasQueryFilter(e => e.IsActive);
 
-            // ✅ Explicitly map User navigation to User.Doctors collection
+            // User relationship
             builder.HasOne(d => d.User)
                    .WithMany(u => u.Doctors)
                    .HasForeignKey(d => d.UserId)
                    .OnDelete(DeleteBehavior.ClientSetNull);
 
+            // Facility relationship
             builder.HasOne(d => d.HealthcareFacility)
-       .WithMany(f => f.Doctors)
-       .HasForeignKey(d => d.FacilityId)
-       .OnDelete(DeleteBehavior.Cascade);
-            // One-to-one relationship with TreatmentCapacity
+                   .WithMany(f => f.Doctors)
+                   .HasForeignKey(d => d.FacilityId)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            // TreatmentCapacity relationship
             builder.HasOne(d => d.TreatmentCapacity)
                    .WithOne(tc => tc.Doctor)
                    .HasForeignKey<DoctorTreatmentCapacity>(tc => tc.DoctorId)
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Cascade);
 
-            // Configure many-to-many relationship
+            // ✅ Reviews relationship (One Doctor -> Many Reviews)
+            builder.HasMany(d => d.Reviews)
+                   .WithOne(r => r.Doctor)
+                   .HasForeignKey(r => r.DoctorID)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            // Departments many-to-many relationship
             builder.HasMany(d => d.Departments)
                    .WithMany(d => d.Doctors)
                    .UsingEntity<Dictionary<string, object>>(
@@ -57,7 +66,6 @@ namespace AppointmentApplication.Infrastructure.Data.Configurations
                            j.Property<DateTime?>("UpdatedAtdUtc");
                            j.HasKey("DoctorId", "DepartmentId");
                        });
-
         }
     }
 }

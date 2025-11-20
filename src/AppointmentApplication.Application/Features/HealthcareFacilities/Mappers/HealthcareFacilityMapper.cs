@@ -12,6 +12,8 @@ using AppointmentApplication.Domain.HealthcareFacilities.Enums;
 using AppointmentApplication.Domain.HealthcareFacilities.ScheduleExceptions;
 using AppointmentApplication.Domain.HealthcareFacilities.Schedules;
 
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Mappers;
 
 public static class HealthcareFacilityMapper
@@ -29,6 +31,7 @@ public static class HealthcareFacilityMapper
             entity.GPSLatitude,
             entity.GPSLongitude,
             entity.Description,
+            entity.User.Avatar == string.Empty ? "" : "api/users/" + entity.User.Id.ToString() + "/avatar",
             entity.Departments.ToDtos(),
             entity.Schedules.ToDtos(),
             entity.ScheduleExceptions.ToDtos());
@@ -47,6 +50,7 @@ public static class HealthcareFacilityMapper
             entity.GPSLongitude,
             entity.User is null ? string.Empty : entity.User.Email,
             entity.Description,
+            entity.User.Avatar == string.Empty ? "" : "api/users/" + entity.User.Id.ToString() + "/avatar",
             entity.Departments.ToDtos(),
             entity.Schedules.ToDtos(),
             entity.ScheduleExceptions.ToDtos());

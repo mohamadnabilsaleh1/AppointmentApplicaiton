@@ -10,7 +10,7 @@ using AppointmentApplication.Domain.Shared.Enums;
 
 namespace AppointmentApplication.Application.Features.Doctors.Dtos
 {
-   public record DoctorWithContactDto(
+    public record DoctorWithContactDto(
         Guid Id,
         Guid HealthCareFacilityId,
         string FirstName,
@@ -21,6 +21,11 @@ namespace AppointmentApplication.Application.Features.Doctors.Dtos
         string? PrimaryEmail,
         string? PrimaryPhone,
         List<EmailDto> Emails,
-        List<PhoneDto> Phones
+        List<PhoneDto> Phones,
+        string Avatar,
+        double AverageRating,
+        int TotalReviews,
+        int PositiveReviews,
+        double PositiveReviewPercentage
     );
 }

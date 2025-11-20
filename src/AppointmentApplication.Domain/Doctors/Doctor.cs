@@ -13,6 +13,7 @@ using AppointmentApplication.Domain.Doctors.Schedules;
 using AppointmentApplication.Domain.HealthcareFacilities;
 using AppointmentApplication.Domain.HealthcareFacilities.Departments;
 using AppointmentApplication.Domain.HealthcareFacilities.Enums;
+using AppointmentApplication.Domain.Reviews;
 using AppointmentApplication.Domain.Shared.Enums;
 using AppointmentApplication.Domain.Shared.Results;
 using AppointmentApplication.Domain.Users;
@@ -47,6 +48,8 @@ namespace AppointmentApplication.Domain.Doctors
 
         private readonly List<Appointment> _appointments = new();
         public IReadOnlyCollection<Appointment> Appointments => _appointments.AsReadOnly();
+        private readonly List<Review> _reviews = new();
+        public IReadOnlyCollection<Review> Reviews => _reviews.AsReadOnly();
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 

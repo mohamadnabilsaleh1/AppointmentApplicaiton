@@ -1,12 +1,15 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+
 using AppointmentApplication.Application.Features.Appointments.Errors;
 using AppointmentApplication.Application.Shared.Interfaces;
 using AppointmentApplication.Domain.Appointments;
 using AppointmentApplication.Domain.Appointments.Enums;
 using AppointmentApplication.Domain.Shared.Results;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -17,15 +20,18 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Conf
         private readonly ILogger<ConfirmAppointmentCommandHandler> _logger;
         private readonly IAppDbContext _context;
         private readonly IAppointmentEmailService _emailService;
+        private readonly INotificationService _notificationService;
 
         public ConfirmAppointmentCommandHandler(
             ILogger<ConfirmAppointmentCommandHandler> logger,
             IAppDbContext context,
-            IAppointmentEmailService emailService)
+            IAppointmentEmailService emailService,
+            INotificationService notificationService)
         {
             _logger = logger;
             _context = context;
             _emailService = emailService;
+            _notificationService = notificationService;
         }
 
         public async Task<Result<Updated>> Handle(ConfirmAppointmentCommand request, CancellationToken cancellationToken)
@@ -101,6 +107,16 @@ namespace AppointmentApplication.Application.Features.Appointments.Commands.Conf
                     _logger.LogError(emailEx, "❌ Background email sending failed for appointment confirmation");
                 }
             });
+            var patientUserId = appointment.Patient.UserId;
+            var doctorName = $"{appointment.Doctor.FirstName} {appointment.Doctor.LastName}";
+            var scheduledDateTime = appointment.ScheduledDate.ToDateTime(TimeOnly.FromTimeSpan(appointment.ScheduledTime));
+
+            await _notificationService.NotifyAppointmentConfirmedAsync(
+                patientUserId,
+                appointment.Id,
+                doctorName);
+
+            _logger.LogInformation("Notifications sent successfully for appointment {AppointmentId}", appointment.Id);
 
             return Result.Updated;
         }

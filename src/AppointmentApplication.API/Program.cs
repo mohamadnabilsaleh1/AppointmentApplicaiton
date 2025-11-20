@@ -19,6 +19,24 @@ builder.Services
 
 builder.Host.UseSerilog((context, loggerConfig) =>
     loggerConfig.ReadFrom.Configuration(context.Configuration));
+    
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFlutterApp", policy =>
+    {
+        // Allow any localhost or 127.0.0.1 port during development
+        policy
+            .SetIsOriginAllowed(origin =>
+            {
+                var uri = new Uri(origin);
+                return uri.Host == "localhost" || uri.Host == "127.0.0.1" || uri.Host == "suhaib.local" || uri.Host.EndsWith("ngrok-free.dev");
+            })
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 WebApplication app = builder.Build();
 
@@ -52,3 +70,8 @@ app.UseAntiforgery();
 app.MapStaticAssets();
 
 app.Run();
+
+
+
+
+

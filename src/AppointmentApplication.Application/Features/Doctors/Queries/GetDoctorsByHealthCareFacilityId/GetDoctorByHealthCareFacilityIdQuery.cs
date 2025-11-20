@@ -16,11 +16,10 @@ using MediatR;
 namespace AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorsByHealthCareFacilityId
 {
     public sealed record GetDoctorsByHealthCareFacilityIdQuery(
-        Guid HealthCareFacilityId) : ICachedQuery<Result<List<DoctorDto>>>
+        Guid HealthCareFacilityId) : ICachedQuery<Result<List<DoctorWithContactDto>>>
     {
-        public string CacheKey => "healthCareFacilityDoctors";
-        public string[] Tags => new[] { "healthCareFacilityDoctors" };
+        public string CacheKey => $"healthCareFacilityDoctors:{HealthCareFacilityId}"; // ✅ Include facility ID in cache key
+        public string[] Tags => new[] { "healthCareFacilityDoctors", $"facility:{HealthCareFacilityId}" };
         public TimeSpan Expiration => TimeSpan.FromMinutes(10);
     }
 }
-

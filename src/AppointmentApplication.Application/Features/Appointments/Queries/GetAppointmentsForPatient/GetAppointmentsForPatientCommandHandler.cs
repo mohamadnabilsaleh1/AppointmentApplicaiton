@@ -97,7 +97,8 @@ namespace AppointmentApplication.Application.Features.Appointments.Queries.GetAp
                 page: request.Page,
                 pageSize: request.PageSize,
                 fields: request.Fields,
-                toDtoFunc: list => list.ToDtos());
+                toDtoFunc: list => list.ToDtos(),
+                filters:filters);
 
             return dynamicQueryResult;
         }

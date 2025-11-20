@@ -35,6 +35,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Queri
                 .Include(f => f.Departments)
                 .Include(f => f.Schedules)
                 .Include(f => f.ScheduleExceptions)
+                .Include(f => f.User)
                 .FirstOrDefaultAsync(f => f.Id == request.Id && f.IsActive == true, cancellationToken);
 
             if (facility is null)

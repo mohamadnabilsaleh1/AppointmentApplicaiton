@@ -8,4 +8,4 @@ namespace AppointmentApplication.Application.HealthcareFacilities.Schedules.Quer
 
 public sealed record GetDoctorByUserIdQuery(
     Guid UserId,
-    Guid DepartmentId, Guid DoctorId) : IRequest<Result<DoctorDto>>;
+    Guid DepartmentId, Guid DoctorId) : IRequest<Result<DepartmentDoctorsDto>>;

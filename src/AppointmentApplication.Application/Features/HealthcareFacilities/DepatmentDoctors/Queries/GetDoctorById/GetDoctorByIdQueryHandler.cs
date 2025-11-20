@@ -18,7 +18,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentApplication.Application.Features.HealthcareFacilities.Schedules.Queries;
 
-public class GetDoctorByIdQueryHandler : IRequestHandler<GetDoctorByIdQuery, Result<DoctorDto>>
+public class GetDoctorByIdQueryHandler : IRequestHandler<GetDoctorByIdQuery, Result<DepartmentDoctorsDto>>
 {
     private readonly IAppDbContext _context;
 
@@ -27,7 +27,7 @@ public class GetDoctorByIdQueryHandler : IRequestHandler<GetDoctorByIdQuery, Res
         _context = context;
     }
 
-    public async Task<Result<DoctorDto>> Handle(GetDoctorByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<DepartmentDoctorsDto>> Handle(GetDoctorByIdQuery request, CancellationToken cancellationToken)
     {
         var facility = await _context.HealthcareFacilities
                 .Include(f => f.Departments)
@@ -51,6 +51,7 @@ public class GetDoctorByIdQueryHandler : IRequestHandler<GetDoctorByIdQuery, Res
             return doctorResult.Errors;
         }
         var doctor = doctorResult.Value;
-        return doctor.ToDto();
+        //entities.Select(e => e.DepartmentDoctorsToDto()).ToList();
+        return doctor.DepartmentDoctorsToDto();
     }
 }
