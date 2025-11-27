@@ -4,13 +4,13 @@ using FluentValidation;
 
 namespace AppointmentApplication.Application.Features.Appointments.Commands.CancelAppointment
 {
-    public class CancelAppointmentCommandValidator : AbstractValidator<CancelAppointmentCommand>
+    public class CancelAppointmentByPatientIdCommandValidator : AbstractValidator<CancelAppointmentByPatientIdCommand>
     {
-        public CancelAppointmentCommandValidator()
+        public CancelAppointmentByPatientIdCommandValidator()
         {
             RuleFor(x => x.UserId)
-                .NotEmpty().WithMessage("User ID is required.")
-                .NotEqual(Guid.Empty).WithMessage("User ID must be a valid GUID.");
+                .NotEmpty().WithMessage("Patient ID is required.")
+                .NotEqual(Guid.Empty).WithMessage("Patient ID must be a valid GUID.");
 
             RuleFor(x => x.AppointmentId)
                 .NotEmpty().WithMessage("Appointment ID is required.")

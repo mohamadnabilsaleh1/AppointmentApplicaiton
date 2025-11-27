@@ -123,6 +123,16 @@ Error.NotFound("Appointment.Failed", $" {error}");
                 "Appointment.CannotRescheduleCompleted",
                 "Cannot reschedule completed or cancelled appointment.");
 
+        public static Error CannotRescheduleWithin24Hours(Guid appointmentId) =>
+            Error.Conflict(
+                "Appointment.Reschedule.Within24Hours",
+                $"Appointment {appointmentId} cannot be rescheduled within 24 hours of the scheduled time.");
+
+        public static Error CannotReschedulePastAppointment(DateOnly scheduledDate) =>
+            Error.Conflict(
+                "Appointment.Reschedule.PastDate",
+                $"Cannot reschedule appointment scheduled for {scheduledDate}. Past appointments cannot be rescheduled.");
+
         public static Error UnauthorizedToCancelAppointment(Guid appointmentId) =>
         Error.Unauthorized(
             "Appointment.Cancel.Unauthorized",

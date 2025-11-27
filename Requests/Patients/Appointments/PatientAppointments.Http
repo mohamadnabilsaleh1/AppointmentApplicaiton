@@ -1,7 +1,6 @@
 @baseUrl = http://localhost:5001
 
-@PatientToken = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NjM1NzM3NzksImlhdCI6MTc2MzUzNzc3OSwianRpIjoib25ydHJvOmI1Y2QzNzdhLTBmNWItMjQ0YS0zNmFlLWQzNTVkMTgzYTdmNyIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIxNTUxYWMwYy0xZTU5LTQ4ZTItYjViMy0wZDNmOWU3MmY3NTkiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6IjAzMzA5YzhmLTRjM2YtNGI3MS1hOTNmLTdmMGZiYjY1ZTMxYSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6Ik1hcmlhbSBTYWVlZCIsInByZWZlcnJlZF91c2VybmFtZSI6ImdhbWVyMm1vaGFtYWRAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ik1hcmlhbSIsImZhbWlseV9uYW1lIjoiU2FlZWQiLCJlbWFpbCI6ImdhbWVyMm1vaGFtYWRAZ21haWwuY29tIn0.cMkb0CBWalJrMJ6ZmOeUWLMaRl2vFf6dpOplPO4T8Ye7yZIK-XWftiIIA3EFVpTN4xULvwfZlPVdbVjngRI2pHvXBMxCNd3vJuo6bhyZSO-wxiztLGwQQsLIpr7lvtFnAIAkqSb3r4aIF6tJhoTMFN9eiwRP46H1fbMeiuvSdDoPfturr4iRVocXeOkAFhN6lQGGus30_NPI-a0dlFZ5h7sVwupAQgpV3sKJrVB9RMQhB2PkViRA2sSzx9aa21-4KCygpTs6MR7HrcnUrSDIlaDpr175SacXjoQQSRg2-Z7XKADdD3cMVBYFEKI_TU9qkc70VVG0FUoseM-2tnyfmA
-
+@PatientToken = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqMnNBVlhodzJSVjFqdnlPcEZNdWpWVVEzU203Qm5iQU1oNWZOdkt1Wl9FIn0.eyJleHAiOjE3NjQzMDIwNTUsImlhdCI6MTc2NDI2NjA1NSwianRpIjoib25ydHJvOmU5NTA5YjQ4LTk4ODgtOGU1My02NmJjLWYyODFiMGI1OTY3MCIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTgwODAvcmVhbG1zL0FwcG9pbnRtZW50LWlkcCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIxNTUxYWMwYy0xZTU5LTQ4ZTItYjViMy0wZDNmOWU3MmY3NTkiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBvaW50bWVudC1hdXRoLWNsaWVudCIsInNpZCI6Ijg0OWM4NjEyLTUxYmItNGQ3MC04Y2ExLTVkZDhmMmQxZjIyNiIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYXBwb2ludG1lbnQtaWRwIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6Ik1hcmlhbSBTYWVlZCIsInByZWZlcnJlZF91c2VybmFtZSI6ImdhbWVyMm1vaGFtYWRAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ik1hcmlhbSIsImZhbWlseV9uYW1lIjoiU2FlZWQiLCJlbWFpbCI6ImdhbWVyMm1vaGFtYWRAZ21haWwuY29tIn0.vhjMjr6aERZaxoIACw-6shHHR2b8YKO906zitaOhkiL6yva3AoKV3gRTM1Xpfj5V-u79o3qeji0qvl8stwFUH-7F9ba70ejFY2x1kv0HbMAL_v6QrUky1bsZnMc0nPpVpuI5MbsFmgkPur5EHjlZ2473j7StgzW6tsZ0yVmWXZTM0y7rhytMkH8dpTZVMsq4pwLQ0hmLdkoj9MXF5_D2IRXZiYYADFjd-BjkmAHSchswlOzrLudq81eGO0N16x2Jy6WGuRuIy7nffVbDEtiyf2XwF57GqhjuVLqaxUkncCPH6a6JmkBa3bY-r5O2P0SYuOX9oRb3Yk7fbB2zWYx6uQ
 ###
 POST http://localhost:5001/api/users/login
 Content-Type: application/json
@@ -26,14 +25,35 @@ GEt {{baseUrl}}/api/patients/me
 Authorization: {{PatientToken}}
 
 ### get me
-GEt {{baseUrl}}/api/patients/me/appointments?status=completed
+GEt {{baseUrl}}/api/patients/me/appointments?status=Cancelled
 Authorization: {{PatientToken}}
 
 ###
-GEt {{baseUrl}}/api/patients/me/appointments/a5d0c676-a5b2-4e76-b5ed-983297eba958
+GEt {{baseUrl}}/api/patients/me/appointments/2b4f487f-f959-4c1b-9dae-06d34895109b
 Authorization: {{PatientToken}}
 
+### cancel appointment 
 
+PUT  {{baseUrl}}/api/patients/me/appointments/a192465e-d93d-4a3d-aa44-d66726573138/cancel
+Authorization: {{PatientToken}}
+Content-Type: application/json
+
+{
+  "CancellationReason": "no have had a sex with my wife"
+}
+
+###2b4f487f-f959-4c1b-9dae-06d34895109b
+
+### reschedul appointment 
+
+PUT  {{baseUrl}}/api/patients/me/appointments/2b4f487f-f959-4c1b-9dae-06d34895109b/reschedule
+Authorization: {{PatientToken}}
+Content-Type: application/json
+
+{
+  "NewDate": "2026-01-06",
+  "NewTime": "11:40:00"
+}
 ###
 POST {{baseUrl}}/api/appointments
 Authorization: {{PatientToken}}
@@ -42,8 +62,8 @@ Content-Type: application/json
 {
   "doctorId": "11fe2f9e-5c61-4f80-9b64-ff8aa67f4c6a",
   "facilityId": "08ab65af-cdb4-4f2f-910f-cd45a1ba5eaf",
-  "scheduledDate": "2025-12-28",
-  "scheduledTime": "14:40:00",
+  "scheduledDate": "2026-01-05",
+  "scheduledTime": "11:40:00",
   "durationMinutes": 20,
   "notes": "Regular checkup appointment"
 }

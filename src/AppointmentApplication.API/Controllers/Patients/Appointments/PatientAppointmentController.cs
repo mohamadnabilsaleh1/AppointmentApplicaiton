@@ -10,7 +10,9 @@ using AppointmentApplication.API.Dtos;
 using AppointmentApplication.API.Models.Appointments;
 using AppointmentApplication.API.Services;
 using AppointmentApplication.Application.Abstractions.Authentication;
+using AppointmentApplication.Application.Features.Appointments.Commands.CancelAppointment;
 using AppointmentApplication.Application.Features.Appointments.Commands.CreateAppointment;
+using AppointmentApplication.Application.Features.Appointments.Commands.RescheduleAppointment;
 using AppointmentApplication.Application.Features.Appointments.Queries.GetAppointmentByDoctorId;
 using AppointmentApplication.Application.Features.Appointments.Queries.GetAppointmentDetailsForPatientById;
 using AppointmentApplication.Domain.Shared.Results;
@@ -129,6 +131,73 @@ namespace AppointmentApplication.Api.Controllers
 
                     return Ok(resource);
                 },
+                Problem);
+        }
+
+        [HttpPut("{appointmentId:guid}/cancel", Name = "CancelPatientAppointment")]
+        [Authorize(Roles = Roles.Patient)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [MapToApiVersion("0.1")]
+        [EndpointSummary("Cancel an appointment (patient).")]
+        [EndpointDescription("Cancels an appointment for the authenticated patient. Must be more than 24 hours before the scheduled time.")]
+        [EndpointName("CancelPatientAppointment")]
+        public async Task<IActionResult> CancelAppointment(
+            Guid appointmentId,
+            [FromBody] CancelAppointmentRequest request,
+            CancellationToken cancellationToken)
+        {
+            var command = new CancelAppointmentByPatientIdCommand(
+                _userContext.UserId,
+                appointmentId,
+                request.CancellationReason);
+
+            var result = await _sender.Send(command, cancellationToken);
+
+            return result.Match<IActionResult>(
+                _ => NoContent(),
+                Problem);
+        }
+
+        [HttpPut("{appointmentId:guid}/reschedule", Name = "ReschedulePatientAppointment")]
+        [Authorize(Roles = Roles.Patient)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [MapToApiVersion("0.1")]
+        [EndpointSummary("Reschedule an appointment (patient).")]
+        [EndpointDescription("Reschedules an appointment for the authenticated patient. Must be more than 24 hours before the scheduled time.")]
+        [EndpointName("ReschedulePatientAppointment")]
+        public async Task<IActionResult> RescheduleAppointment(
+            Guid appointmentId,
+            [FromBody] RescheduleAppointmentRequest request,
+            CancellationToken cancellationToken)
+        {
+            var command = new RescheduleAppointmentByPatientIdCommand(
+                _userContext.UserId,
+                appointmentId,
+                request.NewDate,
+                request.NewTime);
+
+            var result = await _sender.Send(command, cancellationToken);
+
+            return result.Match<IActionResult>(
+                _ => Ok(new
+                {
+                    message = "Appointment rescheduled successfully",
+                    appointmentId,
+                    request.NewDate,
+                    request.NewTime
+                }),
                 Problem);
         }
 

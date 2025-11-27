@@ -19,6 +19,7 @@ services:
     networks:
       - appointmentapp-net
     restart: on-failure
+
   sqlserver:
     container_name: appointmentapp-sql
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -88,12 +89,15 @@ services:
       - ./.files/bookify-realm-export.json:/opt/keycloak/data/import/realm.json
     ports:
       - 18080:8080
-
-
-volumes:
-  sqlserver-data: {}
-  grafana-data: {}
+    networks:
+      - appointmentapp-net
 
 networks:
   appointmentapp-net:
     driver: bridge
+
+volumes:
+  sqlserver-data:
+    driver: local
+  grafana-data:
+    driver: local
