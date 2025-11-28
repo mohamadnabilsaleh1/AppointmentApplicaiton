@@ -33,6 +33,7 @@ namespace AppointmentApplication.Application.Features.HealthcareFacilities.Sched
             var facility = await _context.HealthcareFacilities
                 .Include(f => f.Departments)
                     .ThenInclude(d => d.Doctors)
+                        .ThenInclude(doc => doc.Reviews)
                 .FirstOrDefaultAsync(f => f.UserId == request.UserId, cancellationToken);
 
             if (facility is null)

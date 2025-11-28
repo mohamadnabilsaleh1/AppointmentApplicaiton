@@ -11,6 +11,7 @@ using AppointmentApplication.Application.Features.Doctors.Commands.AddDescriptio
 using AppointmentApplication.Application.Features.Doctors.Commands.UpdateDoctor;
 using AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorByUserId;
 using AppointmentApplication.Application.Features.Doctors.Queries.GetDoctors;
+using AppointmentApplication.Application.Features.Doctors.Queries.GetTopDoctors;
 using AppointmentApplication.Application.Features.Doctors.Queries.GetDoctorsById;
 using AppointmentApplication.Contracts.Requests.Doctors;
 
@@ -36,6 +37,59 @@ public sealed class DoctorController : ApiController
         _sender = sender;
         _linkService = linkService;
         _userContext = userContext;
+    }
+
+    [HttpGet("top")]
+    [MapToApiVersion("0.1")]
+    [EndpointSummary("Get Top Doctors.")]
+    [EndpointDescription("Retrieves top-rated doctors with pagination.")]
+    [EndpointName("GetTopDoctors")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesDefaultResponseType]
+    [OutputCache(Duration = 60)]
+    public async Task<IActionResult> GetTopDoctors(
+        [FromQuery] DoctorQueryParameters queryParameters,
+        CancellationToken cancellationToken)
+    {
+        var sort = string.IsNullOrWhiteSpace(queryParameters.Sort)
+            ? "Rating desc,TotalReviews desc,LastName asc,FirstName asc"
+            : queryParameters.Sort;
+
+        var result = await _sender.Send(
+            new GetTopDoctorsQuery(
+                queryParameters.Search,
+                queryParameters.Page,
+                queryParameters.PageSize,
+                sort,
+                queryParameters.Fields,
+                queryParameters.Specialization),
+            cancellationToken);
+
+        return result.Match(
+            response =>
+            {
+                var hasNextPage = response.Page < response.TotalPages;
+                var hasPreviousPage = response.Page > 1;
+
+                var links = CreateTopDoctorsLinks(queryParameters, hasNextPage, hasPreviousPage);
+
+                var resource = new
+                {
+                    data = response.Items,
+                    pagination = new
+                    {
+                        response.Page,
+                        response.PageSize,
+                        response.TotalCount,
+                        response.TotalPages
+                    },
+                    links
+                };
+
+                return Ok(resource);
+            },
+            Problem);
     }
 
     [HttpGet("{id:guid}", Name = "GetDoctorById")]
@@ -230,6 +284,50 @@ public sealed class DoctorController : ApiController
         if (hasPreviousPage)
         {
             links.Add(_linkService.Create(nameof(GetDoctors), "previous-page", HttpMethods.Get, new
+            {
+                page = parameters.Page + 1,
+                pageSize = parameters.PageSize,
+                fields = parameters.Fields,
+                search = parameters.Search,
+                sort = parameters.Sort,
+                specialization = parameters.Specialization,
+            }));
+        }
+
+        return links;
+    }
+
+    private List<LinkDto> CreateTopDoctorsLinks(DoctorQueryParameters parameters, bool hasNextPage, bool hasPreviousPage)
+    {
+        List<LinkDto> links = new()
+        {
+            _linkService.Create(nameof(GetTopDoctors), "self", HttpMethods.Get, new
+            {
+                page = parameters.Page,
+                pageSize = parameters.PageSize,
+                fields = parameters.Fields,
+                search = parameters.Search,
+                sort = parameters.Sort,
+                specialization = parameters.Specialization,
+            }),
+        };
+
+        if (hasNextPage)
+        {
+            links.Add(_linkService.Create(nameof(GetTopDoctors), "next-page", HttpMethods.Get, new
+            {
+                page = parameters.Page + 1,
+                pageSize = parameters.PageSize,
+                fields = parameters.Fields,
+                search = parameters.Search,
+                sort = parameters.Sort,
+                specialization = parameters.Specialization,
+            }));
+        }
+
+        if (hasPreviousPage)
+        {
+            links.Add(_linkService.Create(nameof(GetTopDoctors), "previous-page", HttpMethods.Get, new
             {
                 page = parameters.Page + 1,
                 pageSize = parameters.PageSize,

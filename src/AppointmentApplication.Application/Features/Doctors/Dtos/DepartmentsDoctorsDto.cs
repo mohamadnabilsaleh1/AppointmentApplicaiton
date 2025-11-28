@@ -18,7 +18,9 @@ string LastName,
 Gender Gender,
 Specialization Specialization,
 int age,
-string Description
+string Description,
+double AverageRating,
+int TotalReviews
 );
 
 }

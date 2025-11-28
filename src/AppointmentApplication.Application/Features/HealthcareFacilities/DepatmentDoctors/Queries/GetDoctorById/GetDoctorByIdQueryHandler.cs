@@ -32,6 +32,7 @@ public class GetDoctorByIdQueryHandler : IRequestHandler<GetDoctorByIdQuery, Res
         var facility = await _context.HealthcareFacilities
                 .Include(f => f.Departments)
                     .ThenInclude(d => d.Doctors)
+                        .ThenInclude(doc => doc.Reviews)
                 .FirstOrDefaultAsync(f => f.Id == request.HealthCareFacilityId, cancellationToken);
 
         if (facility is null)

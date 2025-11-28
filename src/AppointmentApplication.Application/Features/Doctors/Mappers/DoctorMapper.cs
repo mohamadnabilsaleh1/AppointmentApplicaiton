@@ -32,6 +32,8 @@ namespace AppointmentApplication.Application.Features.Doctors.Mappers
         public static DepartmentDoctorsDto DepartmentDoctorsToDto(this Doctor entity)
         {
             int age = Doctor.CalculateAge(entity.DateOfBirth);
+            var (averageRating, totalReviews, _, _) = CalculateReviewStatistics(entity);
+
             return new DepartmentDoctorsDto(
                 entity.Id,
                 entity.FacilityId,
@@ -40,8 +42,9 @@ namespace AppointmentApplication.Application.Features.Doctors.Mappers
                 entity.Gender,
                 entity.Specialization,
                 age,
-                entity.Description
-
+                entity.Description,
+                averageRating,
+                totalReviews
             );
         }
 

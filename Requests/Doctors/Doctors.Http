@@ -69,7 +69,11 @@ Content-Type: application/json
 
 
 ###
-GEt {{baseUrl}}/api/doctors/
+GEt {{baseUrl}}/api/doctors
+
+### top doctors
+GEt {{baseUrl}}/api/doctors/top
+
 
 ### get all
 GEt {{baseUrl}}/api/doctors?page=2&pageSize=10
